@@ -11,6 +11,7 @@
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- 引入 GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     
     <!-- 引入电影感高级字体 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -79,13 +80,13 @@
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
         }
         
-        /* 模块卡片毛玻璃质感 */
+        /* 模块卡片毛玻璃质感 - 增强对比度与清晰度 */
         .glass-card {
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.03);
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.06);
         }
 
         /* 满屏便签样式 (保持高饱和度增加对比) */
@@ -134,6 +135,65 @@
 </head>
 <body class="min-h-screen flex flex-col relative selection:bg-primary selection:text-white">
 
+    <!-- 移动端汉堡菜单按钮 -->
+    <button id="mobile-menu-btn" class="fixed top-6 left-4 z-[60] w-10 h-10 rounded-full glass-card flex items-center justify-center border border-white cursor-pointer hover:border-primary transition-all duration-300 shadow-md md:hidden">
+        <i class="fa fa-bars text-slate-600 text-sm"></i>
+    </button>
+
+    <!-- 移动端侧边栏导航 -->
+    <div id="mobile-sidebar" class="fixed inset-0 z-[55] hidden md:hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="mobile-sidebar-overlay"></div>
+        <div class="absolute left-0 top-0 h-full w-72 bg-white/95 backdrop-blur-xl shadow-2xl transform -translate-x-full transition-transform duration-300" id="mobile-sidebar-content">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-8">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                            <span class="text-white text-sm font-bold font-cinzel">Z&Y</span>
+                        </div>
+                        <span class="text-lg font-medium text-slate-800">舟舟与小羊</span>
+                    </div>
+                    <button id="mobile-menu-close" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition">
+                        <i class="fa fa-times text-slate-500 text-sm"></i>
+                    </button>
+                </div>
+                
+                <nav class="space-y-2">
+                    <a href="#hero" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-primary/10 hover:text-primary transition-colors">
+                        <i class="fa fa-home w-5 text-center"></i>
+                        <span>首页</span>
+                    </a>
+                    <a href="#marquee" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-primary/10 hover:text-primary transition-colors">
+                        <i class="fa fa-camera w-5 text-center"></i>
+                        <span>生活碎片</span>
+                    </a>
+                    <a href="restaurant.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-primary/10 hover:text-primary transition-colors">
+                        <i class="fa fa-cutlery w-5 text-center"></i>
+                        <span>小餐馆</span>
+                    </a>
+                    <a href="tavern.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-primary/10 hover:text-primary transition-colors">
+                        <i class="fa fa-glass w-5 text-center"></i>
+                        <span>小酒馆</span>
+                    </a>
+                    <a href="clinic.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-primary/10 hover:text-primary transition-colors">
+                        <i class="fa fa-heartbeat w-5 text-center"></i>
+                        <span>小诊所</span>
+                    </a>
+                    <a href="museum.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-primary/10 hover:text-primary transition-colors">
+                        <i class="fa fa-university w-5 text-center"></i>
+                        <span>纪念博物馆</span>
+                    </a>
+                </nav>
+                
+                <div class="mt-8 pt-6 border-t border-slate-200">
+                    <a href="#surprise" class="mobile-nav-link flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-medium shadow-lg">
+                        <i class="fa fa-envelope-o"></i>
+                        <span>专属信箱</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 顶部导航 (参照图片的高级清透胶囊样式) -->
     <div class="fixed top-6 w-full z-50 flex justify-center px-4">
         <nav class="nav-pill rounded-full px-2 py-1.5 flex items-center gap-1 md:gap-4">
@@ -142,12 +202,12 @@
                 <span class="text-white text-xs font-bold font-cinzel">Z&Y</span>
             </div>
             
-            <a href="#hero" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">首页</a>
-            <a href="#marquee" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">生活碎片</a>
-            <a href="restaurant.html" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">小餐馆</a>
-            <a href="tavern.html" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">小酒馆</a>
-            <a href="clinic.html" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">小诊所</a>
-            <a href="museum.html" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">纪念博物馆</a>
+            <a href="#hero" class="hidden md:inline-block text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">首页</a>
+            <a href="#marquee" class="hidden md:inline-block text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">生活碎片</a>
+            <a href="restaurant.html" class="hidden md:inline-block text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">小餐馆</a>
+            <a href="tavern.html" class="hidden md:inline-block text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">小酒馆</a>
+            <a href="clinic.html" class="hidden md:inline-block text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">小诊所</a>
+            <a href="museum.html" class="hidden md:inline-block text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">纪念博物馆</a>
             
             <!-- 高亮按钮 -->
             <a href="#surprise" class="ml-2 bg-white text-primary text-xs md:text-sm font-medium px-5 py-2.5 rounded-full hover:bg-primary hover:text-white transition-all active:scale-95 flex items-center gap-2 font-sans tracking-widest shadow-md">
@@ -363,6 +423,23 @@
         <i class="fa fa-unlock text-lg"></i>
     </button>
 
+    <!-- Lightbox 图片查看器 -->
+    <div id="lightbox" class="lightbox-overlay hidden">
+        <button id="lightbox-close" class="lightbox-close">
+            <i class="fa fa-times text-2xl"></i>
+        </button>
+        <button id="lightbox-prev" class="lightbox-nav lightbox-prev">
+            <i class="fa fa-chevron-left text-2xl"></i>
+        </button>
+        <button id="lightbox-next" class="lightbox-nav lightbox-next">
+            <i class="fa fa-chevron-right text-2xl"></i>
+        </button>
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="预览图片">
+        </div>
+        <div id="lightbox-counter" class="lightbox-counter"></div>
+    </div>
+
     <!-- 引入公共脚本 -->
     <script src="js/main.js"></script>
     
@@ -389,6 +466,10 @@
         updateTimer();
 
         // ---------------- 2. 动态加载图集 ----------------
+        // Lightbox 相关变量
+        let lightboxImages = [];
+        let currentLightboxIndex = 0;
+        
         async function loadGalleryImages() {
             const row1 = document.getElementById('marquee-row-1');
             const row2 = document.getElementById('marquee-row-2');
@@ -400,8 +481,11 @@
                 
                 if (images.length === 0) return;
                 
+                // 保存图片列表供Lightbox使用
+                lightboxImages = images;
+                
                 // 检测图片方向并设置对应样式
-                const loadImageWithOrientation = (src, container) => {
+                const loadImageWithOrientation = (src, container, index) => {
                     return new Promise((resolve) => {
                         const img = new Image();
                         img.onload = () => {
@@ -409,18 +493,17 @@
                             let orientClass;
                             
                             if (ratio > 1.2) {
-                                // 横向图片
                                 orientClass = 'gallery-landscape';
                             } else if (ratio < 0.8) {
-                                // 纵向图片
                                 orientClass = 'gallery-portrait';
                             } else {
-                                // 正方形或接近正方形
                                 orientClass = 'gallery-square';
                             }
                             
                             img.className = `${orientClass} rounded-2xl object-cover border-4 border-white shadow-md hover:shadow-xl transition-all hover:-translate-y-1`;
                             img.loading = 'lazy';
+                            img.dataset.index = index;
+                            img.addEventListener('click', () => openLightbox(index));
                             container.appendChild(img);
                             resolve();
                         };
@@ -435,17 +518,17 @@
                 const row2Images = images.slice(mid);
                 
                 // 渲染行
-                const renderRow = async (container, imgs) => {
-                    // 渲染两遍以保证滚动宽度足够
+                const renderRow = async (container, imgs, startIndex) => {
                     for (let repeat = 0; repeat < 2; repeat++) {
-                        for (const src of imgs) {
-                            await loadImageWithOrientation(src, container);
+                        for (let i = 0; i < imgs.length; i++) {
+                            const globalIndex = startIndex + i;
+                            await loadImageWithOrientation(imgs[i], container, globalIndex % images.length);
                         }
                     }
                 };
                 
-                await renderRow(row1, row1Images);
-                await renderRow(row2, row2Images);
+                await renderRow(row1, row1Images, 0);
+                await renderRow(row2, row2Images, mid);
                 
             } catch (error) {
                 console.log('加载图集失败:', error);
@@ -468,18 +551,64 @@
 
         // ---------------- 3. 入场 GSAP 动画 ----------------
         window.addEventListener('load', () => {
+            // 注册 ScrollTrigger 插件
+            gsap.registerPlugin(ScrollTrigger);
+            
+            // 首屏入场动画
             gsap.from(".gsap-hero", {
                 y: 30,
                 opacity: 0,
                 duration: 2,
                 ease: "power2.out"
             });
+            
+            // 导航栏入场动画
             gsap.from(".nav-pill", {
                 y: -50,
                 opacity: 0,
                 duration: 1.5,
                 delay: 0.5,
                 ease: "power3.out"
+            });
+            
+            // 生活碎片标题滚动触发
+            gsap.from("#marquee h2", {
+                scrollTrigger: {
+                    trigger: "#marquee",
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                },
+                y: 30,
+                opacity: 0,
+                duration: 0.8,
+                ease: "power2.out"
+            });
+            
+            // 模块卡片滚动触发
+            gsap.from("#restaurant .glass-card", {
+                scrollTrigger: {
+                    trigger: "#restaurant",
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                },
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.2,
+                ease: "power2.out"
+            });
+            
+            // 惊喜按钮滚动触发
+            gsap.from("#surprise-btn", {
+                scrollTrigger: {
+                    trigger: "#surprise",
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                },
+                scale: 0.8,
+                opacity: 0,
+                duration: 0.6,
+                ease: "back.out(1.7)"
             });
         });
 
@@ -571,6 +700,101 @@
                 setTimeout(() => note.remove(), 1000);
             }, 10000);
         }
+
+        // ---------------- 7. Lightbox 图片查看器 ----------------
+        function openLightbox(index) {
+            currentLightboxIndex = index;
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxCounter = document.getElementById('lightbox-counter');
+            
+            lightboxImg.src = lightboxImages[index];
+            lightboxCounter.textContent = `${index + 1} / ${lightboxImages.length}`;
+            
+            lightbox.classList.remove('hidden');
+            setTimeout(() => lightbox.classList.add('active'), 10);
+            
+            // 禁止背景滚动
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+            setTimeout(() => lightbox.classList.add('hidden'), 300);
+            
+            // 恢复背景滚动
+            document.body.style.overflow = '';
+        }
+
+        function navigateLightbox(direction) {
+            currentLightboxIndex = (currentLightboxIndex + direction + lightboxImages.length) % lightboxImages.length;
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxCounter = document.getElementById('lightbox-counter');
+            
+            lightboxImg.src = lightboxImages[currentLightboxIndex];
+            lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${lightboxImages.length}`;
+        }
+
+        // Lightbox 事件监听
+        document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+        document.getElementById('lightbox-prev').addEventListener('click', () => navigateLightbox(-1));
+        document.getElementById('lightbox-next').addEventListener('click', () => navigateLightbox(1));
+        
+        // 点击遮罩关闭
+        document.getElementById('lightbox').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeLightbox();
+        });
+
+        // 键盘导航
+        document.addEventListener('keydown', (e) => {
+            const lightbox = document.getElementById('lightbox');
+            if (lightbox.classList.contains('hidden')) return;
+            
+            switch(e.key) {
+                case 'Escape':
+                    closeLightbox();
+                    break;
+                case 'ArrowLeft':
+                    navigateLightbox(-1);
+                    break;
+                case 'ArrowRight':
+                    navigateLightbox(1);
+                    break;
+            }
+        });
+
+        // ---------------- 8. 移动端汉堡菜单 ----------------
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileSidebar = document.getElementById('mobile-sidebar');
+        const mobileSidebarContent = document.getElementById('mobile-sidebar-content');
+        const mobileSidebarOverlay = document.getElementById('mobile-sidebar-overlay');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+        function openMobileMenu() {
+            mobileSidebar.classList.remove('hidden');
+            setTimeout(() => {
+                mobileSidebarContent.classList.remove('-translate-x-full');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+            mobileSidebarContent.classList.add('-translate-x-full');
+            setTimeout(() => {
+                mobileSidebar.classList.add('hidden');
+            }, 300);
+            document.body.style.overflow = '';
+        }
+
+        mobileMenuBtn.addEventListener('click', openMobileMenu);
+        mobileMenuClose.addEventListener('click', closeMobileMenu);
+        mobileSidebarOverlay.addEventListener('click', closeMobileMenu);
+
+        // 点击侧边栏链接后关闭菜单
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', closeMobileMenu);
+        });
     </script>
 </body>
 </html>

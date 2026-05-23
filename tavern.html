@@ -8,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -60,33 +61,83 @@
         }
         
         .glass-card {
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.03);
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.06);
         }
     </style>
     
-    <!-- 引入公共样式 -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="min-h-screen flex flex-col selection:bg-secondary selection:text-white">
 
+    <!-- 移动端汉堡菜单按钮 -->
+    <button id="mobile-menu-btn" class="fixed top-6 left-4 z-[60] w-10 h-10 rounded-full glass-card flex items-center justify-center border border-white cursor-pointer hover:border-secondary transition-all duration-300 shadow-md md:hidden">
+        <i class="fa fa-bars text-slate-600 text-sm"></i>
+    </button>
+
+    <!-- 移动端侧边栏导航 -->
+    <div id="mobile-sidebar" class="fixed inset-0 z-[55] hidden md:hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="mobile-sidebar-overlay"></div>
+        <div class="absolute left-0 top-0 h-full w-72 bg-white/95 backdrop-blur-xl shadow-2xl transform -translate-x-full transition-transform duration-300" id="mobile-sidebar-content">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-8">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-secondary to-primary flex items-center justify-center">
+                            <span class="text-white text-sm font-bold font-cinzel">Z&Y</span>
+                        </div>
+                        <span class="text-lg font-medium text-slate-800">舟舟与小羊</span>
+                    </div>
+                    <button id="mobile-menu-close" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition">
+                        <i class="fa fa-times text-slate-500 text-sm"></i>
+                    </button>
+                </div>
+                
+                <nav class="space-y-2">
+                    <a href="index.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-secondary/10 hover:text-secondary transition-colors">
+                        <i class="fa fa-home w-5 text-center"></i>
+                        <span>首页</span>
+                    </a>
+                    <a href="index.html#marquee" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-secondary/10 hover:text-secondary transition-colors">
+                        <i class="fa fa-camera w-5 text-center"></i>
+                        <span>生活碎片</span>
+                    </a>
+                    <a href="restaurant.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-secondary/10 hover:text-secondary transition-colors">
+                        <i class="fa fa-cutlery w-5 text-center"></i>
+                        <span>小餐馆</span>
+                    </a>
+                    <a href="tavern.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl bg-secondary/10 text-secondary transition-colors">
+                        <i class="fa fa-glass w-5 text-center"></i>
+                        <span>小酒馆</span>
+                    </a>
+                    <a href="clinic.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-secondary/10 hover:text-secondary transition-colors">
+                        <i class="fa fa-heartbeat w-5 text-center"></i>
+                        <span>小诊所</span>
+                    </a>
+                    <a href="museum.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-secondary/10 hover:text-secondary transition-colors">
+                        <i class="fa fa-university w-5 text-center"></i>
+                        <span>纪念博物馆</span>
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </div>
+
     <!-- 顶部导航 -->
     <div class="fixed top-6 w-full z-50 flex justify-center px-4">
-        <nav class="nav-pill rounded-full px-2 py-1.5 flex items-center gap-1 md:gap-4 transition-all duration-300">
-            <!-- Logo (长按3秒触发暗号模式) -->
+        <nav class="nav-pill rounded-full px-2 py-1.5 flex items-center gap-1 md:gap-4">
             <div id="logo" class="w-8 h-8 rounded-full bg-gradient-to-br from-secondary to-primary flex items-center justify-center cursor-pointer mr-2 select-none" title="长按3秒解锁创作者模式">
                 <span class="text-white text-xs font-bold font-cinzel">Z&Y</span>
             </div>
             
-            <a href="index.html" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">首页</a>
-            <a href="index.html#marquee" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">生活碎片</a>
-            <a href="restaurant.html" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">小餐馆</a>
-            <a href="tavern.html" class="text-xs md:text-sm text-secondary px-3 py-2 rounded-full transition-colors font-sans tracking-widest font-medium">小酒馆</a>
-            <a href="clinic.html" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">小诊所</a>
-            <a href="museum.html" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">纪念博物馆</a>
+            <a href="index.html" class="hidden md:inline-block text-xs md:text-sm text-slate-600 hover:text-secondary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">首页</a>
+            <a href="index.html#marquee" class="hidden md:inline-block text-xs md:text-sm text-slate-600 hover:text-secondary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">生活碎片</a>
+            <a href="restaurant.html" class="hidden md:inline-block text-xs md:text-sm text-slate-600 hover:text-secondary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">小餐馆</a>
+            <a href="tavern.html" class="hidden md:inline-block text-xs md:text-sm text-secondary px-3 py-2 rounded-full transition-colors font-sans tracking-widest font-medium">小酒馆</a>
+            <a href="clinic.html" class="hidden md:inline-block text-xs md:text-sm text-slate-600 hover:text-secondary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">小诊所</a>
+            <a href="museum.html" class="hidden md:inline-block text-xs md:text-sm text-slate-600 hover:text-secondary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">纪念博物馆</a>
         </nav>
     </div>
 
@@ -101,18 +152,30 @@
             <h1 class="text-3xl md:text-4xl font-medium text-slate-800 tracking-[0.2em] mb-4">小酒馆</h1>
             <p class="text-slate-500 tracking-widest text-sm font-cinzel">Our Tavern</p>
             <p class="text-slate-400 text-xs mt-4 max-w-md mx-auto">微醺时刻与夜间谈心角，记录属于我们的浪漫酒单</p>
+            
+            <!-- 统计 -->
+            <div class="mt-8 flex justify-center gap-8">
+                <div class="text-center">
+                    <div class="text-3xl font-light text-secondary" id="total-bars">2</div>
+                    <div class="text-xs text-slate-400 mt-1">探店酒吧</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-light text-primary" id="total-cocktails">2</div>
+                    <div class="text-xs text-slate-400 mt-1">调酒配方</div>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- 功能切换标签 -->
     <section class="px-4 relative z-10">
         <div class="container mx-auto max-w-6xl">
-            <div class="flex justify-center gap-4 mb-12">
+            <div class="flex justify-center gap-4 mb-8">
                 <button onclick="showTab('guide')" id="tab-guide" class="px-6 py-2.5 rounded-full text-sm tracking-widest transition-all bg-secondary text-white shadow-md">
                     <i class="fa fa-map-marker mr-2"></i>微醺图鉴
                 </button>
                 <button onclick="showTab('recipe')" id="tab-recipe" class="px-6 py-2.5 rounded-full text-sm tracking-widest transition-all bg-white/50 text-slate-600 hover:bg-white/70">
-                    <i class="fa fa-book mr-2"></i>调酒笔记
+                    <i class="fa fa-book mr-2"></i>调酒配方
                 </button>
             </div>
         </div>
@@ -121,14 +184,17 @@
     <!-- 微醺图鉴 -->
     <section id="section-guide" class="pb-24 px-4 relative z-10">
         <div class="container mx-auto max-w-6xl">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="guide-grid">
                 
                 <!-- 酒吧卡片1 -->
-                <div class="glass-card rounded-2xl overflow-hidden group hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div class="glass-card rounded-2xl overflow-hidden group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bar-card">
                     <div class="relative h-48 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=400" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="酒吧">
+                        <img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=1200&q=85" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="酒吧">
                         <div class="absolute top-3 right-3 bg-white/80 backdrop-blur-sm rounded-full px-3 py-1 text-xs text-secondary font-medium">
                             <i class="fa fa-star mr-1"></i>4.9
+                        </div>
+                        <div class="absolute bottom-3 left-3 bg-white/80 backdrop-blur-sm rounded-full px-3 py-1 text-xs text-green-600 font-medium">
+                            <i class="fa fa-check mr-1"></i>会再访
                         </div>
                     </div>
                     <div class="p-6">
@@ -139,35 +205,54 @@
                             <span>工体</span>
                         </div>
                         <h3 class="text-lg font-medium text-slate-700 mb-2">隐秘爵士酒吧</h3>
-                        <p class="text-sm text-slate-500 leading-relaxed">氛围超棒的speakeasy风格酒吧，调酒师很专业，舟舟最爱那杯薰衣草金汤力。</p>
-                        <div class="mt-4 flex items-center gap-2">
+                        <p class="text-sm text-slate-500 leading-relaxed mb-3">氛围超棒的speakeasy风格酒吧，调酒师很专业，舟舟最爱那杯薰衣草金汤力。</p>
+                        
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-xs text-slate-400">酒款亮点：</span>
+                            <span class="text-xs text-secondary">薰衣草金汤力</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-2">
                             <span class="text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded-full">鸡尾酒</span>
                             <span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full">爵士</span>
+                            <span class="text-xs bg-yellow-100 text-yellow-600 px-2 py-1 rounded-full">浪漫</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- 酒款卡片2 -->
-                <div class="glass-card rounded-2xl overflow-hidden group hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div class="glass-card rounded-2xl overflow-hidden group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bar-card">
                     <div class="relative h-48 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="红酒">
+                        <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=1200&q=85" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="红酒">
+                        <div class="absolute bottom-3 left-3 bg-white/80 backdrop-blur-sm rounded-full px-3 py-1 text-xs text-green-600 font-medium">
+                            <i class="fa fa-check mr-1"></i>会再访
+                        </div>
                     </div>
                     <div class="p-6">
                         <div class="flex items-center gap-2 text-xs text-slate-400 mb-3">
                             <i class="fa fa-calendar"></i>
                             <span>2026.05.14</span>
+                            <i class="fa fa-home ml-2"></i>
+                            <span>家</span>
                         </div>
                         <h3 class="text-lg font-medium text-slate-700 mb-2">晚安红酒之夜</h3>
-                        <p class="text-sm text-slate-500 leading-relaxed">在家的浪漫夜晚，开了一瓶澳洲西拉，配着芝士和火腿，聊到深夜。</p>
-                        <div class="mt-4 flex items-center gap-2">
+                        <p class="text-sm text-slate-500 leading-relaxed mb-3">在家的浪漫夜晚，开了一瓶澳洲西拉，配着芝士和火腿，聊到深夜。</p>
+                        
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-xs text-slate-400">酒款亮点：</span>
+                            <span class="text-xs text-secondary">澳洲西拉</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-2">
                             <span class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">红酒</span>
                             <span class="text-xs bg-pink-100 text-pink-600 px-2 py-1 rounded-full">居家</span>
+                            <span class="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full">微醺</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- 添加按钮 -->
-                <div class="glass-card rounded-2xl overflow-hidden border-2 border-dashed border-slate-200 hover:border-secondary/50 transition-all cursor-pointer group flex items-center justify-center min-h-[360px]">
+                <div class="glass-card rounded-2xl overflow-hidden border-2 border-dashed border-slate-200 hover:border-secondary/50 transition-all cursor-pointer group flex items-center justify-center min-h-[400px]" onclick="showUploadDialog('bar')">
                     <div class="text-center">
                         <div class="w-16 h-16 mx-auto bg-slate-100 rounded-full flex items-center justify-center mb-4 group-hover:bg-secondary/10 transition">
                             <i class="fa fa-plus text-2xl text-slate-300 group-hover:text-secondary transition"></i>
@@ -179,70 +264,141 @@
         </div>
     </section>
 
-    <!-- 调酒笔记库 -->
+    <!-- 调酒配方字典 -->
     <section id="section-recipe" class="pb-24 px-4 relative z-10 hidden">
-        <div class="container mx-auto max-w-4xl">
+        <div class="container mx-auto max-w-6xl">
             
-            <!-- 搜索栏 -->
+            <!-- 搜索框 -->
             <div class="mb-8">
-                <div class="glass-card rounded-full px-6 py-3 flex items-center gap-3">
+                <div class="glass-card rounded-full px-6 py-3 flex items-center gap-3 max-w-md mx-auto">
                     <i class="fa fa-search text-slate-400"></i>
-                    <input type="text" placeholder="搜索调酒配方..." class="bg-transparent outline-none flex-1 text-sm text-slate-600 placeholder-slate-400">
+                    <input type="text" id="cocktail-search" placeholder="搜索特调名称或原料..." class="bg-transparent outline-none flex-1 text-sm text-slate-600 placeholder-slate-400" oninput="filterCocktails()" autocomplete="off">
                 </div>
             </div>
 
-            <!-- 调酒配方卡片 -->
-            <div class="glass-card rounded-2xl p-8 mb-6">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl font-medium text-slate-700">薰衣草金汤力</h3>
-                    <span class="text-xs bg-secondary/10 text-secondary px-3 py-1 rounded-full">舟舟最爱</span>
-                </div>
+            <!-- 基酒筛选 -->
+            <div class="flex flex-wrap justify-center gap-3 mb-8">
+                <button class="spirit-filter-btn px-4 py-2 rounded-full text-xs bg-secondary/10 text-secondary border border-secondary/20 hover:bg-secondary hover:text-white transition-all" data-spirit="all">全部</button>
+                <button class="spirit-filter-btn px-4 py-2 rounded-full text-xs bg-white/50 text-slate-500 border border-slate-200 hover:bg-secondary hover:text-white transition-all" data-spirit="gin">金酒</button>
+                <button class="spirit-filter-btn px-4 py-2 rounded-full text-xs bg-white/50 text-slate-500 border border-slate-200 hover:bg-secondary hover:text-white transition-all" data-spirit="vodka">伏特加</button>
+                <button class="spirit-filter-btn px-4 py-2 rounded-full text-xs bg-white/50 text-slate-500 border border-slate-200 hover:bg-secondary hover:text-white transition-all" data-spirit="rum">朗姆</button>
+                <button class="spirit-filter-btn px-4 py-2 rounded-full text-xs bg-white/50 text-slate-500 border border-slate-200 hover:bg-secondary hover:text-white transition-all" data-spirit="whiskey">威士忌</button>
+            </div>
+
+            <!-- 配方卡片 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="cocktail-grid">
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <h4 class="text-sm font-medium text-slate-600 mb-3">配方</h4>
-                        <ul class="space-y-2">
-                            <li class="flex items-center gap-2 text-sm text-slate-500">
-                                <span class="w-2 h-2 bg-secondary rounded-full"></span>
-                                金酒 45ml
-                            </li>
-                            <li class="flex items-center gap-2 text-sm text-slate-500">
-                                <span class="w-2 h-2 bg-secondary rounded-full"></span>
-                                汤力水 150ml
-                            </li>
-                            <li class="flex items-center gap-2 text-sm text-slate-500">
-                                <span class="w-2 h-2 bg-secondary rounded-full"></span>
-                                薰衣草糖浆 15ml
-                            </li>
-                            <li class="flex items-center gap-2 text-sm text-slate-500">
-                                <span class="w-2 h-2 bg-secondary rounded-full"></span>
-                                新鲜柠檬汁 10ml
-                            </li>
-                            <li class="flex items-center gap-2 text-sm text-slate-500">
-                                <span class="w-2 h-2 bg-secondary rounded-full"></span>
-                                干薰衣草装饰
-                            </li>
-                        </ul>
+                <!-- 配方1：薰衣草金汤力 -->
+                <div class="glass-card rounded-2xl p-6 cocktail-card" data-spirit="gin" data-name="薰衣草金汤力" data-ingredients="金酒,汤力水,薰衣草糖浆,柠檬汁">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-medium text-slate-700">薰衣草金汤力</h3>
+                        <span class="text-xs bg-secondary/10 text-secondary px-3 py-1 rounded-full">舟舟最爱</span>
                     </div>
-                    <div>
-                        <h4 class="text-sm font-medium text-slate-600 mb-3">调制步骤</h4>
-                        <ol class="text-sm text-slate-500 space-y-2 list-decimal list-inside">
-                            <li>冰块填满高脚杯</li>
-                            <li>倒入金酒和薰衣草糖浆</li>
-                            <li>轻轻搅拌均匀</li>
-                            <li>缓缓注入汤力水</li>
-                            <li>挤入柠檬汁，放上薰衣草装饰</li>
-                        </ol>
+                    
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full">金酒</span>
+                        <span class="text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded-full">清爽</span>
+                        <span class="text-xs bg-pink-100 text-pink-600 px-2 py-1 rounded-full">花香</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="text-sm font-medium text-slate-600 mb-2">配方</h4>
+                            <ul class="space-y-2">
+                                <li class="flex items-center gap-2 text-sm text-slate-500">
+                                    <span class="w-2 h-2 bg-secondary rounded-full"></span>
+                                    金酒 45ml
+                                </li>
+                                <li class="flex items-center gap-2 text-sm text-slate-500">
+                                    <span class="w-2 h-2 bg-secondary rounded-full"></span>
+                                    汤力水 150ml
+                                </li>
+                                <li class="flex items-center gap-2 text-sm text-slate-500">
+                                    <span class="w-2 h-2 bg-secondary rounded-full"></span>
+                                    薰衣草糖浆 15ml
+                                </li>
+                                <li class="flex items-center gap-2 text-sm text-slate-500">
+                                    <span class="w-2 h-2 bg-secondary rounded-full"></span>
+                                    新鲜柠檬汁 10ml
+                                </li>
+                                <li class="flex items-center gap-2 text-sm text-slate-500">
+                                    <span class="w-2 h-2 bg-secondary rounded-full"></span>
+                                    干薰衣草装饰
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-medium text-slate-600 mb-2">调制步骤</h4>
+                            <ol class="text-sm text-slate-500 space-y-2 list-decimal list-inside">
+                                <li>冰块填满高脚杯</li>
+                                <li>倒入金酒和薰衣草糖浆</li>
+                                <li>轻轻搅拌均匀</li>
+                                <li>缓缓注入汤力水</li>
+                                <li>挤入柠檬汁，放上薰衣草装饰</li>
+                            </ol>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- 添加配方按钮 -->
-            <div class="glass-card rounded-2xl p-8 border-2 border-dashed border-slate-200 hover:border-secondary/50 transition-all cursor-pointer group text-center">
-                <div class="w-16 h-16 mx-auto bg-slate-100 rounded-full flex items-center justify-center mb-4 group-hover:bg-secondary/10 transition">
-                    <i class="fa fa-plus text-2xl text-slate-300 group-hover:text-secondary transition"></i>
+                <!-- 配方2：莫吉托 -->
+                <div class="glass-card rounded-2xl p-6 cocktail-card" data-spirit="rum" data-name="莫吉托" data-ingredients="朗姆酒,青柠,薄荷,糖浆,苏打水">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-medium text-slate-700">莫吉托</h3>
+                        <span class="text-xs bg-green-100 text-green-600 px-3 py-1 rounded-full">经典</span>
+                    </div>
+                    
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="text-xs bg-yellow-100 text-yellow-600 px-2 py-1 rounded-full">朗姆</span>
+                        <span class="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">清爽</span>
+                        <span class="text-xs bg-lime-100 text-lime-600 px-2 py-1 rounded-full">酸甜</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="text-sm font-medium text-slate-600 mb-2">配方</h4>
+                            <ul class="space-y-2">
+                                <li class="flex items-center gap-2 text-sm text-slate-500">
+                                    <span class="w-2 h-2 bg-secondary rounded-full"></span>
+                                    白朗姆酒 45ml
+                                </li>
+                                <li class="flex items-center gap-2 text-sm text-slate-500">
+                                    <span class="w-2 h-2 bg-secondary rounded-full"></span>
+                                    新鲜青柠汁 20ml
+                                </li>
+                                <li class="flex items-center gap-2 text-sm text-slate-500">
+                                    <span class="w-2 h-2 bg-secondary rounded-full"></span>
+                                    薄荷叶 6-8片
+                                </li>
+                                <li class="flex items-center gap-2 text-sm text-slate-500">
+                                    <span class="w-2 h-2 bg-secondary rounded-full"></span>
+                                    糖浆 15ml
+                                </li>
+                                <li class="flex items-center gap-2 text-sm text-slate-500">
+                                    <span class="w-2 h-2 bg-secondary rounded-full"></span>
+                                    苏打水 适量
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-medium text-slate-600 mb-2">调制步骤</h4>
+                            <ol class="text-sm text-slate-500 space-y-2 list-decimal list-inside">
+                                <li>薄荷叶和糖浆放入杯中轻轻捣压</li>
+                                <li>加入青柠汁和朗姆酒</li>
+                                <li>加入碎冰搅拌</li>
+                                <li>注入苏打水至满</li>
+                                <li>用薄荷枝和青柠片装饰</li>
+                            </ol>
+                        </div>
+                    </div>
                 </div>
-                <p class="text-sm text-slate-400 group-hover:text-secondary transition">添加新的调酒配方</p>
+
+                <!-- 添加配方按钮 -->
+                <div class="glass-card rounded-2xl p-8 border-2 border-dashed border-slate-200 hover:border-secondary/50 transition-all cursor-pointer group text-center md:col-span-2" onclick="showUploadDialog('cocktail')">
+                    <div class="w-16 h-16 mx-auto bg-slate-100 rounded-full flex items-center justify-center mb-4 group-hover:bg-secondary/10 transition">
+                        <i class="fa fa-plus text-2xl text-slate-300 group-hover:text-secondary transition"></i>
+                    </div>
+                    <p class="text-sm text-slate-400 group-hover:text-secondary transition">添加新的调酒配方</p>
+                </div>
             </div>
         </div>
     </section>
@@ -261,9 +417,7 @@
             </button>
         </div>
         
-        <div id="playlist-items" class="playlist-items">
-            <!-- 歌单列表将由JS动态生成 -->
-        </div>
+        <div id="playlist-items" class="playlist-items"></div>
         
         <div class="playlist-controls">
             <button id="prev-btn" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center hover:bg-secondary/10 transition">
@@ -301,10 +455,10 @@
         <i class="fa fa-unlock text-lg"></i>
     </button>
 
-    <!-- 引入公共脚本 -->
     <script src="js/main.js"></script>
     
     <script>
+        // 标签切换
         function showTab(tab) {
             document.getElementById('section-guide').classList.toggle('hidden', tab !== 'guide');
             document.getElementById('section-recipe').classList.toggle('hidden', tab !== 'recipe');
@@ -316,6 +470,80 @@
                 ? 'px-6 py-2.5 rounded-full text-sm tracking-widest transition-all bg-secondary text-white shadow-md'
                 : 'px-6 py-2.5 rounded-full text-sm tracking-widest transition-all bg-white/50 text-slate-600 hover:bg-white/70';
         }
+
+        // 基酒筛选
+        document.querySelectorAll('.spirit-filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const spirit = this.dataset.spirit;
+                
+                document.querySelectorAll('.spirit-filter-btn').forEach(b => {
+                    b.className = 'spirit-filter-btn px-4 py-2 rounded-full text-xs bg-white/50 text-slate-500 border border-slate-200 hover:bg-secondary hover:text-white transition-all';
+                });
+                this.className = 'spirit-filter-btn px-4 py-2 rounded-full text-xs bg-secondary/10 text-secondary border border-secondary/20 hover:bg-secondary hover:text-white transition-all';
+                
+                document.querySelectorAll('.cocktail-card').forEach(card => {
+                    if (spirit === 'all') {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = card.dataset.spirit === spirit ? '' : 'none';
+                    }
+                });
+            });
+        });
+
+        // 搜索功能
+        function filterCocktails() {
+            const query = document.getElementById('cocktail-search').value.toLowerCase();
+            
+            document.querySelectorAll('.cocktail-card').forEach(card => {
+                const name = card.dataset.name || '';
+                const ingredients = card.dataset.ingredients || '';
+                const match = name.toLowerCase().includes(query) || ingredients.toLowerCase().includes(query);
+                card.style.display = match ? '' : 'none';
+            });
+        }
+
+        // 上传弹窗
+        function showUploadDialog(type) {
+            alert('上传功能需要后端支持，请先配置云服务。');
+        }
+
+        // 移动端汉堡菜单
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileSidebar = document.getElementById('mobile-sidebar');
+        const mobileSidebarContent = document.getElementById('mobile-sidebar-content');
+        const mobileSidebarOverlay = document.getElementById('mobile-sidebar-overlay');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+        function openMobileMenu() {
+            mobileSidebar.classList.remove('hidden');
+            setTimeout(() => mobileSidebarContent.classList.remove('-translate-x-full'), 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+            mobileSidebarContent.classList.add('-translate-x-full');
+            setTimeout(() => mobileSidebar.classList.add('hidden'), 300);
+            document.body.style.overflow = '';
+        }
+
+        mobileMenuBtn.addEventListener('click', openMobileMenu);
+        mobileMenuClose.addEventListener('click', closeMobileMenu);
+        mobileSidebarOverlay.addEventListener('click', closeMobileMenu);
+        document.querySelectorAll('.mobile-nav-link').forEach(l => l.addEventListener('click', closeMobileMenu));
+
+        // GSAP 动画
+        window.addEventListener('load', () => {
+            if (typeof gsap !== 'undefined') {
+                gsap.registerPlugin(ScrollTrigger);
+                
+                gsap.from('.glass-card:not(#mobile-menu-btn)', {
+                    scrollTrigger: { trigger: '.glass-card:not(#mobile-menu-btn)', start: 'top 80%' },
+                    y: 50, opacity: 0, duration: 0.8, stagger: 0.2, ease: 'power2.out',
+                    clearProps: 'opacity,transform'
+                });
+            }
+        });
     </script>
 </body>
 </html>
