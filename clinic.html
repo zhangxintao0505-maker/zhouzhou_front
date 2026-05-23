@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小诊所 | 我们的专属宇宙</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Noto+Serif+SC:wght@300;400;500;700&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#10B981',
+                        secondary: '#8B5CF6',
+                        tertiary: '#3B82F6',
+                        dark: '#1E293B',
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Serif SC"', 'serif'],
+                        serif: ['"Noto Serif SC"', 'serif'],
+                        cinzel: ['"Cinzel"', 'serif'],
+                        montserrat: ['"Montserrat"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(-45deg, #e0f2fe, #f3e8ff, #d1fae5, #e0f2fe);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #1E293B;
+            font-family: 'Noto Serif SC', serif;
+            overflow-x: hidden;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .nav-pill {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.03);
+        }
+    </style>
+    
+    <!-- 引入公共样式 -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="min-h-screen flex flex-col selection:bg-tertiary selection:text-white">
+
+    <!-- 顶部导航 -->
+    <div class="fixed top-6 w-full z-50 flex justify-center px-4">
+        <nav class="nav-pill rounded-full px-2 py-1.5 flex items-center gap-1 md:gap-4 transition-all duration-300">
+            <!-- Logo (长按3秒触发暗号模式) -->
+            <div id="logo" class="w-8 h-8 rounded-full bg-gradient-to-br from-tertiary to-primary flex items-center justify-center cursor-pointer mr-2 select-none" title="长按3秒解锁创作者模式">
+                <span class="text-white text-xs font-bold font-cinzel">Z&Y</span>
+            </div>
+            
+            <a href="index.html" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">首页</a>
+            <a href="index.html#marquee" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">生活碎片</a>
+            <a href="restaurant.html" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">小餐馆</a>
+            <a href="tavern.html" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">小酒馆</a>
+            <a href="clinic.html" class="text-xs md:text-sm text-tertiary px-3 py-2 rounded-full transition-colors font-sans tracking-widest font-medium">小诊所</a>
+            <a href="museum.html" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">纪念博物馆</a>
+        </nav>
+    </div>
+
+    <!-- 页面头部 -->
+    <section class="pt-32 pb-16 px-4 relative z-10">
+        <div class="container mx-auto max-w-6xl text-center">
+            <div class="inline-flex items-center gap-4 mb-6">
+                <div class="w-16 h-16 bg-tertiary/10 rounded-full flex items-center justify-center">
+                    <i class="fa fa-heartbeat text-3xl text-tertiary"></i>
+                </div>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-medium text-slate-800 tracking-[0.2em] mb-4">小诊所</h1>
+            <p class="text-slate-500 tracking-widest text-sm font-cinzel">Our Clinic</p>
+            <p class="text-slate-400 text-xs mt-4 max-w-md mx-auto">最贴心、最实用的健康守护站，照顾好舟舟的每一天</p>
+        </div>
+    </section>
+
+    <!-- 功能切换标签 -->
+    <section class="px-4 relative z-10">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex flex-wrap justify-center gap-3 mb-12">
+                <button onclick="showTab('period')" id="tab-period" class="px-5 py-2 rounded-full text-xs tracking-widest transition-all bg-pink-500 text-white shadow-md">
+                    <i class="fa fa-calendar mr-1"></i>生理期
+                </button>
+                <button onclick="showTab('products')" id="tab-products" class="px-5 py-2 rounded-full text-xs tracking-widest transition-all bg-white/50 text-slate-600 hover:bg-white/70">
+                    <i class="fa fa-shopping-bag mr-1"></i>好物备忘
+                </button>
+                <button onclick="showTab('health')" id="tab-health" class="px-5 py-2 rounded-full text-xs tracking-widest transition-all bg-white/50 text-slate-600 hover:bg-white/70">
+                    <i class="fa fa-medkit mr-1"></i>健康贴士
+                </button>
+                <button onclick="showTab('medicine')" id="tab-medicine" class="px-5 py-2 rounded-full text-xs tracking-widest transition-all bg-white/50 text-slate-600 hover:bg-white/70">
+                    <i class="fa fa-pills mr-1"></i>用药记录
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 生理期跟踪 -->
+    <section id="section-period" class="pb-24 px-4 relative z-10">
+        <div class="container mx-auto max-w-4xl">
+            
+            <!-- 周期概览卡片 -->
+            <div class="glass-card rounded-2xl p-8 mb-8">
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="flex-1 text-center md:text-left">
+                        <h3 class="text-lg font-medium text-slate-700 mb-2">生理期跟踪</h3>
+                        <p class="text-sm text-slate-500 mb-4">记录舟舟的周期，提前做好温暖准备</p>
+                        
+                        <div class="grid grid-cols-3 gap-4 text-center">
+                            <div class="bg-pink-50 rounded-xl p-4">
+                                <div class="text-2xl font-light text-pink-500 mb-1">28</div>
+                                <div class="text-xs text-slate-500">周期天数</div>
+                            </div>
+                            <div class="bg-pink-50 rounded-xl p-4">
+                                <div class="text-2xl font-light text-pink-500 mb-1">5</div>
+                                <div class="text-xs text-slate-500">持续天数</div>
+                            </div>
+                            <div class="bg-pink-50 rounded-xl p-4">
+                                <div class="text-2xl font-light text-pink-500 mb-1">12</div>
+                                <div class="text-xs text-slate-500">距下次(天)</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="w-48 h-48 rounded-full bg-gradient-to-br from-pink-100 to-purple-100 flex items-center justify-center relative">
+                        <div class="text-center">
+                            <div class="text-3xl font-light text-pink-500">5月</div>
+                            <div class="text-sm text-slate-500">29日</div>
+                            <div class="text-xs text-pink-400 mt-1">预计下次</div>
+                        </div>
+                        <div class="absolute -top-2 -right-2 w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center">
+                            <i class="fa fa-heart text-white text-xs"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 暖心提示 -->
+            <div class="glass-card rounded-2xl p-6 bg-pink-50/50">
+                <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fa fa-bell text-pink-500"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-medium text-slate-700 mb-1">暖心提醒</h4>
+                        <p class="text-sm text-slate-500">距离下次生理期还有12天，记得提醒舟舟注意保暖，少喝冷饮哦～</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 添加记录按钮 -->
+            <div class="mt-8 text-center">
+                <button class="px-8 py-3 bg-pink-500 text-white rounded-full text-sm tracking-widest hover:bg-pink-600 transition shadow-md">
+                    <i class="fa fa-plus mr-2"></i>记录新周期
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 女性好物备忘录 -->
+    <section id="section-products" class="pb-24 px-4 relative z-10 hidden">
+        <div class="container mx-auto max-w-4xl">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 好物卡片 -->
+                <div class="glass-card rounded-2xl p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center">
+                            <i class="fa fa-check text-pink-500"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-medium text-slate-700">ABC卫生巾</h3>
+                            <p class="text-xs text-slate-400">舟舟常用品牌</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2 text-sm text-slate-500">
+                        <p><span class="text-slate-600">规格：</span>日用240mm / 夜用290mm</p>
+                        <p><span class="text-slate-600">特点：</span>棉柔亲肤，不过敏</p>
+                        <p><span class="text-slate-600">购买：</span>天猫旗舰店 / 京东</p>
+                    </div>
+                    <div class="mt-4 flex gap-2">
+                        <span class="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">推荐</span>
+                        <span class="text-xs bg-pink-100 text-pink-600 px-2 py-1 rounded-full">不过敏</span>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center">
+                            <i class="fa fa-check text-pink-500"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-medium text-slate-700">红糖姜茶</h3>
+                            <p class="text-xs text-slate-400">经期必备暖饮</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2 text-sm text-slate-500">
+                        <p><span class="text-slate-600">品牌：</span>寿全斋</p>
+                        <p><span class="text-slate-600">用法：</span>热水冲泡，经期每天一杯</p>
+                        <p><span class="text-slate-600">效果：</span>暖宫驱寒，缓解痛经</p>
+                    </div>
+                    <div class="mt-4 flex gap-2">
+                        <span class="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full">暖宫</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 添加按钮 -->
+            <div class="mt-8 glass-card rounded-2xl p-8 border-2 border-dashed border-slate-200 hover:border-pink-300 transition-all cursor-pointer group text-center">
+                <div class="w-16 h-16 mx-auto bg-slate-100 rounded-full flex items-center justify-center mb-4 group-hover:bg-pink-100 transition">
+                    <i class="fa fa-plus text-2xl text-slate-300 group-hover:text-pink-500 transition"></i>
+                </div>
+                <p class="text-sm text-slate-400 group-hover:text-pink-500 transition">添加新的好物推荐</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 健康预防小贴士 -->
+    <section id="section-health" class="pb-24 px-4 relative z-10 hidden">
+        <div class="container mx-auto max-w-4xl">
+            
+            <div class="space-y-6">
+                <div class="glass-card rounded-2xl p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <i class="fa fa-umbrella text-blue-500 text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-medium text-slate-700 mb-2">经期保暖注意事项</h3>
+                            <ul class="text-sm text-slate-500 space-y-1">
+                                <li>• 避免接触冷水，洗手用温水</li>
+                                <li>• 不吃生冷食物，少喝冷饮</li>
+                                <li>• 注意腹部保暖，可以用暖宝宝</li>
+                                <li>• 保证充足睡眠，避免熬夜</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <i class="fa fa-apple text-green-500 text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-medium text-slate-700 mb-2">日常饮食建议</h3>
+                            <ul class="text-sm text-slate-500 space-y-1">
+                                <li>• 多吃红枣、桂圆等补血食物</li>
+                                <li>• 适量补充铁质，预防贫血</li>
+                                <li>• 多喝温水，保持身体水分</li>
+                                <li>• 少吃辛辣刺激食物</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <i class="fa fa-bed text-purple-500 text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-medium text-slate-700 mb-2">作息与运动</h3>
+                            <ul class="text-sm text-slate-500 space-y-1">
+                                <li>• 保持规律作息，早睡早起</li>
+                                <li>• 适量运动，如瑜伽、散步</li>
+                                <li>• 避免剧烈运动和重体力劳动</li>
+                                <li>• 保持心情愉快，减少压力</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 用药记录 -->
+    <section id="section-medicine" class="pb-24 px-4 relative z-10 hidden">
+        <div class="container mx-auto max-w-4xl">
+            
+            <!-- 用药日历提示 -->
+            <div class="glass-card rounded-2xl p-6 mb-8">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                        <i class="fa fa-clock-o text-blue-500"></i>
+                    </div>
+                    <h3 class="text-base font-medium text-slate-700">今日用药提醒</h3>
+                </div>
+                <div class="bg-blue-50 rounded-xl p-4">
+                    <p class="text-sm text-blue-700">
+                        <i class="fa fa-info-circle mr-1"></i>
+                        当前没有设置用药提醒。点击下方按钮添加用药计划。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 用药记录列表 -->
+            <div class="space-y-4">
+                <div class="glass-card rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-base font-medium text-slate-700">布洛芬</h3>
+                        <span class="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">已完成</span>
+                    </div>
+                    <div class="text-sm text-slate-500 space-y-1">
+                        <p>用途：缓解痛经</p>
+                        <p>用量：每次1粒，饭后服用</p>
+                        <p>记录：5月1日 - 5月3日</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 添加按钮 -->
+            <div class="mt-8 glass-card rounded-2xl p-8 border-2 border-dashed border-slate-200 hover:border-blue-300 transition-all cursor-pointer group text-center">
+                <div class="w-16 h-16 mx-auto bg-slate-100 rounded-full flex items-center justify-center mb-4 group-hover:bg-blue-100 transition">
+                    <i class="fa fa-plus text-2xl text-slate-300 group-hover:text-blue-500 transition"></i>
+                </div>
+                <p class="text-sm text-slate-400 group-hover:text-blue-500 transition">添加新的用药记录</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="py-8 text-center text-slate-400 text-xs tracking-[0.2em] font-cinzel relative z-10 mt-auto">
+        <p>MADE WITH <i id="footer-heart" class="fa fa-heart text-tertiary/70 animate-pulse mx-1 cursor-pointer"></i> BY XIAOYANG FOR ZHOUZHOU</p>
+    </footer>
+
+    <!-- 歌单面板 -->
+    <div id="playlist-panel" class="playlist-panel">
+        <div class="playlist-header">
+            <h3 class="text-lg font-medium text-slate-700">我们的歌单</h3>
+            <button id="close-playlist" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition">
+                <i class="fa fa-times text-slate-500 text-sm"></i>
+            </button>
+        </div>
+        
+        <div id="playlist-items" class="playlist-items">
+            <!-- 歌单列表将由JS动态生成 -->
+        </div>
+        
+        <div class="playlist-controls">
+            <button id="prev-btn" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center hover:bg-tertiary/10 transition">
+                <i class="fa fa-step-backward text-slate-600"></i>
+            </button>
+            <button id="play-pause-btn" class="w-14 h-14 rounded-full bg-tertiary flex items-center justify-center hover:bg-tertiary/90 transition shadow-lg shadow-tertiary/30">
+                <i class="fa fa-play text-white text-lg"></i>
+            </button>
+            <button id="next-btn" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center hover:bg-tertiary/10 transition">
+                <i class="fa fa-step-forward text-slate-600"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- 暗号模式遮罩 -->
+    <div id="secret-overlay" class="secret-mode-overlay">
+        <div class="secret-input-container">
+            <div class="w-16 h-16 mx-auto bg-gradient-to-br from-tertiary/20 to-primary/20 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-lock text-2xl text-tertiary"></i>
+            </div>
+            <h3 class="text-xl font-medium text-slate-700 mb-2">创作者模式</h3>
+            <p class="text-sm text-slate-500 mb-4">输入专属暗号解锁编辑功能</p>
+            <input id="secret-input" type="password" class="secret-input" placeholder="请输入暗号" maxlength="10">
+            <button id="secret-submit-btn" class="secret-submit-btn">
+                <i class="fa fa-unlock mr-2"></i>解锁
+            </button>
+            <button id="secret-cancel-btn" class="mt-3 text-sm text-slate-400 hover:text-slate-600 transition" onclick="hideSecretOverlay()">
+                取消
+            </button>
+        </div>
+    </div>
+
+    <!-- 编辑模式按钮 -->
+    <button id="edit-mode-btn" class="edit-mode-btn">
+        <i class="fa fa-unlock text-lg"></i>
+    </button>
+
+    <!-- 引入公共脚本 -->
+    <script src="js/main.js"></script>
+    
+    <script>
+        function showTab(tab) {
+            const tabs = ['period', 'products', 'health', 'medicine'];
+            tabs.forEach(t => {
+                document.getElementById(`section-${t}`).classList.toggle('hidden', t !== tab);
+                document.getElementById(`tab-${t}`).className = t === tab
+                    ? 'px-5 py-2 rounded-full text-xs tracking-widest transition-all bg-pink-500 text-white shadow-md'
+                    : 'px-5 py-2 rounded-full text-xs tracking-widest transition-all bg-white/50 text-slate-600 hover:bg-white/70';
+            });
+        }
+    </script>
+</body>
+</html>

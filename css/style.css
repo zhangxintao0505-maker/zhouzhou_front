@@ -1,0 +1,402 @@
+/* 公共样式表 - 舟舟与小羊专属520网站 */
+
+/* 隐藏滚动条 */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* 动态清新极光背景 */
+body {
+    margin: 0;
+    background: linear-gradient(-45deg, #e0f2fe, #f3e8ff, #d1fae5, #e0f2fe);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    color: #1E293B;
+    font-family: 'Noto Serif SC', serif;
+    overflow-x: hidden;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* 胶囊导航栏毛玻璃 - 清新高定版 */
+.nav-pill {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+}
+
+/* 模块卡片毛玻璃质感 */
+.glass-card {
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.03);
+}
+
+/* 满屏便签样式 */
+.love-note {
+    position: fixed;
+    width: 80px;
+    height: 80px;
+    transform: rotate(45deg) scale(0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.17, 0.89, 0.32, 1.49);
+    z-index: 100;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.love-note::before, .love-note::after {
+    content: "";
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background-color: inherit;
+    border-radius: 50%;
+}
+
+.love-note::before { top: -40px; left: 0; }
+.love-note::after { top: 0; left: -40px; }
+
+.note-text {
+    position: relative;
+    z-index: 101;
+    font-size: 12px;
+    color: #fff;
+    text-align: center;
+    transform: rotate(-45deg);
+    width: 70px;
+    line-height: 1.5;
+    font-weight: 500;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    font-family: 'PingFang SC', sans-serif;
+}
+
+.love-note.show { opacity: 0.95; transform: rotate(45deg) scale(1); }
+
+/* 便签极光色系 */
+.color-1 { background-color: #8B5CF6; } /* 紫 */
+.color-2 { background-color: #3B82F6; } /* 蓝 */
+.color-3 { background-color: #10B981; } /* 绿 */
+.color-4 { background-color: #6366F1; } /* 靛蓝 */
+.color-5 { background-color: #14b8a6; } /* 柔青 */
+
+/* 锁定等宽数字，防止倒计时抖动 */
+.tabular-nums {
+    font-variant-numeric: tabular-nums;
+}
+
+/* 图集图片方向样式 */
+.gallery-landscape {
+    width: 280px;
+    height: 180px;
+}
+
+.gallery-portrait {
+    width: 200px;
+    height: 280px;
+}
+
+.gallery-square {
+    width: 220px;
+    height: 220px;
+}
+
+@media (min-width: 768px) {
+    .gallery-landscape {
+        width: 380px;
+        height: 240px;
+    }
+    
+    .gallery-portrait {
+        width: 260px;
+        height: 360px;
+    }
+    
+    .gallery-square {
+        width: 280px;
+        height: 280px;
+    }
+}
+
+/* 时光轴样式 */
+.timeline {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, #10B981, #8B5CF6, #3B82F6);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 2rem;
+    padding-bottom: 3rem;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -0.5rem;
+    top: 0.5rem;
+    width: 1rem;
+    height: 1rem;
+    background: white;
+    border: 3px solid #10B981;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+}
+
+.timeline-item:nth-child(even)::before {
+    border-color: #8B5CF6;
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+}
+
+.timeline-item:nth-child(3n)::before {
+    border-color: #3B82F6;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+}
+
+/* 歌单面板样式 */
+.playlist-panel {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    max-width: 400px;
+    height: 70vh;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top-left-radius: 2rem;
+    border-top-right-radius: 2rem;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.1);
+    transform: translateY(100%);
+    transition: transform 0.5s cubic-bezier(0.17, 0.89, 0.32, 1.2);
+    z-index: 60;
+    overflow: hidden;
+}
+
+.playlist-panel.open {
+    transform: translateY(0);
+}
+
+.playlist-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.playlist-items {
+    overflow-y: auto;
+    height: calc(100% - 140px);
+    padding: 1rem;
+}
+
+.playlist-item {
+    padding: 1rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.playlist-item:hover {
+    background: rgba(16, 185, 129, 0.1);
+}
+
+.playlist-item.active {
+    background: rgba(16, 185, 129, 0.15);
+    font-weight: 500;
+}
+
+.playlist-item.active .song-title {
+    color: #10B981;
+}
+
+.playlist-controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.9);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+/* 音乐播放器动画 */
+.music-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 16px;
+}
+
+.music-bar {
+    width: 3px;
+    background: #10B981;
+    border-radius: 2px;
+    animation: musicBar 1s ease-in-out infinite;
+}
+
+.music-bar:nth-child(1) { animation-delay: 0s; height: 8px; }
+.music-bar:nth-child(2) { animation-delay: 0.2s; height: 12px; }
+.music-bar:nth-child(3) { animation-delay: 0.4s; height: 6px; }
+.music-bar:nth-child(4) { animation-delay: 0.6s; height: 10px; }
+
+@keyframes musicBar {
+    0%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(0.5); }
+}
+
+/* 暗号模式样式 */
+.secret-mode-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 200;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.secret-mode-overlay.active {
+    display: flex;
+}
+
+.secret-input-container {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 2rem;
+    padding: 3rem;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.secret-input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 1rem;
+    font-size: 1.2rem;
+    text-align: center;
+    letter-spacing: 0.5em;
+    margin: 1.5rem 0;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.secret-input:focus {
+    border-color: #10B981;
+}
+
+.secret-submit-btn {
+    background: linear-gradient(135deg, #10B981, #8B5CF6);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.secret-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+}
+
+/* 编辑模式按钮 */
+.edit-mode-btn {
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #10B981, #8B5CF6);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 70;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 5px 20px rgba(16, 185, 129, 0.3);
+    transition: all 0.3s ease;
+}
+
+.edit-mode-btn:hover {
+    transform: scale(1.1);
+}
+
+.edit-mode-btn.active {
+    display: flex;
+}
+
+/* 添加按钮增强 */
+.add-record-btn {
+    background: linear-gradient(135deg, #10B981, #8B5CF6);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: none;
+}
+
+.add-record-btn.active {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.add-record-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .playlist-panel {
+        max-width: 100%;
+        height: 80vh;
+    }
+    
+    .secret-input-container {
+        padding: 2rem;
+        margin: 1rem;
+    }
+}

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>纪念博物馆 | 我们的专属宇宙</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Noto+Serif+SC:wght@300;400;500;700&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#10B981',
+                        secondary: '#8B5CF6',
+                        tertiary: '#3B82F6',
+                        dark: '#1E293B',
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Serif SC"', 'serif'],
+                        serif: ['"Noto Serif SC"', 'serif'],
+                        cinzel: ['"Cinzel"', 'serif'],
+                        montserrat: ['"Montserrat"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(-45deg, #e0f2fe, #f3e8ff, #d1fae5, #e0f2fe);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #1E293B;
+            font-family: 'Noto Serif SC', serif;
+            overflow-x: hidden;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .nav-pill {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.03);
+        }
+
+        /* 时光轴样式 */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #10B981, #8B5CF6, #3B82F6);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+            padding-bottom: 3rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -0.5rem;
+            top: 0.5rem;
+            width: 1rem;
+            height: 1rem;
+            background: white;
+            border: 3px solid #10B981;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+        }
+
+        .timeline-item:nth-child(even)::before {
+            border-color: #8B5CF6;
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+        }
+
+        .timeline-item:nth-child(3n)::before {
+            border-color: #3B82F6;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-primary selection:text-white">
+
+    <!-- 顶部导航 -->
+    <div class="fixed top-6 w-full z-50 flex justify-center px-4">
+        <nav class="nav-pill rounded-full px-2 py-1.5 flex items-center gap-1 md:gap-4 transition-all duration-300">
+            <a href="index.html" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">首页</a>
+            <a href="index.html#marquee" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">生活碎片</a>
+            <a href="restaurant.html" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">小餐馆</a>
+            <a href="tavern.html" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">小酒馆</a>
+            <a href="clinic.html" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">小诊所</a>
+            <a href="museum.html" class="text-xs md:text-sm text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest font-medium">纪念博物馆</a>
+        </nav>
+    </div>
+
+    <!-- 页面头部 -->
+    <section class="pt-32 pb-16 px-4 relative z-10">
+        <div class="container mx-auto max-w-6xl text-center">
+            <div class="inline-flex items-center gap-4 mb-6">
+                <div class="w-16 h-16 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full flex items-center justify-center">
+                    <i class="fa fa-university text-3xl bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"></i>
+                </div>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-medium text-slate-800 tracking-[0.2em] mb-4">纪念博物馆</h1>
+            <p class="text-slate-500 tracking-widest text-sm font-cinzel">Memorial Museum</p>
+            <p class="text-slate-400 text-xs mt-4 max-w-md mx-auto">动态生长的爱情编年史，记录我们的每一个"第一次"</p>
+        </div>
+    </section>
+
+    <!-- 时光轴 -->
+    <section class="pb-24 px-4 relative z-10">
+        <div class="container mx-auto max-w-3xl">
+            <div class="timeline">
+                
+                <!-- 第一次告白 -->
+                <div class="timeline-item">
+                    <div class="glass-card rounded-2xl overflow-hidden">
+                        <div class="relative overflow-hidden">
+                            <img src="images/museum/520.jpg" class="w-full h-full object-cover" alt="告白">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                            <div class="absolute bottom-4 left-4 right-4 text-white">
+                                <div class="text-xs font-cinzel tracking-widest mb-1">2026.04.28</div>
+                                <h3 class="text-xl font-medium">第一次告白</h3>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-sm text-slate-500 leading-relaxed whitespace-pre-line">
+我一直相信，一段关系需要一个正式的开始。所以今天，我想给你一束花，和一次认真的表白。
+
+还记得第一次见到你，你的漂亮就令我害羞的不敢直视，第二次见到你的时候，无意间听到你对于爱情的勇气又让我十分敬佩，第三次见到你时，我的目光也会不时的聚焦到你的身上，我原以为我们会是两条平行线，我想也许从那个时候开始就命中注定了，我们俩之间可能会有很深的缘分。
+
+直到最近的几个月我们的一次次的深夜交谈，我突然发现相比起你的外貌，你极其成熟的思想维度才是更加吸引我的，也是因为你的善良我发现压在我20多年的痛苦，有这样一个女孩能和我一起分担，她会因为共情我之前的经历而流泪，也会鼓励我肯定我，也会认真的指出我犯的错误，当我迷失的时候你散发的光芒会引导我走向更好。也是你让我第一次感受到被人坚定的选择是一种什么样的感觉。
+
+这时候我才发现喜欢你大概是这个世界上，最没有道理的事了，突然间我的生活中有了一个你让我牵肠挂肚，割舍不下。因为有了你我对于未来所有的期待都变成了同一件事情，那就是与你一起。
+
+不管是清晨的日出，还是正午的小憩，又或是漫天星辰的夜晚，我都想和你一起度过。我想和你分享我每天吃的什么做了什么，原来有你的陪伴，日子过的灿烂。
+
+我想在能看见你的岁月里，只想对你一个人好。纵使生活工作没那么容易，我还是想把你放在未来里，所以舟舟，你愿意让我成为那个守护你一生一世的男朋友么
+                            </p>
+                            <div class="mt-4 flex items-center gap-2">
+                                <span class="text-xs bg-pink-100 text-pink-600 px-2 py-1 rounded-full">表白</span>
+                                <span class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">心动</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 第一次牵手 -->
+                <div class="timeline-item">
+                    <div class="glass-card rounded-2xl overflow-hidden">
+                        <div class="p-6">
+                            <div class="text-xs font-cinzel tracking-widest text-primary mb-2">2026.04.30</div>
+                            <h3 class="text-lg font-medium text-slate-700 mb-3">第一次牵手</h3>
+                            <p class="text-sm text-slate-500 leading-relaxed">
+                                看电影的时候，偷偷牵起了你的手。你没有躲开，反而握得更紧了。那一刻，感觉拥有了全世界。
+                            </p>
+                            <div class="mt-4">
+                                <span class="text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded-full">甜蜜</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 520纪念日 -->
+                <div class="timeline-item">
+                    <div class="glass-card rounded-2xl overflow-hidden">
+                        <div class="relative h-48 overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                            <div class="text-center">
+                                <div class="text-6xl font-light bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">520</div>
+                                <div class="text-sm text-slate-500 mt-2">我们的第一个520</div>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="text-xs font-cinzel tracking-widest text-secondary mb-2">2026.05.20</div>
+                            <h3 class="text-lg font-medium text-slate-700 mb-3">第一个520</h3>
+                            <p class="text-sm text-slate-500 leading-relaxed">
+                                这个网站就是我送你的520礼物。每一页都写满了我想对你说的话，每一行代码都是我的心意。
+                            </p>
+                            <div class="mt-4 flex items-center gap-2">
+                                <span class="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">纪念日</span>
+                                <span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full">礼物</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 未来：待续 -->
+                <div class="timeline-item">
+                    <div class="glass-card rounded-2xl p-8 border-2 border-dashed border-slate-200 text-center">
+                        <div class="w-16 h-16 mx-auto bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full flex items-center justify-center mb-4">
+                            <i class="fa fa-heart text-2xl text-primary"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-slate-700 mb-2">未完待续...</h3>
+                        <p class="text-sm text-slate-400">更多美好的第一次，等我们一起去创造</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 添加纪念日按钮 -->
+            <div class="mt-12 text-center">
+                <button class="px-8 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-full text-sm tracking-widest hover:shadow-lg hover:shadow-primary/20 transition-all">
+                    <i class="fa fa-plus mr-2"></i>添加新的纪念日
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="py-8 text-center text-slate-400 text-xs tracking-[0.2em] font-cinzel relative z-10 mt-auto">
+        <p>MADE WITH <i class="fa fa-heart text-primary/70 animate-pulse mx-1"></i> BY XIAOYANG FOR ZHOUZHOU</p>
+    </footer>
+</body>
+</html>

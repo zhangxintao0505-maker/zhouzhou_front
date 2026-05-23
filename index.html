@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To 舟舟 | 我们的专属宇宙</title>
+    
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 引入 GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <!-- 引入电影感高级字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Noto+Serif+SC:wght@300;400;500;700&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#10B981',   // 高级薄荷绿 (Emerald)
+                        secondary: '#8B5CF6', // 浪漫紫 (Violet)
+                        tertiary: '#3B82F6',  // 清新蓝 (Blue)
+                        dark: '#1E293B',      // 深邃灰（用于清新背景下的文字）
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Serif SC"', 'serif'],
+                        serif: ['"Noto Serif SC"', 'serif'],
+                        cinzel: ['"Cinzel"', 'serif'],
+                        montserrat: ['"Montserrat"', 'sans-serif'],
+                    },
+                    animation: {
+                        'spin-slow': 'spin 8s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'gradient-bg': 'gradientBG 15s ease infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        gradientBG: {
+                            '0%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' },
+                            '100%': { backgroundPosition: '0% 50%' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* 隐藏滚动条 */
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* 动态清新极光背景 */
+        body {
+            margin: 0;
+            background: linear-gradient(-45deg, #e0f2fe, #f3e8ff, #d1fae5, #e0f2fe);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #1E293B;
+            font-family: 'Noto Serif SC', serif;
+            overflow-x: hidden;
+        }
+
+        /* 胶囊导航栏毛玻璃 - 清新高定版 */
+        .nav-pill {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* 模块卡片毛玻璃质感 */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.03);
+        }
+
+        /* 满屏便签样式 (保持高饱和度增加对比) */
+        .love-note {
+            position: fixed;
+            width: 80px;
+            height: 80px;
+            transform: rotate(45deg) scale(0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.8s cubic-bezier(0.17, 0.89, 0.32, 1.49);
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        .love-note::before, .love-note::after {
+            content: ""; position: absolute; width: 80px; height: 80px;
+            background-color: inherit; border-radius: 50%;
+        }
+        .love-note::before { top: -40px; left: 0; }
+        .love-note::after { top: 0; left: -40px; }
+        .note-text {
+            position: relative; z-index: 101; font-size: 12px; color: #fff;
+            text-align: center; transform: rotate(-45deg); width: 70px; line-height: 1.5;
+            font-weight: 500; text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            font-family: 'PingFang SC', sans-serif;
+        }
+        .love-note.show { opacity: 0.95; transform: rotate(45deg) scale(1); }
+        
+        /* 便签极光色系 */
+        .color-1 { background-color: #8B5CF6; } /* 紫 */
+        .color-2 { background-color: #3B82F6; } /* 蓝 */
+        .color-3 { background-color: #10B981; } /* 绿 */
+        .color-4 { background-color: #6366F1; } /* 靛蓝 */
+        .color-5 { background-color: #14b8a6; } /* 柔青 */
+
+        /* 锁定等宽数字，防止倒计时抖动 */
+        .tabular-nums {
+            font-variant-numeric: tabular-nums;
+        }
+    </style>
+    
+    <!-- 引入公共样式 -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="min-h-screen flex flex-col relative selection:bg-primary selection:text-white">
+
+    <!-- 顶部导航 (参照图片的高级清透胶囊样式) -->
+    <div class="fixed top-6 w-full z-50 flex justify-center px-4">
+        <nav class="nav-pill rounded-full px-2 py-1.5 flex items-center gap-1 md:gap-4">
+            <!-- Logo (长按3秒触发暗号模式) -->
+            <div id="logo" class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center cursor-pointer mr-2 select-none" title="长按3秒解锁创作者模式">
+                <span class="text-white text-xs font-bold font-cinzel">Z&Y</span>
+            </div>
+            
+            <a href="#hero" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">首页</a>
+            <a href="#marquee" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">生活碎片</a>
+            <a href="restaurant.html" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">小餐馆</a>
+            <a href="tavern.html" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">小酒馆</a>
+            <a href="clinic.html" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">小诊所</a>
+            <a href="museum.html" class="text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">纪念博物馆</a>
+            
+            <!-- 高亮按钮 -->
+            <a href="#surprise" class="ml-2 bg-white text-primary text-xs md:text-sm font-medium px-5 py-2.5 rounded-full hover:bg-primary hover:text-white transition-all active:scale-95 flex items-center gap-2 font-sans tracking-widest shadow-md">
+                专属信箱 <i class="fa fa-arrow-right text-[10px]"></i>
+            </a>
+        </nav>
+    </div>
+
+    <!-- 音乐播放器 -->
+    <div class="fixed bottom-8 right-8 z-50 flex items-center gap-3">
+        <!-- 歌单触发器 -->
+        <div id="playlist-trigger" class="w-10 h-10 rounded-full glass-card flex items-center justify-center border border-white cursor-pointer hover:border-primary transition-all duration-300 shadow-md">
+            <i class="fa fa-list-music text-slate-400 text-sm hover:text-primary transition"></i>
+        </div>
+        
+        <!-- 播放/暂停按钮 -->
+        <div id="music-player" class="cursor-pointer animate-float group">
+            <div class="w-12 h-12 rounded-full glass-card flex items-center justify-center border border-white relative overflow-hidden transition-all duration-500 hover:border-primary shadow-lg">
+                <audio id="bgm" loop>
+                    <source src="music/陈奕迅 - 多少.flac" type="audio/flac">
+                    <source src="music/陈奕迅 - I Do.flac" type="audio/flac">
+                    <source src="music/承桓 - 我会忘记 (我会放弃).ogg" type="audio/ogg">
+                </audio>
+                <i id="music-icon" class="fa fa-music text-slate-400 text-sm transition-all duration-500 group-hover:text-primary"></i>
+                <div class="absolute inset-0 rounded-full border border-primary/40 animate-ping opacity-0 group-hover:opacity-100"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 首屏：倒计时区 -->
+    <section id="hero" class="min-h-screen flex items-center justify-center pt-20 px-4 relative z-10">
+        <!-- 背景图 -->
+        <div class="gsap-hero max-w-6xl w-full aspect-[4/3] md:aspect-[21/9] rounded-2xl relative overflow-hidden shadow-2xl flex flex-col items-center justify-center text-white border border-white/50"
+             style="background-image: url('images/hero/520.jpg'); background-size: cover; background-position: center;">
+            
+            <!-- 温柔的渐变遮罩，保证白色文字清晰 -->
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-slate-800/20 to-slate-900/30"></div>
+
+            <div class="relative z-10 w-full h-full flex flex-col justify-between p-8 md:p-14">
+                
+                <!-- 顶部小字 -->
+                <div class="flex justify-between items-start w-full mb-8 relative font-cinzel">
+                    <div class="text-xs md:text-sm tracking-[0.4em] uppercase text-white/90">
+                        To ZhouZhou
+                    </div>
+                    <div class="absolute left-1/2 -translate-x-1/2 text-sm md:text-base tracking-[0.5em] uppercase mt-2 md:mt-0 text-white font-medium text-shadow-md">
+                        Our Time
+                    </div>
+                </div>
+
+                <!-- 倒计时区域 (修复跳动：增加固定宽度 w-20 md:w-32 和 tabular-nums) -->
+                <div class="flex justify-center items-center gap-2 md:gap-8 my-auto font-montserrat">
+                    <div class="flex flex-col items-center w-20 md:w-32">
+                        <div id="days" class="text-5xl md:text-8xl font-light tracking-tighter mb-2 text-white tabular-nums text-center">000</div>
+                        <div class="text-[10px] md:text-xs tracking-[0.5em] lowercase text-white/80">days</div>
+                    </div>
+                    <div class="text-3xl md:text-5xl font-light text-white/50 mb-6">:</div>
+                    <div class="flex flex-col items-center w-20 md:w-32">
+                        <div id="hours" class="text-5xl md:text-8xl font-light tracking-tighter mb-2 text-white tabular-nums text-center">00</div>
+                        <div class="text-[10px] md:text-xs tracking-[0.5em] lowercase text-white/80">hours</div>
+                    </div>
+                    <div class="text-3xl md:text-5xl font-light text-white/50 mb-6">:</div>
+                    <div class="flex flex-col items-center w-20 md:w-32">
+                        <div id="minutes" class="text-5xl md:text-8xl font-light tracking-tighter mb-2 text-white tabular-nums text-center">00</div>
+                        <div class="text-[10px] md:text-xs tracking-[0.5em] lowercase text-white/80">min</div>
+                    </div>
+                    <div class="text-3xl md:text-5xl font-light text-white/50 mb-6 hidden md:block">:</div>
+                    <div class="flex flex-col items-center w-20 md:w-32 hidden md:flex">
+                        <div id="seconds" class="text-5xl md:text-8xl font-light tracking-tighter mb-2 text-white tabular-nums text-center">00</div>
+                        <div class="text-[10px] md:text-xs tracking-[0.5em] lowercase text-white/80">sec</div>
+                    </div>
+                </div>
+
+                <!-- 底部说明文字 -->
+                <div class="text-center mt-8">
+                    <p class="text-xs md:text-sm text-white/90 tracking-[0.2em] mb-4 leading-loose font-light">
+                        遇见你，是我做过最美好的事。<br>
+                        未来的路，我想牵着你的手一直走下去。
+                    </p>
+                    <p class="text-[10px] text-primary tracking-[0.4em] font-cinzel font-medium">
+                        SINCE 2026.04.28
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 视差滚动图集 (复刻 3D Jack 样式，清新背景) -->
+    <section id="marquee" class="pt-24 pb-16 overflow-hidden flex flex-col gap-4 relative z-10">
+        <div class="text-center mb-10 px-4">
+            <h2 class="text-xl md:text-2xl font-medium text-slate-800 tracking-[0.3em] mb-2">生活碎片</h2>
+            <p class="text-slate-500 text-xs tracking-widest uppercase font-cinzel">Fragments of Life</p>
+        </div>
+        
+        <!-- 第一行 (向右滚动) -->
+        <div id="marquee-row-1" class="flex gap-4 w-max will-change-transform">
+            <!-- 图片由JS从content.json动态加载 -->
+        </div>
+        
+        <!-- 第二行 (向左滚动) -->
+        <div id="marquee-row-2" class="flex gap-4 w-max will-change-transform mt-2">
+            <!-- 图片由JS从content.json动态加载 -->
+        </div>
+    </section>
+
+    <!-- 占位预留：小餐馆/小酒馆/小诊所 (清新卡片风格) -->
+    <section id="restaurant" class="py-24 px-4 relative z-10">
+        <div class="container mx-auto max-w-6xl">
+            <!-- 玻璃质感大卡片包裹模块预留区域 -->
+            <div class="glass-card rounded-[2rem] p-12 text-center relative overflow-hidden">
+                <!-- 装饰光晕 -->
+                <div class="absolute -top-20 -right-20 w-64 h-64 bg-primary/20 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-secondary/20 rounded-full blur-3xl"></div>
+                
+                <h2 class="text-3xl font-medium text-slate-800 tracking-[0.2em] mb-4 relative z-10">我们的未来版图</h2>
+                <p class="text-slate-500 tracking-widest text-sm relative z-10">此区域已为您预留，随时可解锁专属模块</p>
+                
+                <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+                    <!-- 预留卡片 1 -->
+                    <div id="restaurant" class="bg-white/40 border border-white p-8 rounded-2xl hover:bg-white/60 transition shadow-sm hover:shadow-md cursor-pointer group">
+                        <div class="w-16 h-16 mx-auto bg-primary/10 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                            <i class="fa fa-cutlery text-2xl text-primary"></i>
+                        </div>
+                        <h3 class="text-xl font-medium text-slate-700 tracking-widest">小餐馆</h3>
+                        <p class="text-xs text-slate-500 mt-2">属于我们的私房菜单</p>
+                    </div>
+                    <!-- 预留卡片 2 -->
+                    <div id="tavern" class="bg-white/40 border border-white p-8 rounded-2xl hover:bg-white/60 transition shadow-sm hover:shadow-md cursor-pointer group">
+                        <div class="w-16 h-16 mx-auto bg-secondary/10 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                            <i class="fa fa-glass text-2xl text-secondary"></i>
+                        </div>
+                        <h3 class="text-xl font-medium text-slate-700 tracking-widest">小酒馆</h3>
+                        <p class="text-xs text-slate-500 mt-2">微醺时刻的悄悄话</p>
+                    </div>
+                    <!-- 预留卡片 3 -->
+                    <div id="clinic" class="bg-white/40 border border-white p-8 rounded-2xl hover:bg-white/60 transition shadow-sm hover:shadow-md cursor-pointer group">
+                        <div class="w-16 h-16 mx-auto bg-tertiary/10 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                            <i class="fa fa-stethoscope text-2xl text-tertiary"></i>
+                        </div>
+                        <h3 class="text-xl font-medium text-slate-700 tracking-widest">小诊所</h3>
+                        <p class="text-xs text-slate-500 mt-2">治愈彼此的秘密基地</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 专属情话互动区 (清新治愈版) -->
+    <section id="surprise" class="py-32 px-4 text-center relative z-10 flex flex-col items-center justify-center">
+        <div class="w-[1px] h-16 bg-gradient-to-b from-transparent to-primary/50 mb-8"></div>
+        <h2 class="text-xl md:text-2xl font-medium text-slate-800 tracking-[0.3em] mb-4">有一份 520 惊喜等待签收</h2>
+        <p class="text-slate-500 mb-12 max-w-md tracking-widest text-sm leading-loose">点开它，听听我想对舟舟说的心里话</p>
+        
+        <button id="surprise-btn" class="relative overflow-hidden group px-10 py-4 border border-primary/30 bg-white/50 text-primary rounded-full font-medium tracking-[0.2em] hover:bg-primary hover:text-white transition-all duration-500 shadow-md hover:shadow-xl hover:shadow-primary/20 backdrop-blur-sm">
+            <span class="relative z-10 flex items-center gap-3 text-sm md:text-base">
+                <i class="fa fa-envelope-o"></i> 开启专属告白
+            </span>
+        </button>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="py-8 text-center text-slate-400 text-xs tracking-[0.2em] font-cinzel relative z-10">
+        <p>MADE WITH <i id="footer-heart" class="fa fa-heart text-primary/70 animate-pulse mx-1 cursor-pointer"></i> BY XIAOYANG FOR ZHOUZHOU</p>
+    </footer>
+
+    <!-- 歌单面板 -->
+    <div id="playlist-panel" class="playlist-panel">
+        <div class="playlist-header">
+            <h3 class="text-lg font-medium text-slate-700">我们的歌单</h3>
+            <button id="close-playlist" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition">
+                <i class="fa fa-times text-slate-500 text-sm"></i>
+            </button>
+        </div>
+        
+        <div id="playlist-items" class="playlist-items">
+            <!-- 歌单列表将由JS动态生成 -->
+        </div>
+        
+        <div class="playlist-controls">
+            <button id="prev-btn" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center hover:bg-primary/10 transition">
+                <i class="fa fa-step-backward text-slate-600"></i>
+            </button>
+            <button id="play-pause-btn" class="w-14 h-14 rounded-full bg-primary flex items-center justify-center hover:bg-primary/90 transition shadow-lg shadow-primary/30">
+                <i class="fa fa-play text-white text-lg"></i>
+            </button>
+            <button id="next-btn" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center hover:bg-primary/10 transition">
+                <i class="fa fa-step-forward text-slate-600"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- 暗号模式遮罩 -->
+    <div id="secret-overlay" class="secret-mode-overlay">
+        <div class="secret-input-container">
+            <div class="w-16 h-16 mx-auto bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-lock text-2xl text-primary"></i>
+            </div>
+            <h3 class="text-xl font-medium text-slate-700 mb-2">创作者模式</h3>
+            <p class="text-sm text-slate-500 mb-4">输入专属暗号解锁编辑功能</p>
+            <input id="secret-input" type="password" class="secret-input" placeholder="请输入暗号" maxlength="10">
+            <button id="secret-submit-btn" class="secret-submit-btn">
+                <i class="fa fa-unlock mr-2"></i>解锁
+            </button>
+            <button id="secret-cancel-btn" class="mt-3 text-sm text-slate-400 hover:text-slate-600 transition" onclick="hideSecretOverlay()">
+                取消
+            </button>
+        </div>
+    </div>
+
+    <!-- 编辑模式按钮 -->
+    <button id="edit-mode-btn" class="edit-mode-btn">
+        <i class="fa fa-unlock text-lg"></i>
+    </button>
+
+    <!-- 引入公共脚本 -->
+    <script src="js/main.js"></script>
+    
+    <script>
+        // ---------------- 1. 倒计时/正计时逻辑 ----------------
+        function updateTimer() {
+            const startDate = new Date(2026, 3, 27);
+            const now = new Date();
+            const diff = now - startDate;
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const mins = Math.floor((diff / (1000 * 60)) % 60);
+            const secs = Math.floor((diff / 1000) % 60);
+            
+            const pad = (num) => num.toString().padStart(2, '0');
+            
+            document.getElementById('days').innerText = pad(days);
+            document.getElementById('hours').innerText = pad(hours);
+            document.getElementById('minutes').innerText = pad(mins);
+            document.getElementById('seconds').innerText = pad(secs);
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // ---------------- 2. 动态加载图集 ----------------
+        async function loadGalleryImages() {
+            const row1 = document.getElementById('marquee-row-1');
+            const row2 = document.getElementById('marquee-row-2');
+            
+            try {
+                const response = await fetch('data/content.json');
+                const data = await response.json();
+                const images = data.galleryImages || [];
+                
+                if (images.length === 0) return;
+                
+                // 检测图片方向并设置对应样式
+                const loadImageWithOrientation = (src, container) => {
+                    return new Promise((resolve) => {
+                        const img = new Image();
+                        img.onload = () => {
+                            const ratio = img.naturalWidth / img.naturalHeight;
+                            let orientClass;
+                            
+                            if (ratio > 1.2) {
+                                // 横向图片
+                                orientClass = 'gallery-landscape';
+                            } else if (ratio < 0.8) {
+                                // 纵向图片
+                                orientClass = 'gallery-portrait';
+                            } else {
+                                // 正方形或接近正方形
+                                orientClass = 'gallery-square';
+                            }
+                            
+                            img.className = `${orientClass} rounded-2xl object-cover border-4 border-white shadow-md hover:shadow-xl transition-all hover:-translate-y-1`;
+                            img.loading = 'lazy';
+                            container.appendChild(img);
+                            resolve();
+                        };
+                        img.onerror = () => resolve();
+                        img.src = src;
+                    });
+                };
+                
+                // 将图片分成两半
+                const mid = Math.ceil(images.length / 2);
+                const row1Images = images.slice(0, mid);
+                const row2Images = images.slice(mid);
+                
+                // 渲染行
+                const renderRow = async (container, imgs) => {
+                    // 渲染两遍以保证滚动宽度足够
+                    for (let repeat = 0; repeat < 2; repeat++) {
+                        for (const src of imgs) {
+                            await loadImageWithOrientation(src, container);
+                        }
+                    }
+                };
+                
+                await renderRow(row1, row1Images);
+                await renderRow(row2, row2Images);
+                
+            } catch (error) {
+                console.log('加载图集失败:', error);
+            }
+        }
+        loadGalleryImages();
+
+        // ---------------- 3. 视差滚动视差特效 (3D Jack Marquee) ----------------
+        const row1 = document.getElementById('marquee-row-1');
+        const row2 = document.getElementById('marquee-row-2');
+        let scrollY = window.scrollY;
+        
+        window.addEventListener('scroll', () => {
+            window.requestAnimationFrame(() => {
+                scrollY = window.scrollY;
+                if(row1) row1.style.transform = `translate3d(${scrollY * 0.4 - 300}px, 0, 0)`;
+                if(row2) row2.style.transform = `translate3d(${-scrollY * 0.4 + 100}px, 0, 0)`;
+            });
+        });
+
+        // ---------------- 3. 入场 GSAP 动画 ----------------
+        window.addEventListener('load', () => {
+            gsap.from(".gsap-hero", {
+                y: 30,
+                opacity: 0,
+                duration: 2,
+                ease: "power2.out"
+            });
+            gsap.from(".nav-pill", {
+                y: -50,
+                opacity: 0,
+                duration: 1.5,
+                delay: 0.5,
+                ease: "power3.out"
+            });
+        });
+
+        // ---------------- 4. 满屏极光色便签 (惊喜交互) ----------------
+        const loveMessages = [
+            "舟舟，520快乐",
+            "记得好好吃饭",
+            "今天也有偷偷想你",
+            "你一笑，世界都亮了",
+            "想和你一起看遍风景",
+            "你在我心里最重要",
+            "照顾好自己",
+            "期待每一次见面",
+            "你的眼睛里有星星",
+            "想把所有温柔给你",
+            "喜欢你，没有为什么",
+            "想和你一起做很多事",
+            "见不到你时全是想念",
+            "双向奔赴的爱最美",
+            "永远做你的小羊"
+        ];
+
+        const surpriseBtn = document.getElementById('surprise-btn');
+        let hasClickedSurprise = false;
+
+        surpriseBtn.addEventListener('click', () => {
+            if (hasClickedSurprise) return;
+            hasClickedSurprise = true;
+            
+            // 按钮状态改变
+            surpriseBtn.innerHTML = `<span class="relative z-10 flex items-center gap-3 text-sm md:text-base"><i class="fa fa-heart"></i> 心意已传达</span>`;
+            surpriseBtn.classList.replace('bg-white/50', 'bg-primary');
+            surpriseBtn.classList.replace('text-primary', 'text-white');
+            surpriseBtn.classList.add('cursor-not-allowed');
+            
+            // 确保音乐播放
+            if(!isPlaying) toggleMusic();
+
+            // 生成满屏便签
+            loveMessages.forEach((message, index) => {
+                setTimeout(() => {
+                    createLoveNote(message);
+                }, index * 300); // 依次飘出
+            });
+        });
+
+        function createLoveNote(message) {
+            const note = document.createElement('div');
+            const text = document.createElement('div');
+            
+            // 随机分配 1-5 种极光颜色
+            const colorClass = `color-${Math.floor(Math.random() * 5) + 1}`;
+            note.className = `love-note ${colorClass}`;
+            text.className = 'note-text';
+            text.textContent = message;
+            
+            note.appendChild(text);
+            document.body.appendChild(note);
+
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+            const noteSize = 100;
+            
+            const randomX = Math.floor(Math.random() * (screenWidth - noteSize));
+            const scrollY = window.scrollY;
+            const randomY = scrollY + Math.floor(Math.random() * (screenHeight - noteSize));
+            
+            note.style.left = `${randomX}px`;
+            note.style.top = `${randomY}px`;
+
+            // 动画显示
+            setTimeout(() => {
+                note.classList.add('show');
+            }, 50);
+
+            // 增加呼吸浮动效果
+            let angle = Math.random() * Math.PI;
+            const originalTop = parseInt(note.style.top);
+            
+            setInterval(() => {
+                angle += 0.02;
+                const floatY = Math.sin(angle) * 8; 
+                note.style.top = `${originalTop + floatY}px`;
+            }, 50);
+            
+            // 10秒后渐隐消失，避免挡住页面
+            setTimeout(() => {
+                note.style.opacity = '0';
+                setTimeout(() => note.remove(), 1000);
+            }, 10000);
+        }
+    </script>
+</body>
+</html>

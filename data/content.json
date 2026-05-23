@@ -1,0 +1,294 @@
+{
+    "songs": [
+        {
+            "title": "多少",
+            "url": "music/陈奕迅 - 多少.flac",
+            "artist": "陈奕迅",
+            "duration": "4:30"
+        },
+        {
+            "title": "I Do",
+            "url": "music/陈奕迅 - I Do.flac",
+            "artist": "陈奕迅",
+            "duration": "4:15"
+        },
+        {
+            "title": "我会忘记",
+            "url": "music/承桓 - 我会忘记 (我会放弃).ogg",
+            "artist": "承桓",
+            "duration": "3:45"
+        },
+        {
+            "title": "QQ音乐歌曲1",
+            "url": "https://c6.y.qq.com/base/fcgi-bin/u?__=KOPX8RB4ePtC",
+            "artist": "未知",
+            "duration": "未知",
+            "isQQMusic": true
+        },
+        {
+            "title": "QQ音乐歌曲2",
+            "url": "https://c6.y.qq.com/base/fcgi-bin/u?__=NBRrEE77M0un",
+            "artist": "未知",
+            "duration": "未知",
+            "isQQMusic": true
+        }
+    ],
+    "messages": [
+        "舟舟，520快乐",
+        "记得好好吃饭",
+        "今天也有偷偷想你",
+        "你一笑，世界都亮了",
+        "想和你一起看遍风景",
+        "你在我心里最重要",
+        "照顾好自己",
+        "期待每一次见面",
+        "你的眼睛里有星星",
+        "想把所有温柔给你",
+        "喜欢你，没有为什么",
+        "想和你一起做很多事",
+        "见不到你时全是想念",
+        "双向奔赴的爱最美",
+        "永远做你的小羊"
+    ],
+    "photos": [
+        {
+            "url": "../images/museum/520.jpg",
+            "caption": "我们的第一张合照",
+            "date": "2026-04-28"
+        },
+        {
+            "url": "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+            "caption": "第一次约会",
+            "date": "2026-05-01"
+        },
+        {
+            "url": "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+            "caption": "一起看日落",
+            "date": "2026-05-10"
+        },
+        {
+            "url": "https://images.unsplash.com/photo-1543807535-eceef0bc6599?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+            "caption": "你的笑容",
+            "date": "2026-05-15"
+        }
+    ],
+    "restaurants": [
+        {
+            "name": "日式抹茶甜品店",
+            "date": "2026-05-01",
+            "location": "三里屯",
+            "rating": 4.8,
+            "description": "舟舟说这家的抹茶千层是她吃过最好的，奶油不甜腻，抹茶味很浓。",
+            "tags": ["甜品", "约会"],
+            "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400"
+        },
+        {
+            "name": "重庆老火锅",
+            "date": "2026-05-10",
+            "location": "国贸",
+            "rating": 4.5,
+            "description": "辣得过瘾！舟舟被辣到流泪但还是停不下来，毛肚特别新鲜。",
+            "tags": ["火锅", "辣"],
+            "image": "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400"
+        }
+    ],
+    "taverns": [
+        {
+            "name": "隐秘爵士酒吧",
+            "date": "2026-05-03",
+            "location": "工体",
+            "rating": 4.9,
+            "description": "氛围超棒的speakeasy风格酒吧，调酒师很专业，舟舟最爱那杯薰衣草金汤力。",
+            "tags": ["鸡尾酒", "爵士"],
+            "image": "https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=400"
+        },
+        {
+            "name": "晚安红酒之夜",
+            "date": "2026-05-14",
+            "location": "家",
+            "rating": 4.7,
+            "description": "在家的浪漫夜晚，开了一瓶澳洲西拉，配着芝士和火腿，聊到深夜。",
+            "tags": ["红酒", "居家"],
+            "image": "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400"
+        }
+    ],
+    "recipes": [
+        {
+            "name": "小羊特制番茄意面",
+            "status": "成功",
+            "description": "舟舟最爱的一道菜，简单但很美味，酸甜开胃。",
+            "ingredients": ["意大利面", "番茄", "大蒜", "橄榄油", "罗勒"],
+            "steps": [
+                "煮意面至八分熟",
+                "番茄切丁，大蒜切末",
+                "橄榄油爆香蒜末，加入番茄炒出汁",
+                "加入意面翻炒，调味出锅"
+            ],
+            "tips": "番茄要选熟透的，炒出来的汁才够浓郁。舟舟说加一点点糖更好吃！",
+            "image": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300"
+        }
+    ],
+    "cocktails": [
+        {
+            "name": "薰衣草金汤力",
+            "favorite": true,
+            "ingredients": [
+                "金酒 45ml",
+                "汤力水 150ml",
+                "薰衣草糖浆 15ml",
+                "新鲜柠檬汁 10ml",
+                "干薰衣草装饰"
+            ],
+            "steps": [
+                "冰块填满高脚杯",
+                "倒入金酒和薰衣草糖浆",
+                "轻轻搅拌均匀",
+                "缓缓注入汤力水",
+                "挤入柠檬汁，放上薰衣草装饰"
+            ]
+        }
+    ],
+    "healthTips": [
+        {
+            "category": "经期保暖",
+            "icon": "fa-umbrella",
+            "color": "blue",
+            "items": [
+                "避免接触冷水，洗手用温水",
+                "不吃生冷食物，少喝冷饮",
+                "注意腹部保暖，可以用暖宝宝",
+                "保证充足睡眠，避免熬夜"
+            ]
+        },
+        {
+            "category": "日常饮食",
+            "icon": "fa-apple",
+            "color": "green",
+            "items": [
+                "多吃红枣、桂圆等补血食物",
+                "适量补充铁质，预防贫血",
+                "多喝温水，保持身体水分",
+                "少吃辛辣刺激食物"
+            ]
+        },
+        {
+            "category": "作息与运动",
+            "icon": "fa-bed",
+            "color": "purple",
+            "items": [
+                "保持规律作息，早睡早起",
+                "适量运动，如瑜伽、散步",
+                "避免剧烈运动和重体力劳动",
+                "保持心情愉快，减少压力"
+            ]
+        }
+    ],
+    "products": [
+        {
+            "name": "ABC卫生巾",
+            "type": "舟舟常用品牌",
+            "spec": "日用240mm / 夜用290mm",
+            "features": "棉柔亲肤，不过敏",
+            "purchase": "天猫旗舰店 / 京东",
+            "tags": ["推荐", "不过敏"]
+        },
+        {
+            "name": "红糖姜茶",
+            "type": "经期必备暖饮",
+            "brand": "寿全斋",
+            "usage": "热水冲泡，经期每天一杯",
+            "effect": "暖宫驱寒，缓解痛经",
+            "tags": ["暖宫"]
+        }
+    ],
+    "timeline": [
+        {
+            "date": "2026-04-28",
+            "title": "第一次告白",
+            "description": "那天晚上，鼓起全部勇气对你说出了「我喜欢你」。心跳得很快，但看到你点头的那一刻，整个世界都亮了。这是我们故事的开始。",
+            "tags": ["表白", "心动"],
+            "image": "https://images.unsplash.com/photo-1518199266791-5375a83164ba?w=600"
+        },
+        {
+            "date": "2026-04-30",
+            "title": "第一次牵手",
+            "description": "看电影的时候，偷偷牵起了你的手。你没有躲开，反而握得更紧了。那一刻，感觉拥有了全世界。",
+            "tags": ["甜蜜"]
+        },
+        {
+            "date": "2026-05-20",
+            "title": "第一个520",
+            "description": "这个网站就是我送你的520礼物。每一页都写满了我想对你说的话，每一行代码都是我的心意。",
+            "tags": ["纪念日", "礼物"]
+        }
+    ],
+    "galleryImages": [
+        "images/gallery/2026-03-22 003549.jpg",
+        "images/gallery/2026-03-22 003551.jpg",
+        "images/gallery/2026-03-22 003553.jpg",
+        "images/gallery/2026-03-22 003555.jpg",
+        "images/gallery/2026-03-22 003557.jpg",
+        "images/gallery/2026-03-22 003559.jpg",
+        "images/gallery/2026-03-22 003601.jpg",
+        "images/gallery/2026-03-22 003603.jpg",
+        "images/gallery/2026-03-22 003605.jpg",
+        "images/gallery/2026-03-22 003610.jpg",
+        "images/gallery/2026-03-22 003612.jpg",
+        "images/gallery/2026-03-22 143955.jpg",
+        "images/gallery/2026-03-22 234202.jpg",
+        "images/gallery/2026-03-23 223117.jpg",
+        "images/gallery/2026-03-23 223119.jpg",
+        "images/gallery/2026-03-26 082807.jpg",
+        "images/gallery/2026-03-27 202300.jpg",
+        "images/gallery/2026-03-28 160600.jpg",
+        "images/gallery/2026-03-30 164755.jpg",
+        "images/gallery/2026-03-30 170447.jpg",
+        "images/gallery/2026-03-31 171319.jpg",
+        "images/gallery/2026-04-04 021449.jpg",
+        "images/gallery/2026-04-05 103734.jpg",
+        "images/gallery/2026-04-05 103736.jpg",
+        "images/gallery/2026-04-05 103738.jpg",
+        "images/gallery/2026-04-05 103742.jpg",
+        "images/gallery/2026-04-05 103745.jpg",
+        "images/gallery/2026-04-05 103754.jpg",
+        "images/gallery/2026-04-05 103758.jpg",
+        "images/gallery/2026-04-05 103804.jpg",
+        "images/gallery/2026-04-05 103817.jpg",
+        "images/gallery/2026-04-05 103819.jpg",
+        "images/gallery/2026-04-05 103825.jpg",
+        "images/gallery/2026-04-05 103829.jpg",
+        "images/gallery/2026-04-05 103835.jpg",
+        "images/gallery/2026-04-05 103952.jpg",
+        "images/gallery/2026-04-05 103954.jpg",
+        "images/gallery/2026-04-05 103956.jpg",
+        "images/gallery/2026-04-05 104045.jpg",
+        "images/gallery/2026-04-05 104110.jpg",
+        "images/gallery/2026-04-05 104125.jpg",
+        "images/gallery/2026-04-05 112543.jpg",
+        "images/gallery/2026-04-06 173323.jpg",
+        "images/gallery/2026-04-14 005237.jpg",
+        "images/gallery/2026-04-17 190936.jpg",
+        "images/gallery/2026-04-20 121524.jpg",
+        "images/gallery/2026-04-28 192042.jpg",
+        "images/gallery/2026-04-28 214103.jpg",
+        "images/gallery/2026-04-28 214335.jpg",
+        "images/gallery/2026-04-29 171946.jpg",
+        "images/gallery/2026-04-30 225842.jpg",
+        "images/gallery/2026-04-30 231112.jpg",
+        "images/gallery/2026-05-02 185010.jpg",
+        "images/gallery/2026-05-02 185011.jpg",
+        "images/gallery/2026-05-02 224150.jpg",
+        "images/gallery/2026-05-06 213804.jpg",
+        "images/gallery/2026-05-06 214458.jpg",
+        "images/gallery/2026-05-06 215254.jpg",
+        "images/gallery/2026-05-06 215333.jpg",
+        "images/gallery/2026-05-06 215348.jpg",
+        "images/gallery/2026-05-06 215935.jpg"
+    ],
+    "settings": {
+        "startDate": "2026-04-28",
+        "secretCode": "5201314",
+        "bgmAutoPlay": false,
+        "theme": "aurora"
+    }
+}
