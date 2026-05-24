@@ -38,18 +38,20 @@
     <style>
         body {
             margin: 0;
-            background: linear-gradient(-45deg, #e0f2fe, #f3e8ff, #d1fae5, #e0f2fe);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            background: transparent !important;
             color: #1E293B;
             font-family: 'Noto Serif SC', serif;
             overflow-x: hidden;
         }
-        
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+
+        #content-wrapper {
+            transition: background-color 0.5s ease;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 -20px 40px rgba(0, 0, 0, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+            border-top-left-radius: 2.5rem;
+            border-top-right-radius: 2.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.5);
         }
 
         .nav-pill {
@@ -100,10 +102,6 @@
                         <i class="fa fa-home w-5 text-center"></i>
                         <span>首页</span>
                     </a>
-                    <a href="index.html#marquee" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-secondary/10 hover:text-secondary transition-colors">
-                        <i class="fa fa-camera w-5 text-center"></i>
-                        <span>生活碎片</span>
-                    </a>
                     <a href="restaurant.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-secondary/10 hover:text-secondary transition-colors">
                         <i class="fa fa-cutlery w-5 text-center"></i>
                         <span>小餐馆</span>
@@ -120,6 +118,10 @@
                         <i class="fa fa-university w-5 text-center"></i>
                         <span>纪念博物馆</span>
                     </a>
+                    <a href="gallery.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-secondary/10 hover:text-secondary transition-colors">
+                        <i class="fa fa-camera w-5 text-center"></i>
+                        <span>沙龙</span>
+                    </a>
                 </nav>
             </div>
         </div>
@@ -133,13 +135,27 @@
             </div>
             
             <a href="index.html" class="hidden md:inline-block text-xs md:text-sm text-slate-600 hover:text-secondary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">首页</a>
-            <a href="index.html#marquee" class="hidden md:inline-block text-xs md:text-sm text-slate-600 hover:text-secondary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">生活碎片</a>
             <a href="restaurant.html" class="hidden md:inline-block text-xs md:text-sm text-slate-600 hover:text-secondary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">小餐馆</a>
             <a href="tavern.html" class="hidden md:inline-block text-xs md:text-sm text-secondary px-3 py-2 rounded-full transition-colors font-sans tracking-widest font-medium">小酒馆</a>
             <a href="clinic.html" class="hidden md:inline-block text-xs md:text-sm text-slate-600 hover:text-secondary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">小诊所</a>
             <a href="museum.html" class="hidden md:inline-block text-xs md:text-sm text-slate-600 hover:text-secondary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">纪念博物馆</a>
+            <a href="gallery.html" class="hidden md:inline-block text-xs md:text-sm text-slate-600 hover:text-secondary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">沙龙</a>
         </nav>
     </div>
+
+    <!-- 专属背景图 - GPU硬件加速无卡顿版 -->
+    <div class="fixed inset-0 z-[-10] w-screen h-screen overflow-hidden bg-cover bg-center bg-no-repeat pointer-events-none" style="background-image: url('images/tavern/background.png'); transform: translate3d(0,0,0); will-change: transform;"></div>
+
+    <!-- 第一屏：全屏背景首屏 -->
+    <div class="h-screen flex items-center justify-center relative select-none pointer-events-none">
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/60 animate-bounce text-center pointer-events-auto flex flex-col items-center select-none">
+            <span class="text-[10px] tracking-[0.4em] uppercase font-sans">向下滚动探索</span>
+            <i class="fa fa-chevron-down mt-2 text-xs"></i>
+        </div>
+    </div>
+
+    <!-- 内容展示区 (支持自适应色过渡和高定卡片圆角) -->
+    <div id="content-wrapper" class="relative z-10 min-h-screen">
 
     <!-- 页面头部 -->
     <section class="pt-32 pb-16 px-4 relative z-10">
@@ -407,6 +423,7 @@
     <footer class="py-8 text-center text-slate-400 text-xs tracking-[0.2em] font-cinzel relative z-10 mt-auto">
         <p>MADE WITH <i id="footer-heart" class="fa fa-heart text-secondary/70 animate-pulse mx-1 cursor-pointer"></i> BY XIAOYANG FOR ZHOUZHOU</p>
     </footer>
+    </div>
 
     <!-- 歌单面板 -->
     <div id="playlist-panel" class="playlist-panel">
@@ -532,8 +549,43 @@
         mobileSidebarOverlay.addEventListener('click', closeMobileMenu);
         document.querySelectorAll('.mobile-nav-link').forEach(l => l.addEventListener('click', closeMobileMenu));
 
-        // GSAP 动画
+        // ---------------- 动态背景色自适应过渡 ----------------
+        function initAdaptiveBackground(imgSrc) {
+            const img = new Image();
+            img.src = imgSrc;
+            img.onload = () => {
+                try {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 1;
+                    canvas.height = 1;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, 1, 1);
+                    const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+                    
+                    // 柔和化色彩并应用 0.45 透明度毛玻璃
+                    const blend = (c) => Math.round(c * 0.35 + 255 * 0.65);
+                    const finalR = blend(r);
+                    const finalG = blend(g);
+                    const finalB = blend(b);
+                    
+                    const wrapper = document.getElementById('content-wrapper');
+                    if (wrapper) {
+                        wrapper.style.backgroundColor = `rgba(${finalR}, ${finalG}, ${finalB}, 0.45)`;
+                    }
+                } catch (e) {
+                    console.warn("Background adaptive extraction failed, using fallback:", e);
+                    const wrapper = document.getElementById('content-wrapper');
+                    if (wrapper) {
+                        wrapper.style.backgroundColor = 'rgba(245, 241, 248, 0.45)'; // 雅致浪漫紫毛玻璃
+                    }
+                }
+            };
+        }
+
+        // 初始化
         window.addEventListener('load', () => {
+            initAdaptiveBackground('images/tavern/background.png');
+            
             if (typeof gsap !== 'undefined') {
                 gsap.registerPlugin(ScrollTrigger);
                 

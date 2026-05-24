@@ -13,41 +13,55 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     
-    <!-- 引入电影感高级字体 -->
+    <!-- 引入公共样式 -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- 引入 Jelu 风格高定法式艺术字体 (Fraunces & Playfair Display & Plus Jakarta Sans) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Noto+Serif+SC:wght@300;400;500;700&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#10B981',   // 高级薄荷绿 (Emerald)
-                        secondary: '#8B5CF6', // 浪漫紫 (Violet)
-                        tertiary: '#3B82F6',  // 清新蓝 (Blue)
-                        dark: '#1E293B',      // 深邃灰（用于清新背景下的文字）
+                        // 1:1 还原 Jelu 鼠尾草与深林绿色彩系统
+                        primary: '#2D3E35',      // 经典深林绿 (Jelu 标志文字/主按钮色)
+                        secondary: '#8EA485',    // 鼠尾草绿 (Jelu 辅助点缀色)
+                        accent: '#E06D53',       // 温暖番茄红 (Jelu 食材提色/爱心点缀)
+                        cream: '#F4F7F3',        // 燕麦奶油白 (Jelu 卡片背景)
+                        sageBg: '#E6EFE5',       // 薄荷鼠尾草背景底色
                     },
                     fontFamily: {
-                        sans: ['"Noto Serif SC"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', '"Noto Serif SC"', 'sans-serif'],
                         serif: ['"Noto Serif SC"', 'serif'],
-                        cinzel: ['"Cinzel"', 'serif'],
-                        montserrat: ['"Montserrat"', 'sans-serif'],
+                        jeluTitle: ['"Fraunces"', 'serif'],      // 还原 Jelu 有机浪漫主标题字形
+                        jeluSub: ['"Playfair Display"', 'serif'], // 还原 Jelu 优雅副标题字形
                     },
                     animation: {
-                        'spin-slow': 'spin 8s linear infinite',
+                        'spin-slow': 'spin 25s linear infinite',
                         'float': 'float 6s ease-in-out infinite',
-                        'gradient-bg': 'gradientBG 15s ease infinite',
+                        'leaf-float-1': 'leafFloat1 18s ease-in-out infinite',
+                        'leaf-float-2': 'leafFloat2 24s ease-in-out infinite',
+                        'heart-pulse': 'heartPulse 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
                         float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
+                            '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-12px) rotate(3deg)' },
                         },
-                        gradientBG: {
-                            '0%': { backgroundPosition: '0% 50%' },
-                            '50%': { backgroundPosition: '100% 50%' },
-                            '100%': { backgroundPosition: '0% 50%' },
+                        leafFloat1: {
+                            '0%, 100%': { transform: 'translate(0, 0) rotate(0deg)' },
+                            '50%': { transform: 'translate(15px, -20px) rotate(25deg)' },
+                        },
+                        leafFloat2: {
+                            '0%, 100%': { transform: 'translate(0, 0) rotate(0deg)' },
+                            '50%': { transform: 'translate(-20px, -15px) rotate(-30deg)' },
+                        },
+                        heartPulse: {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.15)' }
                         }
                     }
                 }
@@ -60,40 +74,48 @@
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* 动态清新极光背景 */
         body {
             margin: 0;
-            background: linear-gradient(-45deg, #e0f2fe, #f3e8ff, #d1fae5, #e0f2fe);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: #1E293B;
-            font-family: 'Noto Serif SC', serif;
+            background-color: #E6EFE5; /* Jelu 治愈系薄荷绿底色 */
+            color: #2D3E35;
+            font-family: 'Plus Jakarta Sans', 'Noto Serif SC', sans-serif;
             overflow-x: hidden;
+            /* 法式点状星空纸张纹底纹（French Dotted Grid Paper）*/
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(244, 247, 243, 0.6) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(142, 164, 133, 0.15) 0%, transparent 50%),
+                radial-gradient(circle, rgba(45,62,53,0.065) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 22px 22px;
         }
 
-        /* 胶囊导航栏毛玻璃 - 清新高定版 */
+        /* 1:1 还原 Jelu 极简悬浮透亮导航栏 */
         .nav-pill {
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+            background: rgba(244, 247, 243, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 10px 30px rgba(45, 62, 53, 0.04);
         }
         
-        /* 模块卡片毛玻璃质感 - 增强对比度与清晰度 */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.85);
-            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.06);
+        /* Jelu 高圆角极其精致卡片 */
+        .jelu-card {
+            background: #F4F7F3;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 15px 45px rgba(45, 62, 53, 0.03);
+            border-radius: 2.5rem; /* 原图标志性大圆角 */
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* 满屏便签样式 (保持高饱和度增加对比) */
+        .jelu-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 25px 55px rgba(45, 62, 53, 0.06);
+        }
+
+        /* 浪漫爱意便签 */
         .love-note {
             position: fixed;
-            width: 80px;
-            height: 80px;
+            width: 85px;
+            height: 85px;
             transform: rotate(45deg) scale(0);
             display: flex;
             align-items: center;
@@ -101,352 +123,1148 @@
             opacity: 0;
             transition: all 0.8s cubic-bezier(0.17, 0.89, 0.32, 1.49);
             z-index: 100;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 25px rgba(45, 62, 53, 0.1);
         }
         .love-note::before, .love-note::after {
-            content: ""; position: absolute; width: 80px; height: 80px;
+            content: ""; position: absolute; width: 85px; height: 85px;
             background-color: inherit; border-radius: 50%;
         }
-        .love-note::before { top: -40px; left: 0; }
-        .love-note::after { top: 0; left: -40px; }
+        .love-note::before { top: -42px; left: 0; }
+        .love-note::after { top: 0; left: -42px; }
         .note-text {
-            position: relative; z-index: 101; font-size: 12px; color: #fff;
-            text-align: center; transform: rotate(-45deg); width: 70px; line-height: 1.5;
-            font-weight: 500; text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-            font-family: 'PingFang SC', sans-serif;
+            position: relative; z-index: 101; font-size: 11px; color: #fff;
+            text-align: center; transform: rotate(-45deg); width: 75px; line-height: 1.4;
+            font-weight: 500;
+            font-family: 'Noto Serif SC', serif;
         }
         .love-note.show { opacity: 0.95; transform: rotate(45deg) scale(1); }
         
-        /* 便签极光色系 */
-        .color-1 { background-color: #8B5CF6; } /* 紫 */
-        .color-2 { background-color: #3B82F6; } /* 蓝 */
-        .color-3 { background-color: #10B981; } /* 绿 */
-        .color-4 { background-color: #6366F1; } /* 靛蓝 */
-        .color-5 { background-color: #14b8a6; } /* 柔青 */
+        /* Jelu 自然植物色系便签 */
+        .color-1 { background-color: #2D3E35; } /* 森林深绿 */
+        .color-2 { background-color: #8EA485; } /* 鼠尾草绿 */
+        .color-3 { background-color: #E06D53; } /* 番茄暖红 */
+        .color-4 { background-color: #6D8268; } /* 罗勒清绿 */
+        .color-5 { background-color: #C0A98F; } /* 麦穗暖沙 */
 
-        /* 锁定等宽数字，防止倒计时抖动 */
-        .tabular-nums {
-            font-variant-numeric: tabular-nums;
+        /* 3D 翻牌数字 (适配 Jelu 森林绿质感) */
+        .flip-digit {
+            perspective: 600px;
+            transform-style: preserve-3d;
+            box-shadow: 0 8px 20px rgba(45, 62, 53, 0.08);
+        }
+
+        /* 仿黑胶留声机，采用 Jelu 温暖燕麦色设计 */
+        .jelu-vinyl-panel {
+            background: rgba(244, 247, 243, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 20px 50px rgba(45, 62, 53, 0.08);
+        }
+
+        /* 复古黑胶盘旋转 */
+        .vinyl-spin {
+            animation: spin-vinyl 15s linear infinite;
+        }
+        @keyframes spin-vinyl {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 还原 Jelu 标志性的点状虚线按钮细节 */
+        .jelu-dotted-btn {
+            border-bottom: 2px dotted #2D3E35;
+            transition: all 0.3s ease;
+        }
+        .jelu-dotted-btn:hover {
+            border-bottom-style: solid;
+            letter-spacing: 0.1em;
+        }
+
+        /* 解决 3D 翻牌文字重影阴影，消除中间横线割裂 */
+        .flip-digit {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* 木栅栏摇曳动画 */
+        .leaf-sway-1, .leaf-sway-2, .leaf-sway-3,
+        .flower-sway-1, .flower-sway-2, .flower-sway-3 {
+            transform-origin: bottom center;
+            animation: sway-meadow 4.5s ease-in-out infinite;
+        }
+        .leaf-sway-1 { animation-duration: 4.2s; animation-delay: -0.5s; }
+        .leaf-sway-2 { animation-duration: 4.8s; animation-delay: -1.8s; }
+        .leaf-sway-3 { animation-duration: 4.0s; animation-delay: -3.1s; }
+        
+        .flower-sway-1 { animation-duration: 4.6s; animation-delay: -1.2s; }
+        .flower-sway-2 { animation-duration: 5.0s; animation-delay: -2.7s; }
+        .flower-sway-3 { animation-duration: 4.4s; animation-delay: -0.9s; }
+
+        @keyframes sway-meadow {
+            0%, 100% { transform: rotate(-2.5deg); }
+            50% { transform: rotate(2.5deg); }
+        }
+
+        /* 歌单面板样式 */
+        .playlist-panel {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            max-width: 400px;
+            height: 70vh;
+            border-top-left-radius: 2.5rem;
+            border-top-right-radius: 2.5rem;
+            box-shadow: 0 -15px 45px rgba(45, 62, 53, 0.08);
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.17, 0.89, 0.32, 1.2);
+            z-index: 60;
+            overflow: hidden;
+        }
+
+        .playlist-panel.open {
+            transform: translateY(0);
+        }
+
+        .playlist-items {
+            overflow-y: auto;
+        }
+
+        .playlist-item {
+            padding: 1rem;
+            border-radius: 1.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .playlist-item:hover {
+            background: rgba(142, 164, 133, 0.15);
+        }
+
+        .playlist-item.active {
+            background: rgba(142, 164, 133, 0.25);
+            font-weight: 600;
+        }
+
+        .playlist-item.active .song-title {
+            color: #2D3E35;
+        }
+
+        /* 音乐频谱条 */
+        .music-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 16px;
+        }
+
+        .music-bar {
+            width: 3px;
+            background: #2D3E35;
+            border-radius: 2px;
+            animation: musicBar 1s ease-in-out infinite;
+        }
+
+        .music-bar:nth-child(1) { animation-delay: 0s; height: 8px; }
+        .music-bar:nth-child(2) { animation-delay: 0.2s; height: 12px; }
+        .music-bar:nth-child(3) { animation-delay: 0.4s; height: 6px; }
+        .music-bar:nth-child(4) { animation-delay: 0.6s; height: 10px; }
+
+        @keyframes musicBar {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.5); }
+        }
+
+        /* 创作者模式遮罩 */
+        .secret-mode-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(45, 62, 53, 0.65);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 200;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .secret-mode-overlay.active {
+            display: flex;
+        }
+
+        /* ══════════ 里程碑徽章发光动效 ══════════ */
+        @keyframes milestoneGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(224, 109, 83, 0); }
+            50% { box-shadow: 0 0 12px 4px rgba(224, 109, 83, 0.28); }
+        }
+        .milestone-badge-glow {
+            animation: milestoneGlow 2.2s ease-in-out infinite;
+        }
+        /* 里程碑进度条光晕动效 */
+        @keyframes progressShimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        .milestone-bar-shimmer {
+            background: linear-gradient(90deg, #8EA485 0%, #6D8268 40%, #aacba0 60%, #8EA485 100%);
+            background-size: 200% auto;
+            animation: progressShimmer 2.5s linear infinite;
+        }
+
+        /* ══════════ 拍立得记忆叠层 ══════════ */
+        .polaroid-tag {
+            position: absolute;
+            bottom: -18px;
+            left: -28px;
+            width: 88px;
+            background: #fffef9;
+            border: 1px solid rgba(180,170,155,0.35);
+            box-shadow: 3px 4px 18px rgba(45,62,53,0.13), 0 1px 0 rgba(255,255,255,0.9) inset;
+            border-radius: 4px;
+            padding: 7px 7px 18px;
+            transform: rotate(-8deg);
+            z-index: 20;
+            pointer-events: none;
+        }
+        .polaroid-tag .pol-img {
+            width: 74px;
+            height: 56px;
+            background: linear-gradient(135deg, #dde9da 0%, #c8dcc5 50%, #b8d2b4 100%);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        .polaroid-tag .pol-text {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-size: 8.5px;
+            color: #7A695E;
+            text-align: center;
+            margin-top: 5px;
+            letter-spacing: 0.03em;
+        }
+
+        /* ══════════ 复古封蜡邮戳贴纸 ══════════ */
+        .wax-stamp {
+            position: absolute;
+            top: -14px;
+            right: -18px;
+            width: 64px;
+            height: 64px;
+            z-index: 22;
+            pointer-events: none;
+        }
+
+        /* ══════════ 植物藤蔓有机背景 ══════════ */
+        .botanical-frame {
+            position: absolute;
+            bottom: -28px;
+            right: -36px;
+            width: 180px;
+            height: 180px;
+            opacity: 0.32;
+            pointer-events: none;
+            z-index: 0;
+            animation: botanicalSway 7s ease-in-out infinite;
+            transform-origin: bottom right;
+        }
+        @keyframes botanicalSway {
+            0%, 100% { transform: rotate(-2deg) scale(1); }
+            50% { transform: rotate(2deg) scale(1.03); }
         }
     </style>
-    
-    <!-- 引入公共样式 -->
-    <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="min-h-screen flex flex-col relative selection:bg-primary selection:text-white">
 
-    <!-- 移动端汉堡菜单按钮 -->
-    <button id="mobile-menu-btn" class="fixed top-6 left-4 z-[60] w-10 h-10 rounded-full glass-card flex items-center justify-center border border-white cursor-pointer hover:border-primary transition-all duration-300 shadow-md md:hidden">
-        <i class="fa fa-bars text-slate-600 text-sm"></i>
+    <!-- Jelu 植物风：无缝自然漂浮元素层 -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0 select-none">
+        <!-- 漂浮植物罗勒叶、小番茄和爱心 (仿原图质感) -->
+        <div class="absolute w-12 h-12 md:w-16 md:h-16 animate-leaf-float-1" style="top: 15%; left: 8%; opacity: 0.35;">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M50,90 Q30,60 10,50 Q40,30 50,10 Q60,30 90,50 Q70,60 50,90 Z" fill="#8EA485"/>
+                <path d="M50,90 Q45,50 50,10" stroke="#2D3E35" stroke-width="2"/>
+            </svg>
+        </div>
+        <div class="absolute w-8 h-8 md:w-12 md:h-12 animate-leaf-float-2" style="top: 35%; right: 5%; opacity: 0.25;">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20,80 Q50,60 50,20 Q30,40 10,50 Z" fill="#6D8268"/>
+            </svg>
+        </div>
+        <div class="absolute w-10 h-10 md:w-14 md:h-14 animate-float" style="top: 65%; left: 5%; opacity: 0.2;">
+            <!-- 暖红色小番茄/爱心装饰 -->
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M60,110 C20,80 10,50 30,30 C50,10 60,30 60,30 C60,30 70,10 90,30 C110,50 100,80 60,110 Z" fill="#E06D53"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- 移动端汉堡菜单按钮 (高定植物风) -->
+    <button id="mobile-menu-btn" class="fixed top-6 left-4 z-[60] w-11 h-11 rounded-full bg-cream flex items-center justify-center border border-white/80 cursor-pointer hover:border-primary transition-all duration-300 shadow-sm md:hidden">
+        <i class="fa fa-bars text-primary text-base"></i>
     </button>
 
     <!-- 移动端侧边栏导航 -->
     <div id="mobile-sidebar" class="fixed inset-0 z-[55] hidden md:hidden">
-        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="mobile-sidebar-overlay"></div>
-        <div class="absolute left-0 top-0 h-full w-72 bg-white/95 backdrop-blur-xl shadow-2xl transform -translate-x-full transition-transform duration-300" id="mobile-sidebar-content">
+        <div class="absolute inset-0 bg-primary/25 backdrop-blur-sm" id="mobile-sidebar-overlay"></div>
+        <div class="absolute left-0 top-0 h-full w-72 bg-[#F4F7F3] shadow-2xl transform -translate-x-full transition-transform duration-300" id="mobile-sidebar-content">
             <div class="p-6">
-                <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center justify-between mb-8 border-b border-primary/10 pb-4">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                            <span class="text-white text-sm font-bold font-cinzel">Z&Y</span>
+                        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
+                            <span class="text-white text-xs font-bold font-jeluTitle">Z&Y</span>
                         </div>
-                        <span class="text-lg font-medium text-slate-800">舟舟与小羊</span>
+                        <span class="text-base font-semibold text-primary font-jeluTitle">Zhou & Yang</span>
                     </div>
-                    <button id="mobile-menu-close" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition">
-                        <i class="fa fa-times text-slate-500 text-sm"></i>
+                    <button id="mobile-menu-close" class="w-8 h-8 rounded-full bg-primary/5 flex items-center justify-center hover:bg-primary/10 transition">
+                        <i class="fa fa-times text-primary text-sm"></i>
                     </button>
                 </div>
                 
-                <nav class="space-y-2">
-                    <a href="#hero" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-primary/10 hover:text-primary transition-colors">
-                        <i class="fa fa-home w-5 text-center"></i>
-                        <span>首页</span>
+                <nav class="space-y-1.5">
+                    <a href="#hero" class="mobile-nav-link flex items-center gap-3 px-4 py-3.5 rounded-2xl text-primary hover:bg-secondary/15 transition-all">
+                        <i class="fa fa-home w-5 text-center text-secondary"></i>
+                        <span class="font-medium text-sm">首页 · Home</span>
                     </a>
-                    <a href="#marquee" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-primary/10 hover:text-primary transition-colors">
-                        <i class="fa fa-camera w-5 text-center"></i>
-                        <span>生活碎片</span>
+                    <a href="restaurant.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3.5 rounded-2xl text-primary hover:bg-secondary/15 transition-all">
+                        <i class="fa fa-cutlery w-5 text-center text-secondary"></i>
+                        <span class="font-medium text-sm">小餐馆 · Dining</span>
                     </a>
-                    <a href="restaurant.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-primary/10 hover:text-primary transition-colors">
-                        <i class="fa fa-cutlery w-5 text-center"></i>
-                        <span>小餐馆</span>
+                    <a href="tavern.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3.5 rounded-2xl text-primary hover:bg-secondary/15 transition-all">
+                        <i class="fa fa-glass w-5 text-center text-secondary"></i>
+                        <span class="font-medium text-sm">小酒馆 · Tavern</span>
                     </a>
-                    <a href="tavern.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-primary/10 hover:text-primary transition-colors">
-                        <i class="fa fa-glass w-5 text-center"></i>
-                        <span>小酒馆</span>
+                    <a href="clinic.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3.5 rounded-2xl text-primary hover:bg-secondary/15 transition-all">
+                        <i class="fa fa-heartbeat w-5 text-center text-secondary"></i>
+                        <span class="font-medium text-sm">小诊所 · Clinic</span>
                     </a>
-                    <a href="clinic.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-primary/10 hover:text-primary transition-colors">
-                        <i class="fa fa-heartbeat w-5 text-center"></i>
-                        <span>小诊所</span>
+                    <a href="museum.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3.5 rounded-2xl text-primary hover:bg-secondary/15 transition-all">
+                        <i class="fa fa-university w-5 text-center text-secondary"></i>
+                        <span class="font-medium text-sm">纪念馆 · Museum</span>
                     </a>
-                    <a href="museum.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-primary/10 hover:text-primary transition-colors">
-                        <i class="fa fa-university w-5 text-center"></i>
-                        <span>纪念博物馆</span>
+                    <a href="gallery.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3.5 rounded-2xl text-primary hover:bg-secondary/15 transition-all">
+                        <i class="fa fa-camera w-5 text-center text-secondary"></i>
+                        <span class="font-medium text-sm">沙龙 · Salon</span>
                     </a>
                 </nav>
                 
-                <div class="mt-8 pt-6 border-t border-slate-200">
-                    <a href="#surprise" class="mobile-nav-link flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-medium shadow-lg">
+                <div class="mt-8 pt-6 border-t border-primary/10">
+                    <a href="#surprise" class="mobile-nav-link flex items-center justify-center gap-2 px-4 py-3.5 rounded-full bg-primary text-white font-medium shadow-md">
                         <i class="fa fa-envelope-o"></i>
-                        <span>专属信箱</span>
+                        <span>开启告白 · Letter</span>
                     </a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 顶部导航 (参照图片的高级清透胶囊样式) -->
+    <!-- 1:1 还原 Jelu 顶奢胶囊导航栏 -->
     <div class="fixed top-6 w-full z-50 flex justify-center px-4">
-        <nav class="nav-pill rounded-full px-2 py-1.5 flex items-center gap-1 md:gap-4">
-            <!-- Logo (长按3秒触发暗号模式) -->
-            <div id="logo" class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center cursor-pointer mr-2 select-none" title="长按3秒解锁创作者模式">
-                <span class="text-white text-xs font-bold font-cinzel">Z&Y</span>
+        <nav class="nav-pill rounded-full px-2.5 py-1.5 flex items-center gap-1 md:gap-4">
+            <!-- Logo (带有 Jelu 标志性的不对称手写标贴) -->
+            <div id="logo" class="flex items-center gap-1.5 cursor-pointer pl-3 pr-2 select-none" title="长按3秒解锁创作者模式">
+                <span class="text-primary text-xl font-extrabold font-jeluTitle tracking-tight">Zhou<span class="text-secondary italic">♥</span></span>
             </div>
             
-            <a href="#hero" class="hidden md:inline-block text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">首页</a>
-            <a href="#marquee" class="hidden md:inline-block text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">生活碎片</a>
-            <a href="restaurant.html" class="hidden md:inline-block text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">小餐馆</a>
-            <a href="tavern.html" class="hidden md:inline-block text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">小酒馆</a>
-            <a href="clinic.html" class="hidden md:inline-block text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">小诊所</a>
-            <a href="museum.html" class="hidden md:inline-block text-xs md:text-sm text-slate-600 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans tracking-widest">纪念博物馆</a>
+            <a href="#hero" class="hidden md:inline-block text-xs text-primary/70 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans font-medium tracking-wide">Home 首页</a>
+            <a href="restaurant.html" class="hidden md:inline-block text-xs text-primary/70 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans font-medium tracking-wide">Dining 餐馆</a>
+            <a href="tavern.html" class="hidden md:inline-block text-xs text-primary/70 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans font-medium tracking-wide">Tavern 酒馆</a>
+            <a href="clinic.html" class="hidden md:inline-block text-xs text-primary/70 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans font-medium tracking-wide">Clinic 诊所</a>
+            <a href="museum.html" class="hidden md:inline-block text-xs text-primary/70 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans font-medium tracking-wide">Museum 纪念馆</a>
+            <a href="gallery.html" class="hidden md:inline-block text-xs text-primary/70 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans font-medium tracking-wide">Salon 沙龙</a>
             
-            <!-- 高亮按钮 -->
-            <a href="#surprise" class="ml-2 bg-white text-primary text-xs md:text-sm font-medium px-5 py-2.5 rounded-full hover:bg-primary hover:text-white transition-all active:scale-95 flex items-center gap-2 font-sans tracking-widest shadow-md">
-                专属信箱 <i class="fa fa-arrow-right text-[10px]"></i>
+            <!-- 还原右侧标志性的高亮主色胶囊按钮 -->
+            <a href="#surprise" class="ml-2 bg-primary text-cream text-xs font-semibold px-6 py-3 rounded-full hover:bg-[#3d5448] transition-all active:scale-95 flex items-center gap-2 font-sans tracking-wider shadow-sm">
+                开启告白 <i class="fa fa-arrow-right text-[9px]"></i>
             </a>
         </nav>
     </div>
 
-    <!-- 音乐播放器 -->
-    <div class="fixed bottom-8 right-8 z-50 flex items-center gap-3">
-        <!-- 歌单触发器 -->
-        <div id="playlist-trigger" class="w-10 h-10 rounded-full glass-card flex items-center justify-center border border-white cursor-pointer hover:border-primary transition-all duration-300 shadow-md">
-            <i class="fa fa-list-music text-slate-400 text-sm hover:text-primary transition"></i>
-        </div>
-        
-        <!-- 播放/暂停按钮 -->
-        <div id="music-player" class="cursor-pointer animate-float group">
-            <div class="w-12 h-12 rounded-full glass-card flex items-center justify-center border border-white relative overflow-hidden transition-all duration-500 hover:border-primary shadow-lg">
-                <audio id="bgm" loop>
-                    <source src="music/陈奕迅 - 多少.flac" type="audio/flac">
-                    <source src="music/陈奕迅 - I Do.flac" type="audio/flac">
-                    <source src="music/承桓 - 我会忘记 (我会放弃).ogg" type="audio/ogg">
-                </audio>
-                <i id="music-icon" class="fa fa-music text-slate-400 text-sm transition-all duration-500 group-hover:text-primary"></i>
-                <div class="absolute inset-0 rounded-full border border-primary/40 animate-ping opacity-0 group-hover:opacity-100"></div>
-            </div>
-        </div>
+    <!-- 隐藏的哑元素，用于完美适配并初始化 main.js 中的音乐播放器，防止底层核心挂载失效 -->
+    <div id="music-player" class="hidden">
+        <i id="music-icon" class="hidden"></i>
     </div>
 
-    <!-- 首屏：倒计时区 -->
-    <section id="hero" class="min-h-screen flex items-center justify-center pt-20 px-4 relative z-10">
-        <!-- 背景图 -->
-        <div class="gsap-hero max-w-6xl w-full aspect-[4/3] md:aspect-[21/9] rounded-2xl relative overflow-hidden shadow-2xl flex flex-col items-center justify-center text-white border border-white/50"
-             style="background-image: url('images/hero/520.jpg'); background-size: cover; background-position: center;">
+    <!-- Jelu 风格定制复古黑胶片留声机播放器小组件 -->
+    <div id="vinyl-player-widget" class="fixed bottom-8 right-8 z-50 flex flex-col items-end gap-3 select-none">
+        
+        <!-- 唱盘底座与控制卡片 (展开状态 - 1:1 还原奶油纸张材质) -->
+        <div id="vinyl-card" class="jelu-vinyl-panel rounded-[2rem] p-5 flex flex-col items-center gap-4.5 w-60 border border-white/60 shadow-xl transition-all duration-500 origin-bottom-right scale-0 hidden">
+            <!-- 唱机头部栏：当前曲目与收起 -->
+            <div class="flex items-center justify-between w-full border-b border-primary/10 pb-2">
+                <span id="current-song-title" class="text-xs font-bold text-primary truncate max-w-[150px] font-sans">多少 - 陈奕迅</span>
+                <button id="vinyl-collapse-btn" class="w-6 h-6 rounded-full bg-primary/5 flex items-center justify-center hover:bg-primary/10 transition shadow-inner">
+                    <i class="fa fa-chevron-down text-[9px] text-primary"></i>
+                </button>
+            </div>
             
-            <!-- 温柔的渐变遮罩，保证白色文字清晰 -->
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-slate-800/20 to-slate-900/30"></div>
-
-            <div class="relative z-10 w-full h-full flex flex-col justify-between p-8 md:p-14">
+            <!-- 唱片与唱针寻轨交互区 -->
+            <div class="relative w-40 h-40 flex items-center justify-center my-1">
+                <!-- 留声机底盘 -->
+                <div class="absolute inset-0 bg-[#E8EDE6] rounded-full shadow-inner border border-primary/10"></div>
                 
-                <!-- 顶部小字 -->
-                <div class="flex justify-between items-start w-full mb-8 relative font-cinzel">
-                    <div class="text-xs md:text-sm tracking-[0.4em] uppercase text-white/90">
-                        To ZhouZhou
-                    </div>
-                    <div class="absolute left-1/2 -translate-x-1/2 text-sm md:text-base tracking-[0.5em] uppercase mt-2 md:mt-0 text-white font-medium text-shadow-md">
-                        Our Time
-                    </div>
-                </div>
-
-                <!-- 倒计时区域 (修复跳动：增加固定宽度 w-20 md:w-32 和 tabular-nums) -->
-                <div class="flex justify-center items-center gap-2 md:gap-8 my-auto font-montserrat">
-                    <div class="flex flex-col items-center w-20 md:w-32">
-                        <div id="days" class="text-5xl md:text-8xl font-light tracking-tighter mb-2 text-white tabular-nums text-center">000</div>
-                        <div class="text-[10px] md:text-xs tracking-[0.5em] lowercase text-white/80">days</div>
-                    </div>
-                    <div class="text-3xl md:text-5xl font-light text-white/50 mb-6">:</div>
-                    <div class="flex flex-col items-center w-20 md:w-32">
-                        <div id="hours" class="text-5xl md:text-8xl font-light tracking-tighter mb-2 text-white tabular-nums text-center">00</div>
-                        <div class="text-[10px] md:text-xs tracking-[0.5em] lowercase text-white/80">hours</div>
-                    </div>
-                    <div class="text-3xl md:text-5xl font-light text-white/50 mb-6">:</div>
-                    <div class="flex flex-col items-center w-20 md:w-32">
-                        <div id="minutes" class="text-5xl md:text-8xl font-light tracking-tighter mb-2 text-white tabular-nums text-center">00</div>
-                        <div class="text-[10px] md:text-xs tracking-[0.5em] lowercase text-white/80">min</div>
-                    </div>
-                    <div class="text-3xl md:text-5xl font-light text-white/50 mb-6 hidden md:block">:</div>
-                    <div class="flex flex-col items-center w-20 md:w-32 hidden md:flex">
-                        <div id="seconds" class="text-5xl md:text-8xl font-light tracking-tighter mb-2 text-white tabular-nums text-center">00</div>
-                        <div class="text-[10px] md:text-xs tracking-[0.5em] lowercase text-white/80">sec</div>
+                <!-- 黑胶唱片 (播放时旋转) -->
+                <div id="vinyl-record" class="w-36 h-36 rounded-full bg-[#1C2420] border-[5px] border-[#2D3E35] flex items-center justify-center relative shadow-md">
+                    <div class="absolute inset-0 rounded-full border border-white/5 pointer-events-none scale-[0.9]"></div>
+                    <div class="absolute inset-0 rounded-full border border-white/5 pointer-events-none scale-[0.7]"></div>
+                    <div class="absolute inset-0 rounded-full border border-white/5 pointer-events-none scale-[0.5]"></div>
+                    <!-- 中心专辑标贴 -->
+                    <div class="w-12 h-12 rounded-full bg-secondary flex items-center justify-center border-2 border-[#1C2420] z-10 shadow-md">
+                        <span class="text-[9px] text-white font-extrabold font-jeluTitle">Z & Y</span>
                     </div>
                 </div>
-
-                <!-- 底部说明文字 -->
-                <div class="text-center mt-8">
-                    <p class="text-xs md:text-sm text-white/90 tracking-[0.2em] mb-4 leading-loose font-light">
-                        遇见你，是我做过最美好的事。<br>
-                        未来的路，我想牵着你的手一直走下去。
-                    </p>
-                    <p class="text-[10px] text-primary tracking-[0.4em] font-cinzel font-medium">
-                        SINCE 2026.04.28
-                    </p>
+                
+                <!-- 复古唱针臂 -->
+                <div id="vinyl-needle" class="absolute top-2 right-2 w-10 h-20 origin-[24px_12px] transition-transform duration-700 ease-out z-20 pointer-events-none" style="transform: rotate(0deg);">
+                    <svg width="40" height="80" viewBox="0 0 40 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="24" cy="12" r="8" fill="#8EA485" stroke="#2D3E35" stroke-width="1.5"/>
+                        <circle cx="24" cy="12" r="3" fill="#FFF"/>
+                        <path d="M24,12 L12,50 L14,70" stroke="#2D3E35" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                        <rect x="8" y="65" width="10" height="12" rx="1.5" fill="#2D3E35" transform="rotate(-15 13 71)"/>
+                    </svg>
                 </div>
+            </div>
+            
+            <!-- 播放声音频载体 -->
+            <audio id="bgm" loop>
+                <source src="music/陈奕迅 - 多少.flac" type="audio/flac">
+                <source src="music/陈奕迅 - I Do.flac" type="audio/flac">
+                <source src="music/承桓 - 我会忘记 (我会放弃).ogg" type="audio/ogg">
+            </audio>
+            
+            <!-- 留声机控制面板 -->
+            <div class="flex items-center justify-between w-full px-1 border-t border-primary/10 pt-2.5">
+                <button id="playlist-trigger" class="w-8 h-8 rounded-full bg-primary/5 flex items-center justify-center hover:bg-primary/10 hover:text-primary transition" title="专属歌单">
+                    <i class="fa fa-list text-primary text-xs"></i>
+                </button>
+                
+                <div class="flex items-center gap-2">
+                    <button id="vinyl-prev-btn" class="w-8 h-8 rounded-full bg-primary/5 flex items-center justify-center hover:bg-primary/10 hover:text-primary transition">
+                        <i class="fa fa-step-backward text-primary text-2xs"></i>
+                    </button>
+                    <button id="vinyl-play-btn" class="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-white hover:bg-primary/90 transition shadow-md">
+                        <i class="fa fa-play text-2xs"></i>
+                    </button>
+                    <button id="vinyl-next-btn" class="w-8 h-8 rounded-full bg-primary/5 flex items-center justify-center hover:bg-primary/10 hover:text-primary transition">
+                        <i class="fa fa-step-forward text-primary text-2xs"></i>
+                    </button>
+                </div>
+                
+                <button id="vinyl-mute-btn" class="w-8 h-8 rounded-full bg-primary/5 flex items-center justify-center hover:bg-primary/10 hover:text-primary transition" title="静音切换">
+                    <i class="fa fa-volume-up text-primary text-xs"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 紧凑折叠状态下的黑胶盘入口按钮 (Jelu 森林绿色呼吸) -->
+        <button id="vinyl-trigger-btn" class="w-14 h-14 rounded-full bg-cream flex items-center justify-center border border-white/80 cursor-pointer hover:border-primary shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden group">
+            <div class="absolute inset-1.5 rounded-full bg-[#1C2420] border-2 border-[#2D3E35] flex items-center justify-center shadow-inner group-hover:scale-105 transition duration-300">
+                <div class="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center relative">
+                    <i class="fa fa-music text-secondary text-xs" id="vinyl-trigger-icon"></i>
+                </div>
+            </div>
+            <div class="absolute inset-0 rounded-full border border-secondary/40 animate-ping opacity-0 group-hover:opacity-100"></div>
+        </button>
+        
+    </div>
 
+    <!-- 首屏：1:1 Jelu 风格杂志版头排版布局 -->
+    <section id="hero" class="min-h-screen flex items-center justify-center pt-28 pb-16 px-4 md:px-12 relative z-10 max-w-7xl mx-auto w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center w-full">
+            
+            <!-- Left Side: 优雅法式字体排版 (对应 Jelu Left Title) -->
+            <div class="lg:col-span-7 flex flex-col justify-center text-primary text-left">
+                <!-- 顶部小标 -->
+                <div class="text-[11px] font-bold tracking-[0.4em] uppercase text-secondary mb-3 font-sans">
+                    TO ZHOUZHOU · OUR SPECIAL UNIVERSE
+                </div>
+                <!-- 招牌有机手账风大标题 -->
+                <h1 class="font-jeluTitle font-light text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] text-primary tracking-tight select-none mb-6">
+                    遇见你的 <br>
+                    <span class="italic font-normal text-secondary font-jeluSub">Windy Spring</span> <br>
+                    是最好的故事。
+                </h1>
+                
+                <p class="text-sm md:text-base text-primary/80 tracking-widest leading-relaxed font-light mb-8 max-w-xl">
+                    生活碎片里，每一个与你同行的时刻都像是晨曦中的薄荷叶，清新而又让人心动。我们在这里记录陪伴彼此的温度与光芒。
+                </p>
+                
+                <div class="flex flex-wrap items-center gap-4">
+                    <a href="#surprise" class="bg-primary text-cream px-8 py-3.5 rounded-full font-semibold hover:bg-secondary transition shadow-md active:scale-95 text-xs tracking-widest">
+                        开启专属告白
+                    </a>
+                    <a href="#restaurant" class="jelu-dotted-btn py-2 text-xs tracking-widest font-bold text-primary">
+                        我们的未来版图 →
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Side: 1:1 复刻 Jelu 食物圆盘张力 -> "爱意圆盘" 与 3D 物理时钟 -->
+            <div class="lg:col-span-5 flex flex-col items-center justify-center">
+                <!-- 圆润卡片底盘 (还原 Jelu 右上圆盘沙拉美学) -->
+                <div class="relative w-full aspect-square max-w-[420px] rounded-full bg-[#F4F7F3] border border-white flex items-center justify-center shadow-lg p-3 animate-float">
+
+                    <!-- 🌿 植物有机藤蔓 SVG 背景框 (Botanical Frame) -->
+                    <svg class="botanical-frame" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M180,180 C150,130 120,100 80,90 C60,85 40,95 20,80" stroke="#6D8268" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                        <path d="M160,185 C140,150 110,120 70,115" stroke="#8EA485" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+                        <ellipse cx="95" cy="88" rx="14" ry="9" fill="#8EA485" transform="rotate(-30 95 88)"/>
+                        <ellipse cx="72" cy="110" rx="11" ry="7" fill="#6D8268" transform="rotate(15 72 110)"/>
+                        <ellipse cx="120" cy="102" rx="10" ry="6" fill="#8EA485" transform="rotate(-50 120 102)"/>
+                        <ellipse cx="50" cy="130" rx="9" ry="6" fill="#aacba0" transform="rotate(20 50 130)"/>
+                        <circle cx="145" cy="95" r="5" fill="#E06D53" opacity="0.7"/>
+                        <circle cx="60" cy="150" r="4" fill="#E06D53" opacity="0.5"/>
+                        <path d="M95,88 L92,95 M72,110 L70,118 M120,102 L118,110" stroke="#6D8268" stroke-width="1.2" stroke-linecap="round"/>
+                    </svg>
+
+                    <!-- 爱意拼盘装饰层 -->
+                    <div class="absolute inset-4 rounded-full border-2 border-dashed border-secondary/20 flex items-center justify-center overflow-hidden">
+                        <div class="absolute inset-0 bg-cover bg-center opacity-90 transition-transform duration-1000" style="background-image: url('images/index/sheep_cat.jpg');"></div>
+                        <!-- 柔白光遮罩层 -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary/40 via-transparent to-transparent"></div>
+                    </div>
+                    
+                    <!-- 浮动文字标签 -->
+                    <div class="absolute bottom-6 bg-white/90 backdrop-blur-md border border-primary/10 text-[10px] text-primary font-bold px-4 py-1.5 rounded-full tracking-widest shadow-sm z-10">
+                        ZHOU & YANG 520 ♥
+                    </div>
+
+                    <!-- 🗓️ 拍立得胶片记忆叠层 (Floating Polaroid Tag) -->
+                    <div class="polaroid-tag">
+                        <div class="pol-img">🐑🐱</div>
+                        <div class="pol-text">Spring 2026 ✍️</div>
+                    </div>
+
+                    <!-- 📮 复古封蜡邮戳 (Wax Seal & Postal Stamp) -->
+                    <div class="wax-stamp">
+                        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8,8 L56,8 L56,56 L8,56 Z" fill="#FFF8F0" stroke="none"/>
+                            <path d="M8,8 Q11,5 14,8 Q17,5 20,8 Q23,5 26,8 Q29,5 32,8 Q35,5 38,8 Q41,5 44,8 Q47,5 50,8 Q53,5 56,8 L56,11 Q59,14 56,17 Q59,20 56,23 Q59,26 56,29 Q59,32 56,35 Q59,38 56,41 Q59,44 56,47 Q59,50 56,53 Q59,56 56,56 Q53,59 50,56 Q47,59 44,56 Q41,59 38,56 Q35,59 32,56 Q29,59 26,56 Q23,59 20,56 Q17,59 14,56 Q11,59 8,56 L8,53 Q5,50 8,47 Q5,44 8,41 Q5,38 8,35 Q5,32 8,29 Q5,26 8,23 Q5,20 8,17 Q5,14 8,11 Z" fill="#FFF8F0" stroke="#C0A98F" stroke-width="0.8"/>
+                            <circle cx="32" cy="32" r="18" fill="#C85A3A" opacity="0.88"/>
+                            <circle cx="32" cy="32" r="14" fill="none" stroke="rgba(255,220,180,0.5)" stroke-width="1.2"/>
+                            <text x="32" y="30" text-anchor="middle" font-family="serif" font-size="5.5" font-weight="bold" fill="#FFF0E0" letter-spacing="0.8">AIR MAIL</text>
+                            <text x="32" y="38" text-anchor="middle" font-family="serif" font-size="8" font-weight="bold" fill="#FFDDB8" letter-spacing="1">520</text>
+                        </svg>
+                    </div>
+
+                    <!-- 浮动小番茄与罗勒叶点缀 -->
+                    <div class="absolute top-4 right-10 w-8 h-8 bg-accent rounded-full border border-white shadow-sm flex items-center justify-center z-10">
+                        <span class="text-white text-[10px]">🍅</span>
+                    </div>
+                    <div class="absolute bottom-12 left-2 w-8 h-8 text-xl z-10">🍃</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 1:1 还原 Jelu 标志性微缩事实状态栏 (Pill Badge Bar) -->
+    <section class="px-4 max-w-6xl mx-auto w-full z-10 relative mb-16">
+        <div class="bg-[#F4F7F3]/90 backdrop-blur-md border border-white rounded-[2rem] p-4 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+            <div class="flex items-center gap-4.5 w-full md:w-auto px-4 py-2">
+                <div class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center text-primary">
+                    <i class="fa fa-calendar-check-o text-base"></i>
+                </div>
+                <div class="text-left">
+                    <span class="block text-[10px] text-secondary font-bold uppercase tracking-widest">Since Date</span>
+                    <span class="text-xs font-bold text-primary tracking-widest">2026.04.28 启程</span>
+                </div>
+            </div>
+            
+            <div class="h-[1px] md:h-8 w-full md:w-[1px] bg-primary/10"></div>
+            
+            <div class="flex items-center gap-4.5 w-full md:w-auto px-4 py-2">
+                <div class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center text-primary">
+                    <i class="fa fa-music text-base"></i>
+                </div>
+                <div class="text-left">
+                    <span class="block text-[10px] text-secondary font-bold uppercase tracking-widest">Music Mode</span>
+                    <span class="text-xs font-bold text-primary tracking-widest">留声机就绪</span>
+                </div>
+            </div>
+            
+            <div class="h-[1px] md:h-8 w-full md:w-[1px] bg-primary/10"></div>
+            
+            <div class="flex items-center gap-4.5 w-full md:w-auto px-4 py-2">
+                <div class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center text-primary">
+                    <i class="fa fa-heart text-base text-accent"></i>
+                </div>
+                <div class="text-left">
+                    <span class="block text-[10px] text-secondary font-bold uppercase tracking-widest">Status</span>
+                    <span class="text-xs font-bold text-primary tracking-widest">爱意常恒绽放</span>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- 视差滚动图集 (复刻 3D Jack 样式，清新背景) -->
-    <section id="marquee" class="pt-24 pb-16 overflow-hidden flex flex-col gap-4 relative z-10">
-        <div class="text-center mb-10 px-4">
-            <h2 class="text-xl md:text-2xl font-medium text-slate-800 tracking-[0.3em] mb-2">生活碎片</h2>
-            <p class="text-slate-500 text-xs tracking-widest uppercase font-cinzel">Fragments of Life</p>
-        </div>
-        
-        <!-- 第一行 (向右滚动) -->
-        <div id="marquee-row-1" class="flex gap-4 w-max will-change-transform">
-            <!-- 图片由JS从content.json动态加载 -->
-        </div>
-        
-        <!-- 第二行 (向左滚动) -->
-        <div id="marquee-row-2" class="flex gap-4 w-max will-change-transform mt-2">
-            <!-- 图片由JS从content.json动态加载 -->
+    <!-- 3D 物理翻钟计时牌模块 (融合在 Jelu 标志卡片中) -->
+    <section class="px-4 max-w-6xl mx-auto w-full z-10 relative mb-24">
+        <div class="jelu-card p-8 md:p-12 text-center relative overflow-hidden">
+            <!-- 柔和背景浮动小饰物 -->
+            <div class="absolute -top-12 -right-12 w-48 h-48 bg-secondary/10 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-12 -left-12 w-48 h-48 bg-accent/5 rounded-full blur-3xl"></div>
+            
+            <div class="text-[11px] font-bold tracking-[0.4em] uppercase text-secondary mb-3 font-sans relative z-10">
+                OUR LOVE TIMER
+            </div>
+            <h2 class="font-jeluTitle text-3xl md:text-4xl text-primary font-light mb-10 relative z-10">
+                我们已经携手走过
+            </h2>
+
+            <!-- 倒计时区域 (真正 3D 空间翻折时钟 - 森林绿高级调色) -->
+            <div class="flex justify-center items-center gap-1.5 md:gap-5 my-auto select-none relative z-10">
+                
+                <!-- 天 (3位独立卡片) -->
+                <div class="flex flex-col items-center">
+                    <div class="flex gap-1 md:gap-1.5">
+                        <div id="days-hundreds" class="flip-digit w-9 h-14 md:w-14 md:h-20 bg-primary rounded-xl relative overflow-hidden flex flex-col">
+                            <div class="flip-card-up w-full h-1/2 bg-[#3A5044] overflow-hidden relative rounded-t-xl">
+                                <div class="absolute top-0 left-0 w-full h-[200%] flex items-center justify-center">
+                                    <span class="text-3xl md:text-5xl font-jeluTitle text-cream">0</span>
+                                </div>
+                            </div>
+                            <div class="flip-card-down w-full h-1/2 bg-primary overflow-hidden relative rounded-b-xl">
+                                <div class="absolute bottom-0 left-0 w-full h-[200%] flex items-center justify-center">
+                                    <span class="text-3xl md:text-5xl font-jeluTitle text-cream">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="days-tens" class="flip-digit w-9 h-14 md:w-14 md:h-20 bg-primary rounded-xl relative overflow-hidden flex flex-col">
+                            <div class="flip-card-up w-full h-1/2 bg-[#3A5044] overflow-hidden relative rounded-t-xl">
+                                <div class="absolute top-0 left-0 w-full h-[200%] flex items-center justify-center">
+                                    <span class="text-3xl md:text-5xl font-jeluTitle text-cream">0</span>
+                                </div>
+                            </div>
+                            <div class="flip-card-down w-full h-1/2 bg-primary overflow-hidden relative rounded-b-xl">
+                                <div class="absolute bottom-0 left-0 w-full h-[200%] flex items-center justify-center">
+                                    <span class="text-3xl md:text-5xl font-jeluTitle text-cream">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="days-ones" class="flip-digit w-9 h-14 md:w-14 md:h-20 bg-primary rounded-xl relative overflow-hidden flex flex-col">
+                            <div class="flip-card-up w-full h-1/2 bg-[#3A5044] overflow-hidden relative rounded-t-xl">
+                                <div class="absolute top-0 left-0 w-full h-[200%] flex items-center justify-center">
+                                    <span class="text-3xl md:text-5xl font-jeluTitle text-cream">0</span>
+                                </div>
+                            </div>
+                            <div class="flip-card-down w-full h-1/2 bg-primary overflow-hidden relative rounded-b-xl">
+                                <div class="absolute bottom-0 left-0 w-full h-[200%] flex items-center justify-center">
+                                    <span class="text-3xl md:text-5xl font-jeluTitle text-cream">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-[9px] tracking-[0.3em] uppercase text-secondary font-bold mt-2.5">DAYS</div>
+                </div>
+                
+                <div class="text-xl md:text-2xl font-bold text-primary/40 mb-5 select-none">:</div>
+                
+                <!-- 小时 -->
+                <div class="flex flex-col items-center">
+                    <div class="flex gap-1 md:gap-1.5">
+                        <div id="hours-tens" class="flip-digit w-9 h-14 md:w-14 md:h-20 bg-primary rounded-xl relative overflow-hidden flex flex-col">
+                            <div class="flip-card-up w-full h-1/2 bg-[#3A5044] overflow-hidden relative rounded-t-xl">
+                                <div class="absolute top-0 left-0 w-full h-[200%] flex items-center justify-center">
+                                    <span class="text-3xl md:text-5xl font-jeluTitle text-cream">0</span>
+                                </div>
+                            </div>
+                            <div class="flip-card-down w-full h-1/2 bg-primary overflow-hidden relative rounded-b-xl">
+                                <div class="absolute bottom-0 left-0 w-full h-[200%] flex items-center justify-center">
+                                    <span class="text-3xl md:text-5xl font-jeluTitle text-cream">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="hours-ones" class="flip-digit w-9 h-14 md:w-14 md:h-20 bg-primary rounded-xl relative overflow-hidden flex flex-col">
+                            <div class="flip-card-up w-full h-1/2 bg-[#3A5044] overflow-hidden relative rounded-t-xl">
+                                <div class="absolute top-0 left-0 w-full h-[200%] flex items-center justify-center">
+                                    <span class="text-3xl md:text-5xl font-jeluTitle text-cream">0</span>
+                                </div>
+                            </div>
+                            <div class="flip-card-down w-full h-1/2 bg-primary overflow-hidden relative rounded-b-xl">
+                                <div class="absolute bottom-0 left-0 w-full h-[200%] flex items-center justify-center">
+                                    <span class="text-3xl md:text-5xl font-jeluTitle text-cream">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-[9px] tracking-[0.3em] uppercase text-secondary font-bold mt-2.5">HOURS</div>
+                </div>
+                
+                <div class="text-xl md:text-2xl font-bold text-primary/40 mb-5 select-none">:</div>
+                
+                <!-- 分钟 -->
+                <div class="flex flex-col items-center">
+                    <div class="flex gap-1 md:gap-1.5">
+                        <div id="minutes-tens" class="flip-digit w-9 h-14 md:w-14 md:h-20 bg-primary rounded-xl relative overflow-hidden flex flex-col">
+                            <div class="flip-card-up w-full h-1/2 bg-[#3A5044] overflow-hidden relative rounded-t-xl">
+                                <div class="absolute top-0 left-0 w-full h-[200%] flex items-center justify-center">
+                                    <span class="text-3xl md:text-5xl font-jeluTitle text-cream">0</span>
+                                </div>
+                            </div>
+                            <div class="flip-card-down w-full h-1/2 bg-primary overflow-hidden relative rounded-b-xl">
+                                <div class="absolute bottom-0 left-0 w-full h-[200%] flex items-center justify-center">
+                                    <span class="text-3xl md:text-5xl font-jeluTitle text-cream">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="minutes-ones" class="flip-digit w-9 h-14 md:w-14 md:h-20 bg-primary rounded-xl relative overflow-hidden flex flex-col">
+                            <div class="flip-card-up w-full h-1/2 bg-[#3A5044] overflow-hidden relative rounded-t-xl">
+                                <div class="absolute top-0 left-0 w-full h-[200%] flex items-center justify-center">
+                                    <span class="text-3xl md:text-5xl font-jeluTitle text-cream">0</span>
+                                </div>
+                            </div>
+                            <div class="flip-card-down w-full h-1/2 bg-primary overflow-hidden relative rounded-b-xl">
+                                <div class="absolute bottom-0 left-0 w-full h-[200%] flex items-center justify-center">
+                                    <span class="text-3xl md:text-5xl font-jeluTitle text-cream">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-[9px] tracking-[0.3em] uppercase text-secondary font-bold mt-2.5">MIN</div>
+                </div>
+                
+                <div class="text-xl md:text-2xl font-bold text-primary/40 mb-5 select-none hidden md:block">:</div>
+                
+                <!-- 秒钟 (仅在桌面端) -->
+                <div class="flex flex-col items-center hidden md:flex">
+                    <div class="flex gap-1 md:gap-1.5">
+                        <div id="seconds-tens" class="flip-digit w-9 h-14 md:w-14 md:h-20 bg-primary rounded-xl relative overflow-hidden flex flex-col">
+                            <div class="flip-card-up w-full h-1/2 bg-[#3A5044] overflow-hidden relative rounded-t-xl">
+                                <div class="absolute top-0 left-0 w-full h-[200%] flex items-center justify-center">
+                                    <span class="text-3xl md:text-5xl font-jeluTitle text-cream">0</span>
+                                </div>
+                            </div>
+                            <div class="flip-card-down w-full h-1/2 bg-primary overflow-hidden relative rounded-b-xl">
+                                <div class="absolute bottom-0 left-0 w-full h-[200%] flex items-center justify-center">
+                                    <span class="text-3xl md:text-5xl font-jeluTitle text-cream">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="seconds-ones" class="flip-digit w-9 h-14 md:w-14 md:h-20 bg-primary rounded-xl relative overflow-hidden flex flex-col">
+                            <div class="flip-card-up w-full h-1/2 bg-[#3A5044] overflow-hidden relative rounded-t-xl">
+                                <div class="absolute top-0 left-0 w-full h-[200%] flex items-center justify-center">
+                                    <span class="text-3xl md:text-5xl font-jeluTitle text-cream">0</span>
+                                </div>
+                            </div>
+                            <div class="flip-card-down w-full h-1/2 bg-primary overflow-hidden relative rounded-b-xl">
+                                <div class="absolute bottom-0 left-0 w-full h-[200%] flex items-center justify-center">
+                                    <span class="text-3xl md:text-5xl font-jeluTitle text-cream">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-[9px] tracking-[0.3em] uppercase text-secondary font-bold mt-2.5">SEC</div>
+                </div>
+                
+            </div>
         </div>
     </section>
 
-    <!-- 占位预留：小餐馆/小酒馆/小诊所 (清新卡片风格) -->
-    <section id="restaurant" class="py-24 px-4 relative z-10">
+    <!-- 💡 爱意纪事与动态趣味看板网格 (Love Ledger & Stats) -->
+    <section class="px-4 max-w-6xl mx-auto w-full z-10 relative mb-24">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <!-- 卡片 1: 宇宙心跳共振仪 (实时递增，极其浪漫) -->
+            <div class="bg-[#F4F7F3] border border-white/60 p-6 rounded-[2.2rem] shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between min-h-[190px]">
+                <div class="flex items-center justify-between">
+                    <span class="text-[10px] tracking-widest font-bold text-secondary uppercase font-sans">Heartbeat Resonance</span>
+                    <!-- 动态跳动的红心 -->
+                    <i class="fa fa-heart text-accent text-sm animate-heart-pulse"></i>
+                </div>
+                <div class="my-3">
+                    <!-- 心跳实时计数器 -->
+                    <div id="heartbeat-counter" class="text-2xl md:text-3xl font-jeluTitle font-extrabold text-primary tracking-wide">
+                        Calculating...
+                    </div>
+                    <p class="text-[10px] text-primary/60 mt-1 font-sans">
+                        我们在宇宙星河里，心跳共鸣的次数。
+                    </p>
+                </div>
+                <div class="text-[10px] font-bold text-[#6D8268] tracking-widest flex items-center gap-1.5">
+                    <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#6D8268] animate-ping"></span>
+                    实时生命频率同步中
+                </div>
+            </div>
+
+            <!-- 卡片 2: ✨ 时光契约无限智算引擎 (Infinite Milestone Engine) -->
+            <div class="bg-[#F4F7F3] border border-white/60 p-6 rounded-[2.2rem] shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between min-h-[190px] relative overflow-hidden">
+                <!-- 微小装饰背景晕 -->
+                <div class="absolute -bottom-6 -right-6 w-24 h-24 bg-accent/8 rounded-full blur-2xl"></div>
+                <div class="flex items-center justify-between">
+                    <span class="text-[10px] tracking-widest font-bold text-secondary uppercase font-sans">Infinite Milestone</span>
+                    <!-- 里程碑类型徽章 -->
+                    <span id="milestone-type-badge" class="text-[8px] px-2 py-0.5 rounded-full bg-accent/15 text-accent font-bold tracking-wider milestone-badge-glow">百天</span>
+                </div>
+                <div class="my-2">
+                    <!-- 里程碑名称 -->
+                    <div id="milestone-name" class="text-base font-jeluTitle font-bold text-primary leading-tight mb-0.5">计算中…</div>
+                    <!-- 里程碑日期 -->
+                    <div id="milestone-date" class="text-[9px] text-primary/50 font-sans tracking-widest mb-2">—</div>
+                    <!-- 进度条 -->
+                    <div class="w-full bg-[#E6EFE5] rounded-full h-2 overflow-hidden border border-white/40">
+                        <div id="milestone-progress-bar" class="milestone-bar-shimmer h-full rounded-full transition-all duration-1000" style="width: 0%"></div>
+                    </div>
+                    <div class="flex items-center justify-between mt-1.5">
+                        <span id="milestone-percent" class="text-[9px] font-bold text-secondary font-sans">0%</span>
+                        <span id="milestone-days-left" class="text-[9px] text-primary/50 font-sans">—</span>
+                    </div>
+                </div>
+                <div class="text-[10px] font-bold text-[#6D8268] tracking-widest flex items-center gap-1.5">
+                    <span class="inline-block w-1.5 h-1.5 rounded-full bg-accent/70 animate-ping"></span>
+                    <span id="milestone-sub-hint">智算引擎运转中</span>
+                </div>
+            </div>
+
+            <!-- 卡片 3: 浪漫节日事件打卡 (520 / 七夕 / 情人节 / 跨年) -->
+            <div class="bg-[#F4F7F3] border border-white/60 p-6 rounded-[2.2rem] shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between min-h-[190px]">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-[10px] tracking-widest font-bold text-secondary uppercase font-sans">Love Milestones</span>
+                    <i class="fa fa-calendar text-[#C0A98F] text-sm"></i>
+                </div>
+                <!-- 迷你节日打卡状态滚轮 -->
+                <div class="space-y-1.5 text-left my-1 max-h-[85px] overflow-y-auto scrollbar-hide">
+                    <!-- 520 打卡 -->
+                    <div class="flex items-center justify-between text-xs py-0.5 border-b border-primary/5">
+                        <span class="text-primary font-medium">🌸 520 情人节</span>
+                        <span id="badge-520" class="text-[9px] px-2 py-0.5 rounded-full bg-secondary/15 text-primary font-bold">1次已打卡</span>
+                    </div>
+                    <!-- 七夕打卡 -->
+                    <div class="flex items-center justify-between text-xs py-0.5 border-b border-primary/5">
+                        <span class="text-primary font-medium">🌌 七夕鹊桥节</span>
+                        <span id="badge-qixi" class="text-[9px] px-2 py-0.5 rounded-full bg-[#E6EFE5] text-[#6D8268] font-bold">倒计时中</span>
+                    </div>
+                    <!-- 跨年打卡 -->
+                    <div class="flex items-center justify-between text-xs py-0.5 border-b border-primary/5">
+                        <span class="text-primary font-medium">✨ 元旦跨年夜</span>
+                        <span id="badge-newyear" class="text-[9px] px-2 py-0.5 rounded-full bg-primary/5 text-primary/40 font-normal">待启程</span>
+                    </div>
+                </div>
+                <div class="text-[10px] text-primary/50 tracking-widest leading-relaxed">
+                    下一站：2026.08.19 七夕鹊桥
+                </div>
+            </div>
+
+            <!-- 卡片 4: 思念雷达发射器 (col-span-2) -->
+            <div class="md:col-span-2 bg-[#F4F7F3] border border-white/60 p-6 rounded-[2.2rem] shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between min-h-[190px]">
+                <div class="flex items-center justify-between">
+                    <span class="text-[10px] tracking-widest font-bold text-secondary uppercase font-sans">Miss Radar Transmission</span>
+                    <i class="fa fa-rss text-accent animate-pulse"></i>
+                </div>
+                <div class="my-3 flex items-center gap-4">
+                    <span id="radar-counter" class="text-4xl sm:text-5xl font-jeluTitle font-extrabold text-accent">525</span>
+                    <span class="text-xs font-bold text-primary/70">次思念电波已送达</span>
+                </div>
+                <p class="text-[10px] text-primary/60 mb-4 font-sans">
+                    每想你一次，就在这里按下按钮，把粉红番茄爱意波段发射进宇宙。
+                </p>
+                <div class="flex items-center justify-between">
+                    <button id="radar-emit-btn" class="bg-primary text-cream px-6 py-2.5 rounded-full font-bold hover:bg-secondary transition active:scale-95 text-2xs tracking-widest flex items-center gap-2 shadow-sm">
+                        <i class="fa fa-paper-plane text-[10px]"></i> 点击发送思念
+                    </button>
+                    <span class="text-[9px] tracking-wider text-secondary font-bold font-sans uppercase">Tap to Emit Luv</span>
+                </div>
+            </div>
+
+            <!-- 卡片 5: 季节相伴进度 (col-span-1) -->
+            <div class="bg-[#F4F7F3] border border-white/60 p-6 rounded-[2.2rem] shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between min-h-[190px]">
+                <div class="flex items-center justify-between">
+                    <span class="text-[10px] tracking-widest font-bold text-secondary uppercase font-sans">Seasons Companion</span>
+                    <i class="fa fa-leaf text-[#6D8268]"></i>
+                </div>
+                <div class="my-3">
+                    <div class="flex items-end justify-between mb-1.5">
+                        <span class="text-xs font-bold text-primary">初夏相伴进度</span>
+                        <span id="season-percentage" class="text-xs font-bold text-secondary font-sans">26%</span>
+                    </div>
+                    <!-- 极简深绿季节进度条 -->
+                    <div class="w-full bg-[#E6EFE5] rounded-full h-2.5 overflow-hidden border border-white/40">
+                        <div id="season-progress-bar" class="bg-primary h-full rounded-full transition-all duration-1000" style="width: 26%"></div>
+                    </div>
+                </div>
+                <p class="text-[10px] text-primary/50 italic tracking-wide text-center leading-relaxed">
+                    “我们从暖春启航，在热烈走向美好的初夏，温柔绽放。”
+                </p>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- Jelu 中间叙事排版块：1:1 还原 "Whart TS & CAF Wicke!" 模块 (我们的未来版图) -->
+    <section id="restaurant" class="py-12 px-4 relative z-10">
         <div class="container mx-auto max-w-6xl">
-            <!-- 玻璃质感大卡片包裹模块预留区域 -->
-            <div class="glass-card rounded-[2rem] p-12 text-center relative overflow-hidden">
-                <!-- 装饰光晕 -->
-                <div class="absolute -top-20 -right-20 w-64 h-64 bg-primary/20 rounded-full blur-3xl"></div>
-                <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-secondary/20 rounded-full blur-3xl"></div>
+            <!-- 仿 Jelu 宽阔卡片设计 -->
+            <div class="jelu-card p-10 md:p-16 relative overflow-hidden">
+                <!-- 装饰植物圆晕 -->
+                <div class="absolute -top-20 -right-20 w-80 h-80 bg-secondary/10 rounded-full blur-3xl"></div>
                 
-                <h2 class="text-3xl font-medium text-slate-800 tracking-[0.2em] mb-4 relative z-10">我们的未来版图</h2>
-                <p class="text-slate-500 tracking-widest text-sm relative z-10">此区域已为您预留，随时可解锁专属模块</p>
-                
-                <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
-                    <!-- 预留卡片 1 -->
-                    <div id="restaurant" class="bg-white/40 border border-white p-8 rounded-2xl hover:bg-white/60 transition shadow-sm hover:shadow-md cursor-pointer group">
-                        <div class="w-16 h-16 mx-auto bg-primary/10 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition">
-                            <i class="fa fa-cutlery text-2xl text-primary"></i>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    
+                    <!-- Left: 故事讲述 -->
+                    <div class="lg:col-span-7 text-left">
+                        <div class="text-[11px] font-bold tracking-[0.4em] uppercase text-secondary mb-3 font-sans">
+                            OUR FUTURE MAP
                         </div>
-                        <h3 class="text-xl font-medium text-slate-700 tracking-widest">小餐馆</h3>
-                        <p class="text-xs text-slate-500 mt-2">属于我们的私房菜单</p>
+                        <h2 class="font-jeluTitle text-3xl sm:text-4xl text-primary leading-snug mb-6">
+                            属于我们两个人的<br><span class="italic font-normal text-secondary font-jeluSub">Secret Bases</span>
+                        </h2>
+                        <p class="text-sm text-primary/80 leading-relaxed font-light mb-8 max-w-lg">
+                            我们说好未来要去建造很多美好的地方：在小餐馆里烹饪温暖的料理，在微醺的小酒馆讲悄悄话，还有随时能够治愈彼此疲惫的小诊所。生活虽长，但只要与你一同写生，哪里都是幸福的归属。
+                        </p>
+                        <div>
+                            <a href="#surprise" class="bg-primary text-cream px-7 py-3 rounded-full font-bold hover:bg-secondary transition-all text-xs tracking-widest inline-block shadow-sm">
+                                开启神秘告白
+                            </a>
+                        </div>
                     </div>
-                    <!-- 预留卡片 2 -->
-                    <div id="tavern" class="bg-white/40 border border-white p-8 rounded-2xl hover:bg-white/60 transition shadow-sm hover:shadow-md cursor-pointer group">
-                        <div class="w-16 h-16 mx-auto bg-secondary/10 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition">
-                            <i class="fa fa-glass text-2xl text-secondary"></i>
+                    
+                    <!-- Right: 圆角插图卡片 (还原 Jelu 右侧 Avocado 吐司小切片效果) -->
+                    <div class="lg:col-span-5 flex justify-center">
+                        <div class="relative w-full max-w-[340px] aspect-[4/3] rounded-[2rem] overflow-hidden bg-cream border border-white p-3 shadow-md">
+                            <div class="w-full h-full rounded-[1.6rem] overflow-hidden bg-cover bg-center" style="background-image: url('images/index/sheep_cat.jpg');"></div>
+                            <!-- 悬浮的小标签 -->
+                            <div class="absolute bottom-6 right-6 bg-white/90 border border-primary/5 px-3.5 py-1 rounded-full text-[9px] text-primary tracking-widest font-bold shadow-sm">
+                                MEADOW MOMENT 🍃
+                            </div>
                         </div>
-                        <h3 class="text-xl font-medium text-slate-700 tracking-widest">小酒馆</h3>
-                        <p class="text-xs text-slate-500 mt-2">微醺时刻的悄悄话</p>
                     </div>
-                    <!-- 预留卡片 3 -->
-                    <div id="clinic" class="bg-white/40 border border-white p-8 rounded-2xl hover:bg-white/60 transition shadow-sm hover:shadow-md cursor-pointer group">
-                        <div class="w-16 h-16 mx-auto bg-tertiary/10 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition">
-                            <i class="fa fa-stethoscope text-2xl text-tertiary"></i>
+
+                </div>
+
+                <!-- 1:1 复刻 Jelu 的超高圆角五栏异步 Bento 看板卡片区 -->
+                <div class="mt-16 grid grid-cols-1 md:grid-cols-6 gap-8">
+                    <!-- 卡片 1 (小餐馆) -->
+                    <div id="restaurant-card" onclick="window.location.href='restaurant.html'" class="md:col-span-2 bg-[#EAEFE8] border border-white/60 p-8 rounded-[2.2rem] hover:bg-white transition-all duration-300 group shadow-sm flex flex-col justify-between min-h-[250px] cursor-pointer">
+                        <div>
+                            <div class="w-12 h-12 bg-primary/5 rounded-full flex items-center justify-center mb-5 group-hover:scale-110 transition">
+                                <i class="fa fa-cutlery text-xl text-primary"></i>
+                            </div>
+                            <h3 class="font-jeluTitle text-xl text-primary tracking-wide mb-2">小餐馆 · Dining</h3>
+                            <p class="text-xs text-primary/70 leading-relaxed font-light">精心搜罗属于我们的专属私房菜单，填满未来的每一顿早安与夜宵。</p>
                         </div>
-                        <h3 class="text-xl font-medium text-slate-700 tracking-widest">小诊所</h3>
-                        <p class="text-xs text-slate-500 mt-2">治愈彼此的秘密基地</p>
+                        <div class="mt-6">
+                            <span class="jelu-dotted-btn pb-1 text-2xs font-bold text-primary tracking-widest uppercase">Explore Menu · 浏览 →</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 卡片 2 (小酒馆) -->
+                    <div id="tavern-card" onclick="window.location.href='tavern.html'" class="md:col-span-2 bg-[#EAEFE8] border border-white/60 p-8 rounded-[2.2rem] hover:bg-white transition-all duration-300 group shadow-sm flex flex-col justify-between min-h-[250px] cursor-pointer">
+                        <div>
+                            <div class="w-12 h-12 bg-primary/5 rounded-full flex items-center justify-center mb-5 group-hover:scale-110 transition">
+                                <i class="fa fa-glass text-xl text-primary"></i>
+                            </div>
+                            <h3 class="font-jeluTitle text-xl text-primary tracking-wide mb-2">小酒馆 · Tavern</h3>
+                            <p class="text-xs text-primary/70 leading-relaxed font-light">微醺时刻的悄悄话，盛满柔和果酒的夜里，全世界只有我们两人。</p>
+                        </div>
+                        <div class="mt-6">
+                            <span class="jelu-dotted-btn pb-1 text-2xs font-bold text-primary tracking-widest uppercase">Whisper Talk · 倾听 →</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 卡片 3 (小诊所) -->
+                    <div id="clinic-card" onclick="window.location.href='clinic.html'" class="md:col-span-2 bg-[#EAEFE8] border border-white/60 p-8 rounded-[2.2rem] hover:bg-white transition-all duration-300 group shadow-sm flex flex-col justify-between min-h-[250px] cursor-pointer">
+                        <div>
+                            <div class="w-12 h-12 bg-primary/5 rounded-full flex items-center justify-center mb-5 group-hover:scale-110 transition">
+                                <i class="fa fa-heartbeat text-xl text-primary"></i>
+                            </div>
+                            <h3 class="font-jeluTitle text-xl text-primary tracking-wide mb-2">小诊所 · Clinic</h3>
+                            <p class="text-xs text-primary/70 leading-relaxed font-light">温柔拥抱治愈疲惫的秘密基地，贴心创可贴，只给专属的你。</p>
+                        </div>
+                        <div class="mt-6">
+                            <span class="jelu-dotted-btn pb-1 text-2xs font-bold text-primary tracking-widest uppercase">Get Cured · 治愈 →</span>
+                        </div>
+                    </div>
+
+                    <!-- 卡片 4 (纪念博物馆) -->
+                    <div id="museum-card" onclick="window.location.href='museum.html'" class="md:col-span-3 bg-[#EAEFE8] border border-white/60 p-8 rounded-[2.2rem] hover:bg-white transition-all duration-300 group shadow-sm flex flex-col justify-between min-h-[250px] cursor-pointer">
+                        <div>
+                            <div class="w-12 h-12 bg-primary/5 rounded-full flex items-center justify-center mb-5 group-hover:scale-110 transition">
+                                <i class="fa fa-university text-xl text-primary"></i>
+                            </div>
+                            <h3 class="font-jeluTitle text-xl text-primary tracking-wide mb-2">纪念博物馆 · Museum</h3>
+                            <p class="text-xs text-primary/70 leading-relaxed font-light">爱情的时间编年史，定格并记录下我们共同度过的每一个“第一次”与重要足迹。</p>
+                        </div>
+                        <div class="mt-6">
+                            <span class="jelu-dotted-btn pb-1 text-2xs font-bold text-primary tracking-widest uppercase">Chronicle · 追溯 →</span>
+                        </div>
+                    </div>
+
+                    <!-- 卡片 5 (沙龙) -->
+                    <div id="salon-card" onclick="window.location.href='gallery.html'" class="md:col-span-3 bg-[#EAEFE8] border border-white/60 p-8 rounded-[2.2rem] hover:bg-white transition-all duration-300 group shadow-sm flex flex-col justify-between min-h-[250px] cursor-pointer">
+                        <div>
+                            <div class="w-12 h-12 bg-primary/5 rounded-full flex items-center justify-center mb-5 group-hover:scale-110 transition">
+                                <i class="fa fa-camera text-xl text-primary"></i>
+                            </div>
+                            <h3 class="font-jeluTitle text-xl text-primary tracking-wide mb-2">沙龙 · Salon</h3>
+                            <p class="text-xs text-primary/70 leading-relaxed font-light">定格在时光长河里的心动合照，三行交替式滚动跑马灯，尽显清新的法式浪漫。</p>
+                        </div>
+                        <div class="mt-6">
+                            <span class="jelu-dotted-btn pb-1 text-2xs font-bold text-primary tracking-widest uppercase">Salon Gatherings · 悦览 →</span>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
 
-    <!-- 专属情话互动区 (清新治愈版) -->
-    <section id="surprise" class="py-32 px-4 text-center relative z-10 flex flex-col items-center justify-center">
-        <div class="w-[1px] h-16 bg-gradient-to-b from-transparent to-primary/50 mb-8"></div>
-        <h2 class="text-xl md:text-2xl font-medium text-slate-800 tracking-[0.3em] mb-4">有一份 520 惊喜等待签收</h2>
-        <p class="text-slate-500 mb-12 max-w-md tracking-widest text-sm leading-loose">点开它，听听我想对舟舟说的心里话</p>
+    <!-- 专属情话互动区 (Jelu 自然雅致版) -->
+    <section id="surprise" class="py-24 px-4 text-center relative z-10 flex flex-col items-center justify-center">
+        <div class="w-[1px] h-16 bg-gradient-to-b from-transparent to-primary/30 mb-8"></div>
         
-        <button id="surprise-btn" class="relative overflow-hidden group px-10 py-4 border border-primary/30 bg-white/50 text-primary rounded-full font-medium tracking-[0.2em] hover:bg-primary hover:text-white transition-all duration-500 shadow-md hover:shadow-xl hover:shadow-primary/20 backdrop-blur-sm">
-            <span class="relative z-10 flex items-center gap-3 text-sm md:text-base">
+        <div class="text-[11px] font-bold tracking-[0.4em] uppercase text-secondary mb-3 font-sans">
+            520 SURPRISE LETTER
+        </div>
+        <h2 class="font-jeluTitle text-3xl text-primary mb-4">有一份森林来信等待签收</h2>
+        <p class="text-primary/70 mb-10 max-w-md tracking-widest text-xs leading-loose font-light">点开它，听听小羊想对舟舟说的治愈情话</p>
+        
+        <button id="surprise-btn" class="relative overflow-hidden group px-10 py-4 border border-primary/20 bg-cream text-primary rounded-full font-bold tracking-[0.2em] hover:bg-primary hover:text-white transition-all duration-500 shadow-sm hover:shadow-md backdrop-blur-sm">
+            <span class="relative z-10 flex items-center gap-3 text-xs md:text-sm">
                 <i class="fa fa-envelope-o"></i> 开启专属告白
             </span>
         </button>
     </section>
 
-    <!-- 页脚 -->
-    <footer class="py-8 text-center text-slate-400 text-xs tracking-[0.2em] font-cinzel relative z-10">
-        <p>MADE WITH <i id="footer-heart" class="fa fa-heart text-primary/70 animate-pulse mx-1 cursor-pointer"></i> BY XIAOYANG FOR ZHOUZHOU</p>
+    <!-- 页脚 (仿 Jelu 优雅极简版头) -->
+    <footer class="py-12 text-center text-primary/40 text-[10px] tracking-[0.35em] font-sans relative z-10 max-w-6xl mx-auto border-t border-primary/5 w-full">
+        <p>MADE WITH <i id="footer-heart" class="fa fa-heart text-accent animate-pulse mx-1 cursor-pointer"></i> BY XIAOYANG FOR ZHOUZHOU</p>
+        <p class="mt-2 text-[8px] opacity-60">© 2026 OUR MEMORIES ALL RIGHTS RESERVED</p>
     </footer>
 
-    <!-- 歌单面板 -->
-    <div id="playlist-panel" class="playlist-panel">
-        <div class="playlist-header">
-            <h3 class="text-lg font-medium text-slate-700">我们的歌单</h3>
-            <button id="close-playlist" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition">
-                <i class="fa fa-times text-slate-500 text-sm"></i>
+    <!-- 歌单面板 (Jelu 奶油配色升级) -->
+    <div id="playlist-panel" class="playlist-panel bg-cream border-l border-primary/10">
+        <div class="playlist-header border-b border-primary/10 flex items-center justify-between p-6">
+            <h3 class="text-base font-bold text-primary font-sans">我们的歌单 · Playlist</h3>
+            <button id="close-playlist" class="w-8 h-8 rounded-full bg-primary/5 flex items-center justify-center hover:bg-primary/10 transition">
+                <i class="fa fa-times text-primary text-sm"></i>
             </button>
         </div>
         
-        <div id="playlist-items" class="playlist-items">
+        <div id="playlist-items" class="playlist-items p-4 overflow-y-auto" style="height: calc(100% - 150px);">
             <!-- 歌单列表将由JS动态生成 -->
         </div>
         
-        <div class="playlist-controls">
-            <button id="prev-btn" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center hover:bg-primary/10 transition">
-                <i class="fa fa-step-backward text-slate-600"></i>
+        <div class="playlist-controls absolute bottom-0 left-0 right-0 p-6 bg-cream border-t border-primary/10 flex items-center justify-center gap-6">
+            <button id="prev-btn" class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center hover:bg-primary/10 transition">
+                <i class="fa fa-step-backward text-primary"></i>
             </button>
-            <button id="play-pause-btn" class="w-14 h-14 rounded-full bg-primary flex items-center justify-center hover:bg-primary/90 transition shadow-lg shadow-primary/30">
+            <button id="play-pause-btn" class="w-14 h-14 rounded-full bg-primary flex items-center justify-center text-cream hover:bg-[#3d5448] transition shadow-md">
                 <i class="fa fa-play text-white text-lg"></i>
             </button>
-            <button id="next-btn" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center hover:bg-primary/10 transition">
-                <i class="fa fa-step-forward text-slate-600"></i>
+            <button id="next-btn" class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center hover:bg-primary/10 transition">
+                <i class="fa fa-step-forward text-primary"></i>
             </button>
         </div>
     </div>
 
     <!-- 暗号模式遮罩 -->
     <div id="secret-overlay" class="secret-mode-overlay">
-        <div class="secret-input-container">
-            <div class="w-16 h-16 mx-auto bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full flex items-center justify-center mb-4">
+        <div class="secret-input-container jelu-card p-8 md:p-12 max-w-sm w-[90%] text-center">
+            <div class="w-16 h-16 mx-auto bg-primary/5 rounded-full flex items-center justify-center mb-5">
                 <i class="fa fa-lock text-2xl text-primary"></i>
             </div>
-            <h3 class="text-xl font-medium text-slate-700 mb-2">创作者模式</h3>
-            <p class="text-sm text-slate-500 mb-4">输入专属暗号解锁编辑功能</p>
-            <input id="secret-input" type="password" class="secret-input" placeholder="请输入暗号" maxlength="10">
-            <button id="secret-submit-btn" class="secret-submit-btn">
-                <i class="fa fa-unlock mr-2"></i>解锁
+            <h3 class="font-jeluTitle text-xl text-primary mb-2">创作者模式</h3>
+            <p class="text-xs text-primary/60 mb-6">输入专属暗号解锁编辑功能</p>
+            <input id="secret-input" type="password" class="secret-input w-full p-3 border-b-2 border-primary/20 bg-transparent text-center text-lg outline-none focus:border-primary tracking-widest mb-6" placeholder="请输入暗号" maxlength="10">
+            <button id="secret-submit-btn" class="w-full bg-primary text-cream py-3.5 rounded-full text-xs font-bold tracking-widest hover:bg-secondary transition active:scale-95">
+                <i class="fa fa-unlock mr-2"></i>解锁创作者
             </button>
-            <button id="secret-cancel-btn" class="mt-3 text-sm text-slate-400 hover:text-slate-600 transition" onclick="hideSecretOverlay()">
-                取消
+            <button id="secret-cancel-btn" class="mt-4 text-xs text-primary/40 hover:text-primary transition" onclick="hideSecretOverlay()">
+                返回主页
             </button>
         </div>
     </div>
 
     <!-- 编辑模式按钮 -->
-    <button id="edit-mode-btn" class="edit-mode-btn">
-        <i class="fa fa-unlock text-lg"></i>
+    <button id="edit-mode-btn" class="fixed bottom-8 left-8 z-[70] w-12 h-12 rounded-full bg-primary text-cream flex items-center justify-center hover:bg-[#3d5448] transition shadow-lg active:scale-95 hidden">
+        <i class="fa fa-unlock text-sm"></i>
     </button>
 
-    <!-- Lightbox 图片查看器 -->
-    <div id="lightbox" class="lightbox-overlay hidden">
-        <button id="lightbox-close" class="lightbox-close">
-            <i class="fa fa-times text-2xl"></i>
-        </button>
-        <button id="lightbox-prev" class="lightbox-nav lightbox-prev">
-            <i class="fa fa-chevron-left text-2xl"></i>
-        </button>
-        <button id="lightbox-next" class="lightbox-nav lightbox-next">
-            <i class="fa fa-chevron-right text-2xl"></i>
-        </button>
-        <div class="lightbox-content">
-            <img id="lightbox-img" src="" alt="预览图片">
-        </div>
-        <div id="lightbox-counter" class="lightbox-counter"></div>
-    </div>
 
     <!-- 引入公共脚本 -->
     <script src="js/main.js"></script>
     
     <script>
-        // ---------------- 1. 倒计时/正计时逻辑 ----------------
+        // ---------------- 1. 倒计时/正计时逻辑 (高定 3D 物理翻牌时钟) ----------------
+        function flipToDigit(digitId, newDigit) {
+            const digitEl = document.getElementById(digitId);
+            if (!digitEl) return;
+            
+            const staticTop = digitEl.querySelector('.flip-card-up span');
+            const staticBottom = digitEl.querySelector('.flip-card-down span');
+            if (!staticTop || !staticBottom) return;
+            
+            const currentVal = staticBottom.textContent;
+            if (currentVal === newDigit.toString()) return; // 若值无变化，立即返回避免无效重绘
+            
+            // 消除翻页时的重影与数字阴影：
+            // 1. 底部背景 span 在翻动期间完全隐藏 (opacity = 0)，避免旧数字透过半透明的下落卡片产生重影
+            // 2. 顶部背景 span 保持显示旧值，在顶部折页完全翻落后才切换成新值，防止新数字提前透过顶部半透明折页产生重影
+            staticBottom.style.opacity = '0';
+            
+            // 动态创建 3D 翻页折叠层，保持严格的层次结构 (使用 Jelu 高定配色)
+            // 1. 下折上半页 (从 0deg 到 -90deg)
+            const flipPanelTop = document.createElement('div');
+            flipPanelTop.className = 'absolute inset-x-0 top-0 h-1/2 bg-[#3A5044] overflow-hidden origin-bottom z-10 rounded-t-xl';
+            flipPanelTop.style.transformStyle = 'preserve-3d';
+            flipPanelTop.style.backfaceVisibility = 'hidden';
+            flipPanelTop.style.webkitBackfaceVisibility = 'hidden';
+            flipPanelTop.innerHTML = `
+                <div class="absolute top-0 left-0 w-full h-[200%] flex items-center justify-center">
+                    <span class="text-3xl md:text-5xl font-jeluTitle text-cream">${currentVal}</span>
+                </div>
+            `;
+            
+            // 2. 下扣下半页 (从 90deg 到 0deg)
+            const flipPanelBottom = document.createElement('div');
+            flipPanelBottom.className = 'absolute inset-x-0 bottom-0 h-1/2 bg-primary overflow-hidden origin-top z-10 rounded-b-xl';
+            flipPanelBottom.style.transform = 'rotateX(90deg)';
+            flipPanelBottom.style.transformStyle = 'preserve-3d';
+            flipPanelBottom.style.backfaceVisibility = 'hidden';
+            flipPanelBottom.style.webkitBackfaceVisibility = 'hidden';
+            flipPanelBottom.innerHTML = `
+                <div class="absolute bottom-0 left-0 w-full h-[200%] flex items-center justify-center">
+                    <span class="text-3xl md:text-5xl font-jeluTitle text-cream">${newDigit}</span>
+                </div>
+            `;
+            
+            digitEl.appendChild(flipPanelTop);
+            digitEl.appendChild(flipPanelBottom);
+            
+            // 启动 GSAP 3D 旋转与重力颤动回弹
+            gsap.to(flipPanelTop, {
+                rotateX: -90,
+                duration: 0.25,
+                ease: "power2.in",
+                onComplete: () => {
+                    // 上半页翻折完毕，立即切换顶部静止背景为新数字，并移除折叠层
+                    staticTop.textContent = newDigit;
+                    flipPanelTop.remove();
+                }
+            });
+            
+            gsap.to(flipPanelBottom, {
+                rotateX: 0,
+                duration: 0.45,
+                delay: 0.1,
+                ease: "elastic.out(1.1, 0.4)", // 完美物理阻尼反弹效果
+                onComplete: () => {
+                    // 下半页降落完毕，同步更新底部背景为新值并恢复显示 (opacity = 1)
+                    staticBottom.textContent = newDigit;
+                    staticBottom.style.opacity = '1';
+                    flipPanelBottom.remove();
+                }
+            });
+        }
+
         function updateTimer() {
-            const startDate = new Date(2026, 3, 27);
+            const startDate = new Date(2026, 3, 28); // 纪念日 2026-04-28 (月份从0开始，3代表4月)
             const now = new Date();
             const diff = now - startDate;
             
@@ -455,107 +1273,266 @@
             const mins = Math.floor((diff / (1000 * 60)) % 60);
             const secs = Math.floor((diff / 1000) % 60);
             
-            const pad = (num) => num.toString().padStart(2, '0');
+            const pad = (num, length = 2) => num.toString().padStart(length, '0');
             
-            document.getElementById('days').innerText = pad(days);
-            document.getElementById('hours').innerText = pad(hours);
-            document.getElementById('minutes').innerText = pad(mins);
-            document.getElementById('seconds').innerText = pad(secs);
+            const daysStr = pad(days, 3);
+            const hoursStr = pad(hours);
+            const minsStr = pad(mins);
+            const secsStr = pad(secs);
+            
+            // 脏检查逐位进行 3D 翻页
+            flipToDigit('days-hundreds', daysStr[0]);
+            flipToDigit('days-tens', daysStr[1]);
+            flipToDigit('days-ones', daysStr[2]);
+            
+            flipToDigit('hours-tens', hoursStr[0]);
+            flipToDigit('hours-ones', hoursStr[1]);
+            
+            flipToDigit('minutes-tens', minsStr[0]);
+            flipToDigit('minutes-ones', minsStr[1]);
+            
+            flipToDigit('seconds-tens', secsStr[0]);
+            flipToDigit('seconds-ones', secsStr[1]);
         }
-        setInterval(updateTimer, 1000);
-        updateTimer();
 
-        // ---------------- 2. 动态加载图集 ----------------
-        // Lightbox 相关变量
-        let lightboxImages = [];
-        let currentLightboxIndex = 0;
-        
-        async function loadGalleryImages() {
-            const row1 = document.getElementById('marquee-row-1');
-            const row2 = document.getElementById('marquee-row-2');
-            
-            try {
-                const response = await fetch('data/content.json');
-                const data = await response.json();
-                const images = data.galleryImages || [];
-                
-                if (images.length === 0) return;
-                
-                // 保存图片列表供Lightbox使用
-                lightboxImages = images;
-                
-                // 检测图片方向并设置对应样式
-                const loadImageWithOrientation = (src, container, index) => {
-                    return new Promise((resolve) => {
-                        const img = new Image();
-                        img.onload = () => {
-                            const ratio = img.naturalWidth / img.naturalHeight;
-                            let orientClass;
-                            
-                            if (ratio > 1.2) {
-                                orientClass = 'gallery-landscape';
-                            } else if (ratio < 0.8) {
-                                orientClass = 'gallery-portrait';
-                            } else {
-                                orientClass = 'gallery-square';
-                            }
-                            
-                            img.className = `${orientClass} rounded-2xl object-cover border-4 border-white shadow-md hover:shadow-xl transition-all hover:-translate-y-1`;
-                            img.loading = 'lazy';
-                            img.dataset.index = index;
-                            img.addEventListener('click', () => openLightbox(index));
-                            container.appendChild(img);
-                            resolve();
-                        };
-                        img.onerror = () => resolve();
-                        img.src = src;
-                    });
+        // ---------------- 6. 【新增】爱意纪事与动态趣味看板网格 JS 逻辑 ----------------
+        function initLoveLedger() {
+            const startDate = new Date('2026-04-28T00:00:00');
+            const targetVowDate = new Date('2026-08-06T00:00:00');
+            const qixiDate = new Date('2026-08-19T00:00:00');
+
+            // 1. 实时心跳共振仪
+            const heartbeatCounter = document.getElementById('heartbeat-counter');
+            if (heartbeatCounter) {
+                // 每 800ms 增加一个心跳 (约 75bpm)
+                const updateHeartbeat = () => {
+                    const now = new Date();
+                    const diffMs = now - startDate;
+                    const baseBeats = Math.floor(diffMs / 800); // 800ms = 1 beat
+                    heartbeatCounter.textContent = baseBeats.toLocaleString();
                 };
-                
-                // 将图片分成两半
-                const mid = Math.ceil(images.length / 2);
-                const row1Images = images.slice(0, mid);
-                const row2Images = images.slice(mid);
-                
-                // 渲染行
-                const renderRow = async (container, imgs, startIndex) => {
-                    for (let repeat = 0; repeat < 2; repeat++) {
-                        for (let i = 0; i < imgs.length; i++) {
-                            const globalIndex = startIndex + i;
-                            await loadImageWithOrientation(imgs[i], container, globalIndex % images.length);
+                updateHeartbeat();
+                setInterval(updateHeartbeat, 800);
+            }
+
+            // 2. ✨ 时光契约无限智算引擎 (Infinite Milestone Engine)
+            const milestoneName = document.getElementById('milestone-name');
+            const milestoneDate = document.getElementById('milestone-date');
+            const milestoneProgressBar = document.getElementById('milestone-progress-bar');
+            const milestonePercent = document.getElementById('milestone-percent');
+            const milestoneDaysLeft = document.getElementById('milestone-days-left');
+            const milestoneTypeBadge = document.getElementById('milestone-type-badge');
+            const milestoneSubHint = document.getElementById('milestone-sub-hint');
+
+            if (milestoneName) {
+                // 格式化日期为 YYYY.MM.DD
+                const fmtDate = (d) => `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+                // 按天数偏移计算日期
+                const addDays = (base, n) => new Date(base.getTime() + n * 86400000);
+
+                const updateMilestone = () => {
+                    const now = new Date();
+                    const elapsedMs = now - startDate;
+                    const elapsedDays = elapsedMs / 86400000; // 精确天数（含小数）
+
+                    // 构建里程碑候选列表（取每类最近的下一个）
+                    const candidates = [];
+
+                    // A. 百天纪念 (100, 200, 300, ...)
+                    for (let n = 1; n <= 500; n++) {
+                        const targetDays = n * 100;
+                        if (targetDays > elapsedDays) {
+                            candidates.push({
+                                type: '百天',
+                                typePriority: 1,
+                                nameCN: `第 ${n * 100} 天纪念`,
+                                date: addDays(startDate, targetDays),
+                                startDays: (n - 1) * 100,
+                                totalDays: 100
+                            });
+                            break;
                         }
                     }
+
+                    // B. 周年恋歌 (365, 730, 1095, ...)
+                    const anniversaryNames = {
+                        1: '一周年恋歌', 2: '二周年', 3: '三周年', 4: '四周年',
+                        5: '五周年', 10: '十周年金婚', 20: '双十周年', 50: '金婚五十年', 100: '百年好合'
+                    };
+                    for (let y = 1; y <= 200; y++) {
+                        const targetDays = y * 365;
+                        if (targetDays > elapsedDays) {
+                            candidates.push({
+                                type: '周年',
+                                typePriority: 3,
+                                nameCN: anniversaryNames[y] || `第 ${y} 周年`,
+                                date: addDays(startDate, targetDays),
+                                startDays: (y - 1) * 365,
+                                totalDays: 365
+                            });
+                            break;
+                        }
+                    }
+
+                    // C. 整千天黄金誓约 (1000, 2000, 3000, ...)
+                    const thousandNames = {
+                        1: '千日誓约', 2: '双千天', 3: '三千日约定',
+                        5: '五千天黄金誓约', 10: '万日之诺'
+                    };
+                    for (let k = 1; k <= 100; k++) {
+                        const targetDays = k * 1000;
+                        if (targetDays > elapsedDays) {
+                            candidates.push({
+                                type: '千日',
+                                typePriority: 2,
+                                nameCN: thousandNames[k] || `${k * 1000} 天黄金誓约`,
+                                date: addDays(startDate, targetDays),
+                                startDays: (k - 1) * 1000,
+                                totalDays: 1000
+                            });
+                            break;
+                        }
+                    }
+
+                    // 智能优先级：按到达时间排序，5天内同阶段取高优先级
+                    candidates.sort((a, b) => {
+                        const timeA = a.date - now;
+                        const timeB = b.date - now;
+                        if (Math.abs(timeA - timeB) < 86400000 * 5) {
+                            return b.typePriority - a.typePriority;
+                        }
+                        return timeA - timeB;
+                    });
+
+                    const next = candidates[0];
+                    if (!next) return;
+
+                    // 计算进度
+                    const progressDays = elapsedDays - next.startDays;
+                    let percent = (progressDays / next.totalDays) * 100;
+                    percent = Math.min(100, Math.max(0, percent));
+
+                    const timeLeft = next.date - now;
+                    const daysLeft = Math.ceil(timeLeft / 86400000);
+
+                    // 更新 DOM
+                    milestoneName.textContent = next.nameCN;
+                    milestoneDate.textContent = fmtDate(next.date) + ' 到达';
+                    milestoneProgressBar.style.width = `${percent.toFixed(1)}%`;
+                    milestonePercent.textContent = `${percent.toFixed(1)}%`;
+                    milestoneDaysLeft.textContent = daysLeft > 0 ? `还剩 ${daysLeft} 天` : '🎉 达成！';
+                    milestoneTypeBadge.textContent = next.type;
+
+                    // 徽章颜色联动
+                    const badgeColors = {
+                        '百天': 'bg-accent/15 text-accent',
+                        '周年': 'bg-secondary/20 text-primary',
+                        '千日': 'bg-[#C0A98F]/25 text-[#7A695E]'
+                    };
+                    milestoneTypeBadge.className = `text-[8px] px-2 py-0.5 rounded-full font-bold tracking-wider milestone-badge-glow ${badgeColors[next.type] || 'bg-accent/15 text-accent'}`;
+
+                    // 提示语联动
+                    const hints = {
+                        '百天': '百天里程碑智算进行中',
+                        '周年': '周年恋歌倒计时引擎',
+                        '千日': '千日黄金誓约传送中'
+                    };
+                    milestoneSubHint.textContent = hints[next.type] || '智算引擎运转中';
                 };
-                
-                await renderRow(row1, row1Images, 0);
-                await renderRow(row2, row2Images, mid);
-                
-            } catch (error) {
-                console.log('加载图集失败:', error);
+
+                updateMilestone();
+                setInterval(updateMilestone, 60000); // 每分钟更新
+            }
+ 
+            // 3. 浪漫节日打卡与倒计时
+            const badgeQixi = document.getElementById('badge-qixi');
+            if (badgeQixi) {
+                const updateQixiCountdown = () => {
+                    const now = new Date();
+                    const timeLeft = qixiDate - now;
+                    if (timeLeft <= 0) {
+                        badgeQixi.className = "text-[9px] px-2 py-0.5 rounded-full bg-secondary/15 text-primary font-bold";
+                        badgeQixi.textContent = '已打卡';
+                    } else {
+                        const daysLeft = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                        badgeQixi.textContent = `剩 ${daysLeft} 天`;
+                    }
+                };
+                updateQixiCountdown();
+                setInterval(updateQixiCountdown, 60000);
+            }
+
+            // 4. 思念雷达发射器
+            const radarEmitBtn = document.getElementById('radar-emit-btn');
+            const radarCounter = document.getElementById('radar-counter');
+            if (radarEmitBtn && radarCounter) {
+                let count = parseInt(localStorage.getItem('miss_radar_count')) || 525;
+                radarCounter.textContent = count;
+
+                const spawnHeartFromBtn = (btnEl) => {
+                    const rect = btnEl.getBoundingClientRect();
+                    const heart = document.createElement('div');
+                    heart.className = 'absolute text-xs pointer-events-none z-30 select-none font-sans';
+                    heart.innerHTML = '❤️';
+                    heart.style.left = `${rect.left + rect.width / 2 + window.scrollX - 8}px`;
+                    heart.style.top = `${rect.top + window.scrollY - 15}px`;
+                    document.body.appendChild(heart);
+
+                    gsap.to(heart, {
+                        y: -80 - Math.random() * 40,
+                        x: Math.random() * 40 - 20,
+                        scale: 1.5,
+                        opacity: 0,
+                        duration: 1.2,
+                        ease: "power2.out",
+                        onComplete: () => heart.remove()
+                    });
+                };
+
+                radarEmitBtn.addEventListener('click', () => {
+                    count++;
+                    radarCounter.textContent = count;
+                    localStorage.setItem('miss_radar_count', count);
+
+                    gsap.fromTo(radarCounter, { scale: 0.8 }, { scale: 1, duration: 0.3, ease: "back.out(2)" });
+                    spawnHeartFromBtn(radarEmitBtn);
+                });
+            }
+
+            // 5. 季节相伴进度
+            const seasonPercentage = document.getElementById('season-percentage');
+            const seasonProgressBar = document.getElementById('season-progress-bar');
+            if (seasonPercentage && seasonProgressBar) {
+                const updateSeasonProgress = () => {
+                    const now = new Date();
+                    const totalDuration = targetVowDate - startDate; // 100 days
+                    const elapsed = now - startDate;
+                    
+                    let percent = (elapsed / totalDuration) * 100;
+                    percent = Math.min(100, Math.max(0, percent));
+                    
+                    seasonPercentage.textContent = `${Math.floor(percent)}%`;
+                    seasonProgressBar.style.width = `${percent}%`;
+                };
+                updateSeasonProgress();
+                setInterval(updateSeasonProgress, 60000);
             }
         }
-        loadGalleryImages();
 
-        // ---------------- 3. 视差滚动视差特效 (3D Jack Marquee) ----------------
-        const row1 = document.getElementById('marquee-row-1');
-        const row2 = document.getElementById('marquee-row-2');
-        let scrollY = window.scrollY;
-        
-        window.addEventListener('scroll', () => {
-            window.requestAnimationFrame(() => {
-                scrollY = window.scrollY;
-                if(row1) row1.style.transform = `translate3d(${scrollY * 0.4 - 300}px, 0, 0)`;
-                if(row2) row2.style.transform = `translate3d(${-scrollY * 0.4 + 100}px, 0, 0)`;
-            });
+        // 页面 DOM 加载完毕后启动，防止过早执行获取不到元素
+        window.addEventListener('DOMContentLoaded', () => {
+            updateTimer();
+            setInterval(updateTimer, 1000);
+            initLoveLedger();
         });
 
-        // ---------------- 3. 入场 GSAP 动画 ----------------
+        // ---------------- 2. 入场 GSAP 动画 ----------------
         window.addEventListener('load', () => {
             // 注册 ScrollTrigger 插件
             gsap.registerPlugin(ScrollTrigger);
             
             // 首屏入场动画
-            gsap.from(".gsap-hero", {
+            gsap.from("#hero", {
                 y: 30,
                 opacity: 0,
                 duration: 2,
@@ -571,21 +1548,8 @@
                 ease: "power3.out"
             });
             
-            // 生活碎片标题滚动触发
-            gsap.from("#marquee h2", {
-                scrollTrigger: {
-                    trigger: "#marquee",
-                    start: "top 80%",
-                    toggleActions: "play none none reverse"
-                },
-                y: 30,
-                opacity: 0,
-                duration: 0.8,
-                ease: "power2.out"
-            });
-            
             // 模块卡片滚动触发
-            gsap.from("#restaurant .glass-card", {
+            gsap.from("#restaurant .jelu-card", {
                 scrollTrigger: {
                     trigger: "#restaurant",
                     start: "top 80%",
@@ -595,7 +1559,8 @@
                 opacity: 0,
                 duration: 0.8,
                 stagger: 0.2,
-                ease: "power2.out"
+                ease: "power2.out",
+                clearProps: "opacity,transform"
             });
             
             // 惊喜按钮滚动触发
@@ -608,11 +1573,12 @@
                 scale: 0.8,
                 opacity: 0,
                 duration: 0.6,
-                ease: "back.out(1.7)"
+                ease: "back.out(1.7)",
+                clearProps: "opacity,transform,scale"
             });
         });
 
-        // ---------------- 4. 满屏极光色便签 (惊喜交互) ----------------
+        // ---------------- 3. 满屏极光色便签 (惊喜互动) ----------------
         const loveMessages = [
             "舟舟，520快乐",
             "记得好好吃饭",
@@ -639,9 +1605,9 @@
             hasClickedSurprise = true;
             
             // 按钮状态改变
-            surpriseBtn.innerHTML = `<span class="relative z-10 flex items-center gap-3 text-sm md:text-base"><i class="fa fa-heart"></i> 心意已传达</span>`;
-            surpriseBtn.classList.replace('bg-white/50', 'bg-primary');
-            surpriseBtn.classList.replace('text-primary', 'text-white');
+            surpriseBtn.innerHTML = `<span class="relative z-10 flex items-center gap-3 text-xs md:text-sm"><i class="fa fa-heart"></i> 心意已传达</span>`;
+            surpriseBtn.classList.replace('bg-cream', 'bg-primary');
+            surpriseBtn.classList.replace('text-primary', 'text-cream');
             surpriseBtn.classList.add('cursor-not-allowed');
             
             // 确保音乐播放
@@ -659,7 +1625,7 @@
             const note = document.createElement('div');
             const text = document.createElement('div');
             
-            // 随机分配 1-5 种极光颜色
+            // 随机分配 1-5 种自然植物色
             const colorClass = `color-${Math.floor(Math.random() * 5) + 1}`;
             note.className = `love-note ${colorClass}`;
             text.className = 'note-text';
@@ -701,70 +1667,7 @@
             }, 10000);
         }
 
-        // ---------------- 7. Lightbox 图片查看器 ----------------
-        function openLightbox(index) {
-            currentLightboxIndex = index;
-            const lightbox = document.getElementById('lightbox');
-            const lightboxImg = document.getElementById('lightbox-img');
-            const lightboxCounter = document.getElementById('lightbox-counter');
-            
-            lightboxImg.src = lightboxImages[index];
-            lightboxCounter.textContent = `${index + 1} / ${lightboxImages.length}`;
-            
-            lightbox.classList.remove('hidden');
-            setTimeout(() => lightbox.classList.add('active'), 10);
-            
-            // 禁止背景滚动
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeLightbox() {
-            const lightbox = document.getElementById('lightbox');
-            lightbox.classList.remove('active');
-            setTimeout(() => lightbox.classList.add('hidden'), 300);
-            
-            // 恢复背景滚动
-            document.body.style.overflow = '';
-        }
-
-        function navigateLightbox(direction) {
-            currentLightboxIndex = (currentLightboxIndex + direction + lightboxImages.length) % lightboxImages.length;
-            const lightboxImg = document.getElementById('lightbox-img');
-            const lightboxCounter = document.getElementById('lightbox-counter');
-            
-            lightboxImg.src = lightboxImages[currentLightboxIndex];
-            lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${lightboxImages.length}`;
-        }
-
-        // Lightbox 事件监听
-        document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
-        document.getElementById('lightbox-prev').addEventListener('click', () => navigateLightbox(-1));
-        document.getElementById('lightbox-next').addEventListener('click', () => navigateLightbox(1));
-        
-        // 点击遮罩关闭
-        document.getElementById('lightbox').addEventListener('click', (e) => {
-            if (e.target === e.currentTarget) closeLightbox();
-        });
-
-        // 键盘导航
-        document.addEventListener('keydown', (e) => {
-            const lightbox = document.getElementById('lightbox');
-            if (lightbox.classList.contains('hidden')) return;
-            
-            switch(e.key) {
-                case 'Escape':
-                    closeLightbox();
-                    break;
-                case 'ArrowLeft':
-                    navigateLightbox(-1);
-                    break;
-                case 'ArrowRight':
-                    navigateLightbox(1);
-                    break;
-            }
-        });
-
-        // ---------------- 8. 移动端汉堡菜单 ----------------
+        // ---------------- 4. 移动端汉堡菜单 ----------------
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileSidebar = document.getElementById('mobile-sidebar');
         const mobileSidebarContent = document.getElementById('mobile-sidebar-content');
@@ -795,6 +1698,182 @@
         document.querySelectorAll('.mobile-nav-link').forEach(link => {
             link.addEventListener('click', closeMobileMenu);
         });
+
+        // ---------------- 5. 留声机播放器及极光粒子发射引擎 ----------------
+        const triggerBtn = document.getElementById('vinyl-trigger-btn');
+        const vinylCard = document.getElementById('vinyl-card');
+        const collapseBtn = document.getElementById('vinyl-collapse-btn');
+        const vinylPlayBtn = document.getElementById('vinyl-play-btn');
+        const vinylPrevBtn = document.getElementById('vinyl-prev-btn');
+        const vinylNextBtn = document.getElementById('vinyl-next-btn');
+        const vinylMuteBtn = document.getElementById('vinyl-mute-btn');
+        const bgmAudio = document.getElementById('bgm');
+
+        // 唱机展开与收起 GSAP 阻尼动画
+        function expandVinylPlayer() {
+            vinylCard.classList.remove('hidden');
+            gsap.fromTo(vinylCard, {
+                scale: 0,
+                opacity: 0,
+                transformOrigin: "bottom right"
+            }, {
+                scale: 1,
+                opacity: 1,
+                duration: 0.5,
+                ease: "back.out(1.2)"
+            });
+            gsap.to(triggerBtn, {
+                scale: 0,
+                opacity: 0,
+                duration: 0.3,
+                onComplete: () => {
+                    triggerBtn.classList.add('hidden');
+                }
+            });
+        }
+
+        function collapseVinylPlayer() {
+            triggerBtn.classList.remove('hidden');
+            gsap.fromTo(triggerBtn, {
+                scale: 0,
+                opacity: 0
+            }, {
+                scale: 1,
+                opacity: 1,
+                duration: 0.4,
+                ease: "back.out(1.2)"
+            });
+            gsap.to(vinylCard, {
+                scale: 0,
+                opacity: 0,
+                duration: 0.4,
+                ease: "power2.inOut",
+                onComplete: () => {
+                    vinylCard.classList.add('hidden');
+                }
+            });
+        }
+
+        triggerBtn.addEventListener('click', expandVinylPlayer);
+        collapseBtn.addEventListener('click', collapseVinylPlayer);
+
+        // 播放、切歌、静音、歌单控制
+        vinylPlayBtn.addEventListener('click', () => {
+            if (typeof toggleMusic === 'function') {
+                toggleMusic();
+            } else {
+                if (bgmAudio.paused) bgmAudio.play();
+                else bgmAudio.pause();
+            }
+        });
+
+        vinylPrevBtn.addEventListener('click', () => {
+            if (typeof playPrevSong === 'function') playPrevSong();
+        });
+
+        vinylNextBtn.addEventListener('click', () => {
+            if (typeof playNextSong === 'function') playNextSong();
+        });
+
+        vinylMuteBtn.addEventListener('click', () => {
+            bgmAudio.muted = !bgmAudio.muted;
+            const muteIcon = vinylMuteBtn.querySelector('i');
+            if (muteIcon) {
+                if (bgmAudio.muted) {
+                    muteIcon.className = 'fa fa-volume-off text-primary text-xs';
+                } else {
+                    muteIcon.className = 'fa fa-volume-up text-primary text-xs';
+                }
+            }
+        });
+
+        // 极光粒子发射引擎
+        let particleInterval;
+        function startVinylParticles() {
+            if (particleInterval) clearInterval(particleInterval);
+            
+            const widget = document.getElementById('vinyl-player-widget');
+            if (!widget) return;
+            
+            particleInterval = setInterval(() => {
+                // 只有当音乐正在播放时才持续发射粒子
+                if (bgmAudio.paused) return;
+                
+                const symbols = ['♫', '♪', '♥', '★', '✧', '♩'];
+                const symbol = symbols[Math.floor(Math.random() * symbols.length)];
+                
+                const particle = document.createElement('div');
+                particle.className = 'absolute text-xs pointer-events-none select-none z-30 font-sans';
+                particle.innerHTML = symbol;
+                
+                // 极光色渐变色彩集
+                const colors = ['#2D3E35', '#8EA485', '#E06D53', '#6D8268', '#C0A98F'];
+                particle.style.color = colors[Math.floor(Math.random() * colors.length)];
+                
+                // 计算触发按钮或唱盘在页面上的实际坐标
+                const activeElement = !vinylCard.classList.contains('hidden') ? vinylCard : triggerBtn;
+                const rect = activeElement.getBoundingClientRect();
+                const scrollX = window.scrollX;
+                const scrollY = window.scrollY;
+                
+                const startX = rect.left + scrollX + rect.width / 2 + (Math.random() * 40 - 20);
+                const startY = rect.top + scrollY - 10;
+                
+                particle.style.left = `${startX}px`;
+                particle.style.top = `${startY}px`;
+                particle.style.opacity = '1';
+                particle.style.fontSize = `${Math.random() * 8 + 12}px`;
+                
+                document.body.appendChild(particle);
+                
+                // 并发漂移轨迹
+                const duration = Math.random() * 2.0 + 1.5; // 1.5s - 3.5s
+                const driftX = Math.random() * 80 - 40; // 左右随机偏移
+                
+                gsap.to(particle, {
+                    y: -150 - Math.random() * 50,
+                    x: driftX,
+                    opacity: 0,
+                    scale: 1.5,
+                    duration: duration,
+                    ease: "power1.out",
+                    onComplete: () => {
+                        particle.remove();
+                    }
+                });
+            }, 500);
+        }
+
+        function stopVinylParticles() {
+            if (particleInterval) {
+                clearInterval(particleInterval);
+                particleInterval = null;
+            }
+        }
+
+        // 双向同步：监听底层 HTML5 Audio 事件以控制唱针、唱盘与粒子
+        bgmAudio.addEventListener('play', () => {
+            // 唱片开始无限旋转
+            document.getElementById('vinyl-record').classList.add('vinyl-spin');
+            // 唱针旋转 22deg 搭落在黑胶盘上
+            document.getElementById('vinyl-needle').style.transform = 'rotate(22deg)';
+            // 唱片机上的播放按钮更新为暂停图标
+            vinylPlayBtn.innerHTML = '<i class="fa fa-pause text-[10px]"></i>';
+            // 粒子发射启动
+            startVinylParticles();
+        });
+
+        bgmAudio.addEventListener('pause', () => {
+            // 唱片停止旋转
+            document.getElementById('vinyl-record').classList.remove('vinyl-spin');
+            // 唱针旋转回 0deg 归位
+            document.getElementById('vinyl-needle').style.transform = 'rotate(0deg)';
+            // 唱片机上的播放按钮更新为播放图标
+            vinylPlayBtn.innerHTML = '<i class="fa fa-play text-[10px]"></i>';
+            // 粒子停止
+            stopVinylParticles();
+        });
     </script>
+
 </body>
 </html>

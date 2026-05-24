@@ -519,3 +519,35 @@ body {
 .gallery-square {
     cursor: pointer;
 }
+
+/* 无缝自动滚动跑马灯 (3D Hardware Accelerated Marquee) */
+@keyframes marquee-left {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes marquee-right {
+    0% { transform: translate3d(-50%, 0, 0); }
+    100% { transform: translate3d(0, 0, 0); }
+}
+
+.animate-marquee-left {
+    display: flex;
+    gap: 16px;
+    width: max-content;
+    animation: marquee-left 45s linear infinite;
+    will-change: transform;
+}
+
+.animate-marquee-right {
+    display: flex;
+    gap: 16px;
+    width: max-content;
+    animation: marquee-right 45s linear infinite;
+    will-change: transform;
+}
+
+.animate-marquee-left:hover,
+.animate-marquee-right:hover {
+    animation-play-state: paused;
+}

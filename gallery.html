@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>沙龙 | 我们的专属宇宙</title>
+    
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Font Awesome 图标库 -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 引入 GSAP 动画库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- 引入 Jelu 风格高定法式艺术字体 (Fraunces & Playfair Display & Plus Jakarta Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2D3E35',      // 经典深林绿
+                        secondary: '#8EA485',    // 鼠尾草绿
+                        accent: '#E06D53',       // 温暖番茄红
+                        cream: '#F4F7F3',        // 燕麦奶油白
+                        sageBg: '#E6EFE5',       // 薄荷鼠尾草背景底色
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', '"Noto Serif SC"', 'sans-serif'],
+                        serif: ['"Noto Serif SC"', 'serif'],
+                        jeluTitle: ['"Fraunces"', 'serif'],
+                        jeluSub: ['"Playfair Display"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            margin: 0;
+            background-color: #E6EFE5; /* Jelu 治愈系薄荷绿底色 */
+            color: #2D3E35;
+            font-family: 'Plus Jakarta Sans', 'Noto Serif SC', sans-serif;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 10% 20%, rgba(244, 247, 243, 0.6) 0%, transparent 50%),
+                              radial-gradient(circle at 90% 80%, rgba(142, 164, 133, 0.15) 0%, transparent 50%);
+        }
+
+        /* 1:1 还原 Jelu 极简悬浮透亮导航栏 */
+        .nav-pill {
+            background: rgba(244, 247, 243, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 10px 30px rgba(45, 62, 53, 0.04);
+        }
+        
+        .gallery-landscape {
+            width: 280px;
+            height: 180px;
+        }
+        
+        .gallery-portrait {
+            width: 200px;
+            height: 280px;
+        }
+        
+        .gallery-square {
+            width: 220px;
+            height: 220px;
+        }
+        
+        @media (min-width: 768px) {
+            .gallery-landscape {
+                width: 380px;
+                height: 240px;
+            }
+            
+            .gallery-portrait {
+                width: 260px;
+                height: 360px;
+            }
+            
+            .gallery-square {
+                width: 280px;
+                height: 280px;
+            }
+        }
+
+        /* 无缝自动滚动跑马灯 */
+        @keyframes marquee-left {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-50%, 0, 0); }
+        }
+        
+        @keyframes marquee-right {
+            0% { transform: translate3d(-50%, 0, 0); }
+            100% { transform: translate3d(0, 0, 0); }
+        }
+        
+        .animate-marquee-left {
+            display: flex;
+            gap: 16px;
+            width: max-content;
+            animation: marquee-left 45s linear infinite;
+            will-change: transform;
+        }
+        
+        .animate-marquee-right {
+            display: flex;
+            gap: 16px;
+            width: max-content;
+            animation: marquee-right 45s linear infinite;
+            will-change: transform;
+        }
+        
+        .animate-marquee-left:hover,
+        .animate-marquee-right:hover {
+            animation-play-state: paused;
+        }
+
+        /* Lightbox 大图查看器 */
+        .lightbox-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(45, 62, 53, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .lightbox-overlay.active {
+            opacity: 1;
+        }
+        
+        .lightbox-overlay.hidden {
+            display: none;
+        }
+        
+        .lightbox-content {
+            max-width: 90vw;
+            max-height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: 2rem;
+            box-shadow: 0 20px 60px rgba(45, 62, 53, 0.4);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        
+        .lightbox-overlay.active .lightbox-content img {
+            transform: scale(1);
+        }
+        
+        .lightbox-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+        
+        .lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+        
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+        
+        .lightbox-nav:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .lightbox-prev {
+            left: 1.5rem;
+        }
+        
+        .lightbox-next {
+            right: 1.5rem;
+        }
+        
+        .lightbox-counter {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.875rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+    
+    <!-- 引入外部公共样式 -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="min-h-screen flex flex-col relative selection:bg-primary selection:text-white">
+
+    <!-- 移动端汉堡菜单按钮 (高定植物风) -->
+    <button id="mobile-menu-btn" class="fixed top-6 left-4 z-[60] w-11 h-11 rounded-full bg-cream flex items-center justify-center border border-white/80 cursor-pointer hover:border-primary transition-all duration-300 shadow-sm md:hidden">
+        <i class="fa fa-bars text-primary text-base"></i>
+    </button>
+
+    <!-- 移动端侧边栏导航 -->
+    <div id="mobile-sidebar" class="fixed inset-0 z-[55] hidden md:hidden">
+        <div class="absolute inset-0 bg-primary/25 backdrop-blur-sm" id="mobile-sidebar-overlay"></div>
+        <div class="absolute left-0 top-0 h-full w-72 bg-[#F4F7F3] shadow-2xl transform -translate-x-full transition-transform duration-300" id="mobile-sidebar-content">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-8 border-b border-primary/10 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
+                            <span class="text-white text-xs font-bold font-jeluTitle">Z&Y</span>
+                        </div>
+                        <span class="text-base font-semibold text-primary font-jeluTitle">Zhou & Yang</span>
+                    </div>
+                    <button id="mobile-menu-close" class="w-8 h-8 rounded-full bg-primary/5 flex items-center justify-center hover:bg-primary/10 transition">
+                        <i class="fa fa-times text-primary text-sm"></i>
+                    </button>
+                </div>
+                
+                <nav class="space-y-1.5">
+                    <a href="index.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3.5 rounded-2xl text-primary hover:bg-secondary/15 transition-all">
+                        <i class="fa fa-home w-5 text-center text-secondary"></i>
+                        <span class="font-medium text-sm">首页 · Home</span>
+                    </a>
+                    <a href="restaurant.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3.5 rounded-2xl text-primary hover:bg-secondary/15 transition-all">
+                        <i class="fa fa-cutlery w-5 text-center text-secondary"></i>
+                        <span class="font-medium text-sm">小餐馆 · Dining</span>
+                    </a>
+                    <a href="tavern.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3.5 rounded-2xl text-primary hover:bg-secondary/15 transition-all">
+                        <i class="fa fa-glass w-5 text-center text-secondary"></i>
+                        <span class="font-medium text-sm">小酒馆 · Tavern</span>
+                    </a>
+                    <a href="clinic.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3.5 rounded-2xl text-primary hover:bg-secondary/15 transition-all">
+                        <i class="fa fa-heartbeat w-5 text-center text-secondary"></i>
+                        <span class="font-medium text-sm">小诊所 · Clinic</span>
+                    </a>
+                    <a href="museum.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3.5 rounded-2xl text-primary hover:bg-secondary/15 transition-all">
+                        <i class="fa fa-university w-5 text-center text-secondary"></i>
+                        <span class="font-medium text-sm">纪念馆 · Museum</span>
+                    </a>
+                    <a href="gallery.html" class="mobile-nav-link flex items-center gap-3 px-4 py-3.5 rounded-2xl text-primary hover:bg-secondary/15 transition-all bg-secondary/15">
+                        <i class="fa fa-camera w-5 text-center text-secondary"></i>
+                        <span class="font-medium text-sm">沙龙 · Salon</span>
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- 1:1 还原 Jelu 顶奢胶囊导航栏 (沙龙已放到纪念馆后边) -->
+    <div class="fixed top-6 w-full z-50 flex justify-center px-4">
+        <nav class="nav-pill rounded-full px-2.5 py-1.5 flex items-center gap-1 md:gap-4">
+            <div id="logo" class="flex items-center gap-1.5 cursor-pointer pl-3 pr-2 select-none" title="长按3秒解锁创作者模式">
+                <span class="text-primary text-xl font-extrabold font-jeluTitle tracking-tight">Zhou<span class="text-secondary italic">♥</span></span>
+            </div>
+            
+            <a href="index.html" class="hidden md:inline-block text-xs text-primary/70 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans font-medium tracking-wide">Home 首页</a>
+            <a href="restaurant.html" class="hidden md:inline-block text-xs text-primary/70 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans font-medium tracking-wide">Dining 餐馆</a>
+            <a href="tavern.html" class="hidden md:inline-block text-xs text-primary/70 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans font-medium tracking-wide">Tavern 酒馆</a>
+            <a href="clinic.html" class="hidden md:inline-block text-xs text-primary/70 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans font-medium tracking-wide">Clinic 诊所</a>
+            <a href="museum.html" class="hidden md:inline-block text-xs text-primary/70 hover:text-primary px-3 py-2 rounded-full transition-colors font-sans font-medium tracking-wide">Museum 纪念馆</a>
+            <a href="gallery.html" class="hidden md:inline-block text-xs text-primary px-3 py-2 rounded-full transition-colors font-sans font-semibold tracking-wide bg-secondary/15">Salon 沙龙</a>
+        </nav>
+    </div>
+
+    <!-- 内容展示区 (手账风头部，去除了全屏视频背景占位屏，极致流畅) -->
+    <div id="content-wrapper" class="relative z-10 min-h-screen flex flex-col pt-28">
+        
+        <!-- 页面头部 -->
+        <section class="py-12 px-4 relative z-10">
+            <div class="container mx-auto max-w-6xl text-center">
+                <div class="inline-flex items-center gap-4 mb-6">
+                    <div class="w-16 h-16 bg-primary/5 rounded-full flex items-center justify-center">
+                        <i class="fa fa-camera text-2xl text-primary"></i>
+                    </div>
+                </div>
+                <h1 class="font-jeluTitle text-3xl md:text-4xl text-primary tracking-wide mb-3">沙龙</h1>
+                <p class="font-jeluSub italic text-secondary text-sm tracking-widest font-semibold uppercase">SALON</p>
+                <p class="text-primary/70 text-xs mt-4 max-w-md mx-auto leading-relaxed">定格在时光里的45个心动瞬间，三行交替式滚动记录我们的专属浪漫</p>
+            </div>
+        </section>
+
+        <!-- 三行交替式跑马灯大图展示区 -->
+        <section id="marquee" class="pb-24 overflow-hidden flex flex-col gap-5 relative z-10">
+            <!-- 第一行 (向右无缝滚动) -->
+            <div id="marquee-row-1" class="animate-marquee-right">
+                <!-- 图片由JS从content.json动态加载 -->
+            </div>
+            
+            <!-- 第二行 (向左无缝滚动) -->
+            <div id="marquee-row-2" class="animate-marquee-left">
+                <!-- 图片由JS从content.json动态加载 -->
+            </div>
+            
+            <!-- 第三行 (向右无缝滚动) -->
+            <div id="marquee-row-3" class="animate-marquee-right">
+                <!-- 图片由JS从content.json动态加载 -->
+            </div>
+        </section>
+
+        <!-- 页脚 -->
+        <footer class="py-12 text-center text-primary/40 text-[10px] tracking-[0.35em] font-sans relative z-10 max-w-6xl mx-auto border-t border-primary/5 w-full mt-auto">
+            <p>MADE WITH <i id="footer-heart" class="fa fa-heart text-accent animate-pulse mx-1 cursor-pointer"></i> BY XIAOYANG FOR ZHOUZHOU</p>
+            <p class="mt-2 text-[8px] opacity-60">© 2026 OUR MEMORIES ALL RIGHTS RESERVED</p>
+        </footer>
+    </div>
+
+    <!-- Lightbox 图片大图查看器 -->
+    <div id="lightbox" class="lightbox-overlay hidden">
+        <button id="lightbox-close" class="lightbox-close">
+            <i class="fa fa-times text-xl"></i>
+        </button>
+        <button id="lightbox-prev" class="lightbox-nav lightbox-prev">
+            <i class="fa fa-chevron-left text-xl"></i>
+        </button>
+        <button id="lightbox-next" class="lightbox-nav lightbox-next">
+            <i class="fa fa-chevron-right text-xl"></i>
+        </button>
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="大图预览">
+        </div>
+        <div id="lightbox-counter" class="lightbox-counter"></div>
+    </div>
+
+    <script src="js/main.js"></script>
+    
+    <script>
+        // ---------------- 1. 动态背景色自适应过渡 ----------------
+        function initAdaptiveBackground(imgSrc) {
+            const img = new Image();
+            img.src = imgSrc;
+            img.onload = () => {
+                try {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 1;
+                    canvas.height = 1;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, 1, 1);
+                    const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+                    
+                    const blend = (c) => Math.round(c * 0.2 + 230 * 0.8);
+                    const finalR = blend(r);
+                    const finalG = blend(g);
+                    const finalB = blend(b);
+                    
+                    const wrapper = document.getElementById('content-wrapper');
+                    if (wrapper) {
+                        wrapper.style.backgroundColor = `rgba(${finalR}, ${finalG}, ${finalB}, 0.25)`;
+                    }
+                } catch (e) {
+                    console.warn("背景色自适应提取失败，使用默认值:", e);
+                    useDefaultBackground();
+                }
+            };
+            img.onerror = () => {
+                console.warn("背景色自适应提取图片加载失败，使用默认值");
+                useDefaultBackground();
+            };
+        }
+
+        function useDefaultBackground() {
+            const wrapper = document.getElementById('content-wrapper');
+            if (wrapper) {
+                wrapper.style.backgroundColor = 'rgba(244, 247, 243, 0.25)'; // Jelu 燕麦奶油毛玻璃色
+            }
+        }
+
+        // ---------------- 2. 动态加载三行图集 (共45张照片) ----------------
+        const LOCAL_IMAGES_FALLBACK = [
+            "images/gallery/2026-03-22 003549.jpg",
+            "images/gallery/2026-03-22 003551.jpg",
+            "images/gallery/2026-03-22 003553.jpg",
+            "images/gallery/2026-03-22 003555.jpg",
+            "images/gallery/2026-03-22 003557.jpg",
+            "images/gallery/2026-03-22 003559.jpg",
+            "images/gallery/2026-03-22 003601.jpg",
+            "images/gallery/2026-03-22 003603.jpg",
+            "images/gallery/2026-03-22 003605.jpg",
+            "images/gallery/2026-03-22 003610.jpg",
+            "images/gallery/2026-03-22 003612.jpg",
+            "images/gallery/2026-03-22 143955.jpg",
+            "images/gallery/2026-03-22 234202.jpg",
+            "images/gallery/2026-03-23 223117.jpg",
+            "images/gallery/2026-03-23 223119.jpg",
+            "images/gallery/2026-03-26 082807.jpg",
+            "images/gallery/2026-03-27 202300.jpg",
+            "images/gallery/2026-03-28 160600.jpg",
+            "images/gallery/2026-03-30 164755.jpg",
+            "images/gallery/2026-03-30 170447.jpg",
+            "images/gallery/2026-03-31 171319.jpg",
+            "images/gallery/2026-04-04 021449.jpg",
+            "images/gallery/2026-04-05 103734.jpg",
+            "images/gallery/2026-04-05 103736.jpg",
+            "images/gallery/2026-04-05 103738.jpg",
+            "images/gallery/2026-04-05 103742.jpg",
+            "images/gallery/2026-04-05 103745.jpg",
+            "images/gallery/2026-04-05 103754.jpg",
+            "images/gallery/2026-04-05 103758.jpg",
+            "images/gallery/2026-04-05 103804.jpg",
+            "images/gallery/2026-04-05 103817.jpg",
+            "images/gallery/2026-04-05 103819.jpg",
+            "images/gallery/2026-04-05 103825.jpg",
+            "images/gallery/2026-04-05 103829.jpg",
+            "images/gallery/2026-04-05 103835.jpg",
+            "images/gallery/2026-04-05 103952.jpg",
+            "images/gallery/2026-04-05 103954.jpg",
+            "images/gallery/2026-04-05 103956.jpg",
+            "images/gallery/2026-04-05 104045.jpg",
+            "images/gallery/2026-04-05 104110.jpg",
+            "images/gallery/2026-04-05 104125.jpg",
+            "images/gallery/2026-04-05 112543.jpg",
+            "images/gallery/2026-04-06 173323.jpg",
+            "images/gallery/2026-04-14 005237.jpg",
+            "images/gallery/2026-04-17 190936.jpg",
+            "images/gallery/2026-04-20 121524.jpg",
+            "images/gallery/2026-04-28 192042.jpg",
+            "images/gallery/2026-04-28 214103.jpg",
+            "images/gallery/2026-04-28 214335.jpg",
+            "images/gallery/2026-04-29 171946.jpg",
+            "images/gallery/2026-04-30 225842.jpg",
+            "images/gallery/2026-04-30 231112.jpg",
+            "images/gallery/2026-05-02 185010.jpg",
+            "images/gallery/2026-05-02 185011.jpg",
+            "images/gallery/2026-05-02 224150.jpg",
+            "images/gallery/2026-05-06 213804.jpg",
+            "images/gallery/2026-05-06 214458.jpg",
+            "images/gallery/2026-05-06 215254.jpg",
+            "images/gallery/2026-05-06 215333.jpg",
+            "images/gallery/2026-05-06 215348.jpg",
+            "images/gallery/2026-05-06 215935.jpg"
+        ];
+
+        let lightboxImages = [];
+        let currentLightboxIndex = 0;
+        
+        async function loadGalleryImages() {
+            const row1 = document.getElementById('marquee-row-1');
+            const row2 = document.getElementById('marquee-row-2');
+            const row3 = document.getElementById('marquee-row-3');
+            
+            let images = [];
+            
+            try {
+                const response = await fetch('data/content.json');
+                if (response.ok) {
+                    const data = await response.json();
+                    images = data.galleryImages || [];
+                }
+            } catch (error) {
+                console.warn('无法加载 content.json (可能是本地CORS限制)，将启用本地数组兜底:', error);
+            }
+            
+            if (!images || images.length === 0) {
+                images = LOCAL_IMAGES_FALLBACK;
+            }
+            
+            if (images.length > 0) {
+                initAdaptiveBackground(images[0]);
+            } else {
+                useDefaultBackground();
+            }
+            
+            const uniqueCount = 15;
+            const row1Images = images.slice(0, uniqueCount);
+            const row2Images = images.slice(uniqueCount, uniqueCount * 2);
+            const row3Images = images.slice(uniqueCount * 2, uniqueCount * 3);
+            
+            lightboxImages = [...row1Images, ...row2Images, ...row3Images];
+            
+            const renderRow = async (container, imgs, startIndex) => {
+                const promises = [];
+                for (let repeat = 0; repeat < 2; repeat++) {
+                    for (let i = 0; i < imgs.length; i++) {
+                        const globalIndex = startIndex + i;
+                        
+                        const img = document.createElement('img');
+                        img.className = 'gallery-square rounded-[2rem] object-cover border-4 border-white shadow-md hover:shadow-xl transition-all duration-500 opacity-0';
+                        img.loading = 'lazy';
+                        img.dataset.index = globalIndex;
+                        img.addEventListener('click', () => openLightbox(globalIndex));
+                        container.appendChild(img);
+                        
+                        const loadPromise = new Promise((resolve) => {
+                            const tempImg = new Image();
+                            tempImg.onload = () => {
+                                const ratio = tempImg.naturalWidth / tempImg.naturalHeight;
+                                let orientClass;
+                                
+                                if (ratio > 1.2) {
+                                    orientClass = 'gallery-landscape';
+                                } else if (ratio < 0.8) {
+                                    orientClass = 'gallery-portrait';
+                                } else {
+                                    orientClass = 'gallery-square';
+                                }
+                                
+                                img.className = `${orientClass} rounded-[2rem] object-cover border-4 border-white shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-1.5 opacity-100`;
+                                img.src = imgs[i];
+                                resolve();
+                            };
+                            tempImg.onerror = () => {
+                                console.warn(`图片加载失败: ${imgs[i]}`);
+                                img.remove();
+                                resolve();
+                            };
+                            tempImg.src = imgs[i];
+                        });
+                        promises.push(loadPromise);
+                    }
+                }
+                await Promise.all(promises);
+            };
+            
+            try {
+                await Promise.all([
+                    renderRow(row1, row1Images, 0),
+                    renderRow(row2, row2Images, uniqueCount),
+                    renderRow(row3, row3Images, uniqueCount * 2)
+                ]);
+            } catch (err) {
+                console.error("渲染跑马灯行出现错误:", err);
+            }
+        }
+        loadGalleryImages();
+
+        // ---------------- 3. Lightbox 大图查看器交互控制 ----------------
+        function openLightbox(index) {
+            currentLightboxIndex = index;
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxCounter = document.getElementById('lightbox-counter');
+            
+            lightboxImg.src = lightboxImages[index];
+            lightboxCounter.textContent = `${index + 1} / ${lightboxImages.length}`;
+            
+            lightbox.classList.remove('hidden');
+            setTimeout(() => lightbox.classList.add('active'), 10);
+            
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+            setTimeout(() => lightbox.classList.add('hidden'), 300);
+            
+            document.body.style.overflow = '';
+        }
+
+        function navigateLightbox(direction) {
+            currentLightboxIndex = (currentLightboxIndex + direction + lightboxImages.length) % lightboxImages.length;
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxCounter = document.getElementById('lightbox-counter');
+            
+            lightboxImg.src = lightboxImages[currentLightboxIndex];
+            lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${lightboxImages.length}`;
+        }
+
+        document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+        document.getElementById('lightbox-prev').addEventListener('click', () => navigateLightbox(-1));
+        document.getElementById('lightbox-next').addEventListener('click', () => navigateLightbox(1));
+        
+        document.getElementById('lightbox').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeLightbox();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            const lightbox = document.getElementById('lightbox');
+            if (lightbox.classList.contains('hidden')) return;
+            
+            switch(e.key) {
+                case 'Escape':
+                    closeLightbox();
+                    break;
+                case 'ArrowLeft':
+                    navigateLightbox(-1);
+                    break;
+                case 'ArrowRight':
+                    navigateLightbox(1);
+                    break;
+            }
+        });
+
+        // ---------------- 4. 移动端汉堡侧边栏逻辑 ----------------
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileSidebar = document.getElementById('mobile-sidebar');
+        const mobileSidebarContent = document.getElementById('mobile-sidebar-content');
+        const mobileSidebarOverlay = document.getElementById('mobile-sidebar-overlay');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+        function openMobileMenu() {
+            mobileSidebar.classList.remove('hidden');
+            setTimeout(() => {
+                mobileSidebarContent.classList.remove('-translate-x-full');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+            mobileSidebarContent.classList.add('-translate-x-full');
+            setTimeout(() => {
+                mobileSidebar.classList.add('hidden');
+            }, 300);
+            document.body.style.overflow = '';
+        }
+
+        mobileMenuBtn.addEventListener('click', openMobileMenu);
+        mobileMenuClose.addEventListener('click', closeMobileMenu);
+        mobileSidebarOverlay.addEventListener('click', closeMobileMenu);
+
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', closeMobileMenu);
+        });
+
+        // ---------------- 5. GSAP 滚动触发动画 ----------------
+        window.addEventListener('load', () => {
+            gsap.registerPlugin(ScrollTrigger);
+            
+            gsap.from("#content-wrapper h1, #content-wrapper p", {
+                y: 30,
+                opacity: 0,
+                duration: 1,
+                stagger: 0.2,
+                ease: "power2.out"
+            });
+        });
+    </script>
+</body>
+</html>
